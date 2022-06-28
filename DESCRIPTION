@@ -1,0 +1,14 @@
+Package: yaev
+Type: Package
+Title: Miscellaneaous Utils for Extreme Value Anaysis
+Version: 0.1.0
+Author: Yves Deville <deville.yves@alpestat.com>
+Maintainer: Yves Deville <deville.yves@alpestat.com>
+Description: Provides utility functions and objects for Extreme Value Analysis, 
+    including some distribution functions.
+License: GPL
+Sugggests: testthat, numDeriv
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(old_usage = TRUE)
+RoxygenNote: 7.2.0
