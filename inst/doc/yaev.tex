@@ -1,0 +1,185 @@
+\documentclass[11pt]{article}\usepackage[]{graphicx}\usepackage[]{xcolor}
+% maxwidth is the original width if it is less than linewidth
+% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\let\hlipl\hlkwb
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[english]{babel}
+\usepackage[amsmath]{maxiplot}
+\usepackage{fullpage}
+\usepackage{lscape}
+\usepackage{hyperref}
+\usepackage{tikz}
+\definecolor{MonVert}{rgb}{0.398,0.801,0.000} 
+\definecolor{MonVertF}{rgb}{0.13,0.54,0.13}
+\definecolor{MonRouge}{rgb}{0.600,0.060,0.360} 
+\definecolor{MonBleu}{rgb}{0.000,0.602,0.801} 
+\definecolor{SteelBlue2}{rgb}{0.359375,0.671875,0.9296875}
+\definecolor{orange}{rgb}{1.0,0.6470,0.0}
+\definecolor{SteelBlue4}{rgb}{0.212, 0.392, 0.545}
+\definecolor{MonJaune}{rgb}{0.996,0.996,0.875}
+\definecolor{orange1}{rgb}{0.996,0.645,0}
+\definecolor{PaleVioletRed}{rgb}{0.855,0.438,0.574}
+
+\title{The \textbf{yaev} package}
+
+\author{Yves Deville \href{mailto:deville.yves@alpestat.com}%%
+  {deville.yves@alpestat.com} }
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+\maketitle{}
+\tableofcontents{}
+
+\section{Extreme-Value distributions}
+  
+The probability functions for the GPD and GEV distributions depend
+smoothly on the parameters: they are infinitely differentiable
+functions of the parameters. However these functions are not analytic
+functions of the parameters and a singularity exists for all the
+functions when the shape parameter say $\xi$ is zero.  In practice,
+the functions are given with different formulas depending on whether
+$\xi$ is zero or not; the formulas for $\xi = 0$ relate to the
+exponential and Gumbel distributions and correspond to the limit for
+$\xi \to 0$ of the functions given by the formulas for $\xi \neq 0$.
+
+As an example consider the quantile function of the Generalized Pareto
+distribution with shape $\xi$ and unit scale 
+$$
+q(p) = \begin{cases}
+  [(1 - p)^{-\xi} - 1] / \xi & \xi \neq 0 \\
+  -\log(1 - p) & \xi = 0.
+\end{cases}
+$$
+It can be shown that for $\xi \approx 0$
+$$
+q \approx - \log(1-p), \qquad
+\frac{\partial q}{\partial \xi} \approx \frac{1}{2}\, \log^2(1-p), \qquad
+\frac{\partial^2 q}{\partial \xi^2} \approx -\frac{1}{3}\, \log^2(1-p).
+$$
+It is quite easy to obtain expressions for the the derivatives. We can even
+rely on the derivation method \verb@D@ available in R
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{qEx} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{p}\hlstd{,} \hlkwc{xi}\hlstd{) ((}\hlnum{1} \hlopt{-} \hlstd{p)}\hlopt{^}\hlstd{(}\hlopt{-}\hlstd{xi)} \hlopt{-} \hlnum{1}\hlstd{)} \hlopt{/} \hlstd{xi}
+\hlstd{dqEx} \hlkwb{<-} \hlkwd{D}\hlstd{(}\hlkwd{expression}\hlstd{(((}\hlnum{1} \hlopt{-} \hlstd{p)}\hlopt{^}\hlstd{(}\hlopt{-}\hlstd{xi)} \hlopt{-} \hlnum{1}\hlstd{)} \hlopt{/} \hlstd{xi),} \hlkwc{name} \hlstd{=} \hlstr{"xi"}\hlstd{)}
+\hlstd{d2qEx} \hlkwb{<-} \hlkwd{D}\hlstd{(dqEx,} \hlkwc{name} \hlstd{=} \hlstr{"xi"}\hlstd{)}
+\hlstd{p} \hlkwb{<-} \hlnum{0.9}\hlstd{; q} \hlkwb{<-} \hlnum{1} \hlopt{-} \hlstd{p}
+\hlkwa{for} \hlstd{(xi} \hlkwa{in} \hlkwd{c}\hlstd{(}\hlnum{1e-4}\hlstd{,} \hlnum{1e-7}\hlstd{,} \hlnum{1e-9}\hlstd{)) \{}
+    \hlstd{r} \hlkwb{<-} \hlkwd{rbind}\hlstd{(}\hlstr{"ord 0"} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"lim"} \hlstd{=} \hlopt{-}\hlkwd{log}\hlstd{(q),} \hlstr{"der"} \hlstd{=} \hlkwd{qEx}\hlstd{(}\hlkwc{p} \hlstd{= p,} \hlkwc{xi} \hlstd{= xi)),}
+               \hlstr{"ord 1"} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"lim"} \hlstd{=} \hlkwd{log}\hlstd{(q)}\hlopt{^}\hlnum{2} \hlopt{/} \hlnum{2}\hlstd{,} \hlstr{"der"} \hlstd{=} \hlkwd{eval}\hlstd{(dqEx,} \hlkwd{list}\hlstd{(}\hlkwc{p} \hlstd{= p,} \hlkwc{xi} \hlstd{= xi))),}
+               \hlstr{"ord 2"} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"lim"} \hlstd{=} \hlopt{-}\hlkwd{log}\hlstd{(q)}\hlopt{^}\hlnum{3} \hlopt{/} \hlnum{3}\hlstd{,} \hlstr{"der"} \hlstd{=} \hlkwd{eval}\hlstd{(d2qEx,} \hlkwd{list}\hlstd{(}\hlkwc{x} \hlstd{= p,} \hlkwc{xi} \hlstd{= xi))))}
+    \hlkwd{cat}\hlstd{(}\hlstr{"xi = "}\hlstd{, xi,} \hlstr{"\textbackslash{}n"}\hlstd{)}
+    \hlkwd{print}\hlstd{(r)}
+\hlstd{\}}
+\end{alltt}
+\begin{verbatim}
+## xi =  1e-04 
+##            lim      der
+## ord 0 2.302585 2.302850
+## ord 1 2.650949 2.651356
+## ord 2 4.069357 4.069899
+## xi =  1e-07 
+##            lim           der
+## ord 0 2.302585      2.302585
+## ord 1 2.650949      2.652455
+## ord 2 4.069357 -30116.312500
+## xi =  1e-09 
+##            lim           der
+## ord 0 2.302585  2.302585e+00
+## ord 1 2.650949  8.674716e+01
+## ord 2 4.069357 -1.681924e+11
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+The limit can be used with a quite high precision for the
+functions. However it turns out that the precision is not as good for
+the derivatives. The formulas for the functions can be wrong when $\xi$
+is as small as $\text{1e-16}$, and this may be considered as good enough in
+practice. For the derivatives, the formulas can be wrong when $\xi$ is
+about $\text{1e-8}$ for the first-order derivatives and when $\xi$ is
+about $\text{1e-4}$ for the second-order derivatives. The reason is
+that the formulas for the derivatives involve fractions or small
+quantities since $\xi$ or $\xi^2$ comes at the denominator. Although
+not yet widespread, the use of the derivatives w.r.t. the parameters
+is of great help in the optimization tasks required in EVA. These
+tasks of course involve the maximisation of the likelihood, but the
+profile-likelihood inference for models with covariates may require
+constrained optimization, and differential equations can be also used
+to derive confidence intervals. Although automatic differentiation is
+nowdays widely available, it is unclear that the derivatives are
+evaluated with a good precision even if the exact formulas are used.
+
+
+
+
+This report gives the exact expressions for the first-order and
+the second-order derivatives of the probability functions w.r.t. the
+parameters and also provides workable approximations for the case
+$\xi \approx 0$.
+
+\begin{itemize}
+\item The {\color{MonVertF} \bf raw expressions given by Maxima} are reported
+  {\color{MonVertF} in green}. The expressions can be regarded
+  as exact, not being influenced by manual computations. However
+  these formulas are usually difficult to use in a compiled code.
+
+\item The {\color{red} \bf simplified expressions}
+  are derived by us from the raw expressions.
+  They are reported {\color{red} in red}. The expressions are
+  influenced by manual computations hence could in principle contain errors
+  although they have been carefully checked. These formulas are used
+  to write the compiled code.
+  
+\end{itemize}
+
+\end{document}

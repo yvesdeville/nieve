@@ -10,7 +10,6 @@ Define $z$ by
   \label{eq:defz}
   z := \frac{y}{\sigma}.
 \end{equation}
-
 \begin{maxima}%
   z: y / sigma
 \end{maxima}%
@@ -20,32 +19,32 @@ Define $z$ by
 \begin{maxima}%
   B: z / (1 + xi * z)
 \end{maxima}%
-\noindent
+
+\par\noindent
 Define $A$  and $B$ by
 \begin{equation}
   \label{eq:defAB}
-A := 
-\begin{maxima}%
-tex(A)
-\end{maxima},%
-\qquad
-B :=
-\begin{maxima}%
-tex(B)
-\end{maxima}%,
+  A := 
+  \begin{maxima}%
+    tex(A)
+  \end{maxima},%
+  \qquad
+  B :=
+  \begin{maxima}%
+    tex(B)
+  \end{maxima}%,
 \end{equation}
 %% -----------------------------------------------------------------------
 \begin{maxima}%
   g: -log(sigma) - (1 / xi + 1) * A 
 \end{maxima}%
-\noindent then
+\par\noindent then the log-density is given by
 \[
 \log f = 
 \begin{maxima}
   tex(g)
 \end{maxima}.
 \]
-
 %% -----------------------------------------------------------------------
 \begin{maxima}
   g1: diff(g, sigma, 1)
@@ -55,7 +54,6 @@ tex(B)
   g2: diff(g, xi, 1)
 \end{maxima}%
 %-----------------------------------------------------------------------
-
 
 \subsection{Taylor expansion for $\xi \approx 0$}
 %% ========================================================
@@ -176,26 +174,23 @@ For $\xi \approx  0$ we have
  \end{maxima}%
  
 {\color{MonVertF}  
-$$
-\frac{\partial^2}{\partial \sigma^2} \,\log f = 
-\begin{maxima}
-  tex(g11b)
-\end{maxima}
-$$
-
-$$
-\frac{\partial^2}{\partial \sigma \partial \xi} \, \log f =
-\begin{maxima}
-  tex(g12b)
-\end{maxima}
-$$
-
-$$
- \frac{\partial^2}{\partial \xi^2}\, \log f =
-\begin{maxima}
- tex(g22b)
-\end{maxima}
-$$
+\begin{align*}
+  \frac{\partial^2}{\partial \sigma^2} \,\log f
+  &= 
+   \begin{maxima}
+     tex(g11b)
+   \end{maxima} \\
+  \frac{\partial^2}{\partial \sigma \partial \xi} \, \log f
+  &=
+    \begin{maxima}
+      tex(g12b)
+    \end{maxima}\\
+  \frac{\partial^2}{\partial \xi^2}\, \log f
+  &=
+    \begin{maxima}
+      tex(g22b)
+    \end{maxima}
+\end{align*}
 }
 
 \subsubsection*{Simplified  expressions}
@@ -509,6 +504,7 @@ The quantile corresponding to an exceedance probability $q := 1 -p$ for $\xi \ne
 \subsection{First-order derivatives: expressions}
 %%========================================================
 When $\xi \neq 0$ we have
+{\color{MonVertF}
 \begin{align*}
 \frac{\partial \rho}{\partial \sigma}  &=
 \begin{maxima}
@@ -520,6 +516,7 @@ When $\xi \neq 0$ we have
  tex(rho2)
 \end{maxima}
 \end{align*}
+}
 
 
 \subsection{First-order derivatives: Taylor approximation}
