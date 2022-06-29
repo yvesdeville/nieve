@@ -1,0 +1,451 @@
+%% \chapter{Poisson-GP to NHPP transformations}
+
+\section{The PP to Poisson-GP transformation}
+
+\subsection{Expression}
+
+\begin{maxima}
+  z_0: (u - mu_0) / sigma_0
+\end{maxima}
+
+\begin{maxima}
+  C: 1 + xi_0 * z_0
+\end{maxima}
+With $w$ being the reference block duration, 
+$$
+   z_0 := \frac{u - \mu_0}{\sigma_0}, \qquad C:= 1 + \xi_0 z_0
+$$
+
+{\color{MonVertF}
+\begin{maxima}
+  lambda: C^(-1 /xi_0) / w
+\end{maxima}
+\begin{maxima}
+  sigma: C * sigma_0
+\end{maxima}
+\begin{maxima}
+  xi: xi_0
+\end{maxima}
+}
+The Poisson-GP parameter vector
+$\boldsymbol{\theta} := [\lambda, \, \sigma, \, \xi]$ relates to the
+vector $\boldsymbol{\theta}_0 := [\mu_0, \, \sigma_0, \, \xi_0]$ of PP
+parameters according to {\color{MonVertF}
+\begin{align*}
+  \lambda
+  &=
+    \begin{maxima}
+      tex(lambda)
+    \end{maxima}\\
+  \sigma
+  & =
+    \begin{maxima}
+      tex(sigma)
+    \end{maxima}\\   
+  \xi &= \xi_0.
+\end{align*}}%
+In simpler form
+{\color{red}
+\begin{align*}
+  \lambda
+  &= C^{-1/\xi_0} w^{-1}\\
+  \sigma
+  & = C \sigma_0\\   
+  \xi &= \xi_0
+\end{align*}}%
+Remind that these expressions can only be used when the threshold $u$
+is in the support of the GEV distribution with parameters
+$\boldsymbol{\theta}_0 $.
+
+{\footnotesize
+\begin{maxima}
+  tlambda: taylor(lambda, xi_0, 0, 2)
+\end{maxima}
+\begin{maxima}
+  tsigma: taylor(sigma, xi_0, 0, 2)
+\end{maxima}
+\begin{maxima}
+  txi: taylor(xi, xi_0, 0, 2)
+\end{maxima}
+}
+
+\subsection{Taylor approximation for $\xi \approx 0$}
+
+\subsubsection*{Raw expressions}
+
+%% \begin{landscape}
+{\footnotesize \color{MonVertF}
+\begin{align*}
+\lambda &= 
+\begin{maxima}
+  tex(tlambda)
+\end{maxima} \\
+\sigma &= 
+\begin{maxima}
+  tex(tsigma)
+\end{maxima}\\
+  \xi &= 
+\begin{maxima}
+  tex(txi)
+\end{maxima}
+\end{align*}
+}
+%% \end{landscape}
+
+\subsubsection*{Simplified expressions}
+
+{\color{red}
+\begin{align*}
+  \lambda &= e^{-z_0} w^{-1} \,  \left\{ 1 + z_0^2 \, \xi -
+            \frac{z_0^3}{24}\, \left[ 8 - 3 z_0 \right] \xi_0^2 \right\}
+            + o(\xi_0^2)\\
+  \sigma &= \sigma_0 \,  \left[ 1 + z_0 \, \xi  \right] + o(\xi_0^2)\\
+  \xi &= \xi_0
+\end{align*}
+}
+
+
+
+\section{First-order derivatives for $\lambda$: expressions}
+
+
+\subsection*{Raw expressions}
+
+\begin{maxima}
+  dlambdadmu_0: diff(lambda, mu_0, 1)
+\end{maxima}
+\begin{maxima}
+  dlambdadsigma_0: diff(lambda, sigma_0, 1)
+\end{maxima}
+\begin{maxima}
+  dlambdadxi_0: diff(lambda, xi_0, 1)
+\end{maxima}
+
+{\color{MonVertF}
+\begin{align*}
+  \frac{\partial{\lambda}}{\partial \mu_0}
+  &=
+\begin{maxima}
+  tex(dlambdadmu_0)
+\end{maxima}\\
+ \frac{\partial{\lambda}}{\partial \sigma_0}
+  &=
+\begin{maxima}
+  tex(dlambdadxi_0)
+\end{maxima}\\
+\frac{\partial{\lambda}}{\partial \xi_0}
+  &=
+\begin{maxima}
+  tex(dlambdadxi_0)
+\end{maxima}
+\end{align*}
+}
+
+\subsection*{Simplified expressions}
+
+{\color{red}
+\begin{align*}
+  \frac{\partial{\lambda}}{\partial \mu_0}
+  &= \frac{\lambda}{\sigma^\star C} \\
+ \frac{\partial{\lambda}}{\partial \sigma_0}
+  &=
+ \frac{z \lambda}{\sigma^\star C}\\
+\frac{\partial{\lambda}}{\partial \xi_0}
+  &=  \frac{\lambda}{\xi_0^2} \, \left[ \log C - \xi_0 \frac{z_0}{C} \right]\\
+\end{align*}
+}
+
+\section{First-order derivatives of $\lambda$: Taylor approximation}
+
+
+\subsection*{Raw expressions}
+
+\begin{maxima}
+  tdlambdadmu_0: taylor(dlambdadmu_0, xi, 0, 1)
+\end{maxima}
+\begin{maxima}
+  tdlambdadsigma_0: taylor(dlambdadsigma_0, xi, 0, 1)
+\end{maxima}
+\begin{maxima}
+  tdlambdadxi_0: taylor(dlambdadxi_0, xi, 0, 1)
+\end{maxima}
+
+{\color{MonVertF} \footnotesize
+\begin{align*}
+  \frac{\partial{\lambda}}{\partial \mu_0}
+  &=
+\begin{maxima}
+  tex(tdlambdadmu_0)
+\end{maxima}\\
+ \frac{\partial{\lambda}}{\partial \sigma_0}
+  &=
+\begin{maxima}
+  tex(tdlambdadsigma_0)
+\end{maxima}\\
+ \frac{\partial{\lambda}}{\partial \xi_0}
+  &=
+\begin{maxima}
+  tex(tdlambdadxi_0)
+\end{maxima}
+\end{align*}
+}
+
+\subsection*{Simplified expressions}
+
+{\color{red} 
+\begin{align*}
+  \frac{\partial{\lambda}}{\partial \mu_0}
+  &= \frac{1}{\sigma_0} \, e^{-z_0} w^{-1} \,
+    \left\{ 1 + \frac{z_0}{2} \,
+    \left[z_0 - 2\right] \, \xi_0 \right\} + o(\xi_0)
+  \\
+ \frac{\partial{\lambda}}{\partial \sigma_0}
+  &= \frac{z_0}{\sigma_0} \, e^{-z_0} w^{-1} \,
+    \left\{ 1 + \frac{z_0}{2} \,
+    \left[z_0 - 2\right] \, \xi_0 \right\} + o(\xi_0)
+  \\
+ \frac{\partial{\lambda}}{\partial \xi_0}
+  &= \frac{z_0^2}{2} \, e^{-z_0} w^{-1} \,
+     \left\{ 1 + \frac{z_0}{12} \,
+    \left[3 z_0 - 8\right] \, \xi_0 \right\} + o(\xi_0)
+  \\
+\end{align*}
+}
+
+\section{First-order derivatives for $\sigma$: expressions}
+
+\subsection*{Raw expressions}
+
+\begin{maxima}
+  dsigmadmu_0: diff(sigma, mu_0, 1)
+\end{maxima}
+\begin{maxima}
+  dsigmadsigma_0: diff(sigma, sigma_0, 1)
+\end{maxima}
+\begin{maxima}
+  dsigmadxi_0: diff(sigma, xi_0, 1)
+\end{maxima}
+
+\begin{maxima}
+  tdsigmadmu_0: taylor(dsigmadmu_0, xi, 0, 1)
+\end{maxima}
+\begin{maxima}
+  tdsigmadsigma_0: taylor(dsigmadsigma_0, xi, 0, 1)
+\end{maxima}
+\begin{maxima}
+  tdsigmadxi_0: taylor(dsigmadxi_0, xi, 0, 1)
+\end{maxima}
+
+{\color{MonVertF} 
+\begin{align*}
+  \frac{\partial{\sigma}}{\partial \mu_0}
+  &=
+\begin{maxima}
+  tex(dsigmadmu_0)
+\end{maxima}\\
+ \frac{\partial{\sigma}}{\partial \sigma_0}
+  &=
+\begin{maxima}
+  tex(dsigmadsigma_0)
+\end{maxima}\\
+ \frac{\partial{\sigma}}{\partial \xi_0}
+  &=
+\begin{maxima}
+  tex(dsigmadxi_0)
+\end{maxima}
+\end{align*}
+}
+
+\section{First-order derivatives for $\sigma$:
+  Taylor approximation}
+
+Unneeded (see previous section).
+
+% {\color{MonVertF} 
+% \begin{align*}
+%   \frac{\partial{\sigma}}{\partial \mu_0}
+%   &=
+% \begin{maxima}
+%   tex(tdsigmadmu_0)
+% \end{maxima}\\
+%  \frac{\partial{\sigma}}{\partial \sigma_0}
+%   &=
+% \begin{maxima}
+%   tex(tdsigmadsigma_0)
+% \end{maxima}\\
+%  \frac{\partial{\sigma}}{\partial \xi_0}
+%   &=
+% \begin{maxima}
+%   tex(tdsigmadxi_0)
+% \end{maxima}
+% \end{align*}
+% }
+
+% \subsubsection*{Simplified  expressions}
+
+% {\color{red} 
+% \begin{align*}
+%   \frac{\partial{\sigma}}{\partial \mu_0}
+%   &= -\xi_0 + o(\xi_0)\\
+%  \frac{\partial{\sigma}}{\partial \sigma_0}
+%   &= 1 + o(\xi_0) \\
+%  \frac{\partial{\sigma}}{\partial \xi_0}
+%   &= \sigma_0 z_0 +o(\xi_0)
+% \end{align*}
+% }
+
+\section{First-order derivatives for $\xi$: expressions}
+
+\subsection*{Simplified expressions}
+{\color{red} 
+\begin{align*}
+  \frac{\partial{\xi}}{\partial \mu_0}
+  &= 0\\
+ \frac{\partial{\xi}}{\partial \sigma_0}
+  &= 0 \\
+ \frac{\partial{\xi}}{\partial \xi_0}
+  &= 1
+\end{align*}
+}
+
+
+\section{Second-order derivatives for $\lambda$:
+  expressions}
+
+\subsection*{Raw expressions}
+
+\begin{maxima}
+  d2lambdadmu_0dmu_0: diff(lambda, mu_0, 1, mu_0, 1)
+\end{maxima}
+\begin{maxima}
+  d2lambdadmu_0dsigma_0: diff(lambda, mu_0, 1, sigma_0, 1)
+\end{maxima}
+\begin{maxima}
+  d2lambdadmu_0dxi_0: diff(lambda, mu_0, 1, xi_0, 1)
+\end{maxima}
+
+{\color{MonVertF}
+\begin{align*}
+  \frac{\partial^2{\lambda}}{\partial \mu_0^2}
+  &=
+\begin{maxima}
+  tex(d2lambdadmu_0dmu_0)
+\end{maxima}\\
+ \frac{\partial^2{\lambda}}{\partial \mu_0 \partial \sigma_0}
+  &=
+\begin{maxima}
+  tex(d2lambdadmu_0dsigma_0)
+\end{maxima}\\
+\frac{\partial^2{\lambda}}{\partial \mu_0 \partial \xi_0}
+  &=
+\begin{maxima}
+  tex(d2lambdadmu_0dxi_0)
+\end{maxima}
+\end{align*}
+}
+
+\subsection*{Simplified expressions}
+
+{\color{red}
+\begin{align*}
+  \frac{\partial^2{\lambda}}{\partial \mu_0^2}
+  &= -\left[1 + \xi_0\right] \, \frac{\lambda}{C^2 \sigma_0^2}\\
+ \frac{\partial^2{\lambda}}{\partial \mu_0 \partial \sigma_0}
+  &=  - \frac{\lambda}{C \sigma_0^2} \,
+    \left\{ 1 - \left[1 + \xi_0\right] \, \frac{z_0}{C}
+   \right\}\\
+\frac{\partial^2{\lambda}}{\partial \mu_0 \partial \xi_0}
+  &= \frac{\lambda}{C \sigma_0 \xi_0}\, \left\{ -\left[1 + \xi_0\right] \,
+    \frac{z_0}{C} + \frac{\log C}{\xi_0} 
+    \right\}
+\end{align*}
+}
+
+
+\subsection*{Raw expressions}
+
+\begin{maxima}
+  d2lambdadsigma_0dmu_0: diff(lambda, sigma_0, 1, mu_0, 1)
+\end{maxima}
+\begin{maxima}
+  d2lambdadsigma_0dsigma_0: diff(lambda, sigma_0, 1, sigma_0, 1)
+\end{maxima}
+\begin{maxima}
+  d2lambdadsigma_0dxi_0: diff(lambda, sigma_0, 1, xi_0, 1)
+\end{maxima}
+
+{\color{MonVertF}
+\begin{align*}
+ %  \frac{\partial^2{\lambda}}{\partial \sigma_0 \partial \mu_0}
+%   &=
+% \begin{maxima}
+%   tex(d2lambdadsigma_0dmu_0)
+% \end{maxima}\\
+ \frac{\partial^2{\lambda}}{\partial \sigma_0^2}
+  &=
+\begin{maxima}
+  tex(d2lambdadsigma_0dsigma_0)
+\end{maxima}\\
+\frac{\partial^2{\lambda}}{\partial \sigma_0 \partial \xi_0}
+  &=
+\begin{maxima}
+  tex(d2lambdadsigma_0dxi_0)
+\end{maxima}
+\end{align*}
+}
+
+\subsection*{Simplified expressions}
+
+{\color{red}
+\begin{align*}
+ \frac{\partial^2{\lambda}}{\partial \sigma_0^2}
+  &=  - \frac{\lambda z_0}{C \sigma_0^2} \,
+    \left\{ 2 - \left[1 + \xi_0\right] \, \frac{z_0}{C}
+    \right\} \\
+\frac{\partial^2{\lambda}}{\partial \sigma_0 \partial \xi_0}
+  &= \frac{\lambda z_0}{C \sigma_0 \xi_0}\, \left\{ -\left[1 + \xi_0\right] \,
+    \frac{z_0}{C} + \frac{\log C}{\xi_0} 
+    \right\} = z_0 \, \frac{\partial^2{\lambda}}{\partial \mu_0 \partial \xi_0}
+\end{align*}
+}
+
+\section{Second-order derivatives for $\lambda$:
+  limit for $\xi \to 0$}
+
+{\color{MonVertF}
+\begin{align*}
+\lim_{\xi \to 0} \frac{\partial^2 \lambda}{\partial \mu_0^2} &=
+\begin{maxima}
+tex(limit(d2lambdadmu_0dmu_0, xi, 0))
+\end{maxima} \\
+  \lim_{\xi \to 0} \frac{\partial^2 \lambda}{\partial \mu_0 \partial \sigma_0} &=
+\begin{maxima}
+tex(limit(d2lambdadmu_0dsigma_0, xi, 0))
+\end{maxima} \\
+   \lim_{\xi \to 0} \frac{\partial^2 \lambda}{\partial \mu_0 \partial \xi_0} &=
+\begin{maxima}
+tex(limit(d2lambdadmu_0dxi_0, xi, 0))
+\end{maxima} \\
+   \lim_{\xi \to 0} \frac{\partial^2 \lambda}{\partial \sigma_0^2} &=
+\begin{maxima}
+tex(limit(d2lambdadsigma_0dsigma_0, xi, 0))
+\end{maxima} \\
+   \lim_{\xi \to 0} \frac{\partial^2 \lambda}{\partial \sigma_0 \partial \xi_0} &=
+\begin{maxima}
+tex(limit(d2lambdadmu_0dsigma_0, xi, 0))
+\end{maxima}
+\end{align*}}
+
+\section{Second-order derivatives for $\sigma$:
+  expressions}
+
+{\color{red}
+\begin{align*}
+  \frac{\partial^2{\sigma}}{\partial \mu_0^2}
+  &= 0\\
+ \frac{\partial^2{\sigma}}{\partial \mu_0 \partial \sigma_0}
+  &= 0\\
+\frac{\partial^2{\sigma}}{\partial \mu_0 \partial \xi_0}
+  &= -1
+\end{align*}
+}

@@ -1,0 +1,293 @@
+
+%% \chapter{NHPP to Poisson-GP transformations}
+
+\section{Poisson-GP to PP}
+%% ==============================
+
+\subsection{Expression}
+%% -----------------------
+
+Let $\boldsymbol{\theta} = [\lambda,\, \sigma,\, \xi]$ and
+$\boldsymbol{\theta}_0 = [\mu_0,\, \sigma_0,\, \xi_0]$ denote the
+Poisson-GP and PP parameter vectors. The threshold $u$ being
+considered as fixed, the relation between the PP parameters
+$\boldsymbol{\theta}_0 $ and the
+Poisson-GP parameters~$\boldsymbol{\theta}$ is given by
+\begin{align*}
+  \mu_0 &= u + \frac{(\lambda w)^\xi - 1}{\xi} \, \sigma,\\
+  \sigma_0 &= (\lambda w)^\xi \sigma, \\
+  \xi_0 &=  \xi.
+\end{align*}
+
+\begin{maxima}
+  mu_0: u +  sigma * ((lambda * w)^xi - 1) / xi
+\end{maxima}
+\begin{maxima}
+  sigma_0: sigma * (lambda * w)^xi
+\end{maxima}
+\begin{maxima}
+  xi_0: xi
+\end{maxima}
+
+
+%\ begin{align*}
+% \mu_0
+% &=
+% \begin{maxima}
+%   tex(mu_0)
+% \end{maxima}\\
+% \sigma_0 &=
+% \begin{maxima}
+%   tex(sigma_0)
+% \end{maxima}\\
+% \xi_0
+% &=
+% \begin{maxima}
+%   tex(xi_0)
+% \end{maxima}
+% \end{align*}
+
+{\footnotesize
+\begin{maxima}
+  tmu_0: taylor(mu_0, xi, 0, 2)
+\end{maxima}
+\begin{maxima}
+  tsigma_0: taylor(sigma_0, xi, 0, 2)
+\end{maxima}
+\begin{maxima}
+  txi_0: taylor(xi_0, xi, 0, 2)
+\end{maxima}
+}
+
+\subsection{Taylor approximation for $\xi \approx 0$}
+
+\subsubsection*{Raw expressions}
+
+%% \begin{landscape}
+{\color{MonVertF}
+\begin{align*}
+\mu_0 &= 
+\begin{maxima}
+  tex(tmu_0)
+\end{maxima} \\
+\sigma_0 &= 
+\begin{maxima}
+  tex(tsigma_0)
+\end{maxima}\\
+  \xi_0 &= 
+\begin{maxima}
+  tex(txi_0)
+\end{maxima}
+\end{align*}
+}
+%% \end{landscape}
+
+\subsubsection*{Simplified expressions}
+With $L:= \log(\lambda w)$, we have
+{\color{red}
+\begin{align*}
+  \mu_0 &= u + \sigma \, \left\{ L + \frac{L^2}{2} \,\xi + \frac{L^3}{3}\xi^2 \right\} + o(\xi^2) \\
+  \sigma_0 &= \sigma \,  \left\{ 1 + L \,\xi + \frac{L^2}{2}\xi^2 \right\} + o(\xi^2) \\
+  \xi_0 &= \xi + o(\xi^2)
+\end{align*}
+}
+
+
+\section{First-order derivatives for $\mu_0$: expressions}
+
+\subsection*{Raw expressions}
+
+\begin{maxima}
+  dmu_0dlambda: diff(mu_0, lambda, 1)
+\end{maxima}
+\begin{maxima}
+  dmu_0dsigma: diff(mu_0, sigma, 1)
+\end{maxima}
+\begin{maxima}
+  dmu_0dxi: diff(mu_0, xi, 1)
+\end{maxima}
+
+{\color{MonVertF}
+\begin{align*}
+  \frac{\partial \mu_0}{\partial \lambda}
+  &=
+\begin{maxima}
+  tex(dmu_0dlambda)
+\end{maxima}\\
+ \frac{\partial \mu_0}{\partial \sigma}
+  &=
+\begin{maxima}
+  tex(dmu_0dsigma)
+\end{maxima}\\
+\frac{\partial \mu_0 }{\partial \xi}
+  &=
+\begin{maxima}
+  tex(dmu_0dxi)
+\end{maxima}
+\end{align*}
+}
+
+\subsection*{Simplified expressions}
+With $\nu := \lambda w$, we have
+
+{\color{red}
+\begin{align*}
+  \frac{\partial \mu_0}{\partial \lambda}
+  &= \sigma \, \frac{\nu^\xi}{\lambda}\\
+ \frac{\partial \mu_0}{\partial \sigma}
+  &= \frac{\nu^\xi-1}{\xi}\\
+\frac{\partial \mu_0 }{\partial \xi}
+  &= \frac{\sigma}{\xi} \, \left\{\nu^\xi L - \dfrac{\nu^\xi - 1}{\xi} \right\} =
+  \frac{\sigma}{\xi} \, \left\{\nu^\xi L - \frac{\partial \mu_0}{\partial \sigma} \right\} \\
+\end{align*}
+}
+\section{First-order derivatives for $\mu_0$: Taylor approximation}
+
+\subsection*{Raw expressions}
+\begin{maxima}
+  tdmu_0dlambda: taylor(dmu_0dlambda, xi, 0, 1)
+\end{maxima}
+\begin{maxima}
+  tdmu_0dsigma: taylor(dmu_0dsigma, xi, 0, 1)
+\end{maxima}
+\begin{maxima}
+  tdmu_0dxi: taylor(dmu_0dxi, xi, 0, 1)
+\end{maxima}
+
+{\color{MonVertF}
+\begin{align*}
+  \frac{\partial \mu_0}{\partial \lambda}
+  &=
+\begin{maxima}
+  tex(tdmu_0dlambda)
+\end{maxima}\\
+ \frac{\partial \mu_0}{\partial \sigma}
+  &=
+\begin{maxima}
+  tex(tdmu_0dsigma)
+\end{maxima}\\
+\frac{\partial \mu_0 }{\partial \xi}
+  &=
+\begin{maxima}
+  tex(tdmu_0dxi)
+\end{maxima}
+\end{align*}
+}
+
+\subsection*{Simplified expressions}
+{\color{red}
+\begin{align*}
+  \frac{\partial \mu_0}{\partial \lambda}
+  &= \frac{\sigma}{\lambda}\, \left\{ 1 + L \, \xi \right\} + o(\xi) \\
+ \frac{\partial \mu_0}{\partial \sigma}
+  &= \frac{L}{2} \, \left\{ 2 + L\, \xi \right\} + o(\xi) \\
+\frac{\partial \mu_0 }{\partial \xi}
+  &=  \sigma \, \frac{L^2}{6} \left\{ 3  + 2 L\, \xi \right\} + o(\xi) 
+\end{align*}
+}
+
+\section{First-order derivatives for $\sigma_0$: expressions}
+
+\subsection*{Raw expressions}
+
+\begin{maxima}
+  dsigma_0dlambda: diff(sigma_0, lambda, 1)
+\end{maxima}
+\begin{maxima}
+  dsigma_0dsigma: diff(sigma_0, sigma, 1)
+\end{maxima}
+\begin{maxima}
+  dsigma_0dxi: diff(sigma_0, xi, 1)
+\end{maxima}
+
+{\color{MonVertF}
+\begin{align*}
+  \frac{\partial \sigma_0}{\partial \lambda}
+  &=
+    \begin{maxima}
+      tex(dsigma_0dlambda)
+    \end{maxima} \\
+ \frac{\partial \sigma_0}{\partial \sigma}
+  &=
+    \begin{maxima}
+      tex(dsigma_0dsigma)
+    \end{maxima} \\
+  \frac{\partial \sigma_0 }{\partial \xi}
+  &= \begin{maxima}
+      tex(dsigma_0dxi)
+    \end{maxima} \\
+\end{align*}
+}
+
+\subsection*{Simplified expressions}
+
+{\color{red}
+\begin{align*}
+  \frac{\partial \sigma_0}{\partial \lambda}
+  &= \sigma \, \xi \, \frac{\nu^\xi}{\lambda} = \xi \frac{\partial \mu_0}{\partial \lambda}\\
+ \frac{\partial \sigma_0}{\partial \sigma}
+  &= \nu^\xi\\
+  \frac{\partial \sigma_0 }{\partial \xi}
+  &= \sigma \nu^\xi L 
+\end{align*}
+}
+
+\section{First-order derivatives for $\xi_0$: expressions}
+
+{\color{red}
+\begin{align*}
+  \frac{\partial \xi_0}{\partial \lambda}
+  &= 0\\
+ \frac{\partial \xi_0}{\partial \sigma}
+  &= 0\\
+  \frac{\partial \xi_0 }{\partial \xi}
+  &= 1
+\end{align*}
+}
+
+\section{First-order derivatives for $\sigma_0$: Taylor approximation}
+
+\subsection*{Raw expressions}
+\begin{maxima}
+  tdsigma_0dlambda: taylor(dsigma_0dlambda, xi, 0, 1)
+\end{maxima}
+\begin{maxima}
+  tdsigma_0dsigma: taylor(dsigma_0dsigma, xi, 0, 1)
+\end{maxima}
+\begin{maxima}
+  tdsigma_0dxi: taylor(dsigma_0dxi, xi, 0, 1)
+\end{maxima}
+
+{\color{MonVertF}
+\begin{align*}
+  \frac{\partial \sigma_0}{\partial \lambda}
+  &=
+\begin{maxima}
+  tex(tdsigma_0dlambda)
+\end{maxima}\\
+ \frac{\partial \sigma_0}{\partial \sigma}
+  &=
+\begin{maxima}
+  tex(tdsigma_0dsigma)
+\end{maxima}\\
+\frac{\partial \sigma_0 }{\partial \xi}
+  &=
+\begin{maxima}
+  tex(tdsigma_0dxi)
+\end{maxima}
+\end{align*}
+}
+
+\subsection*{Simplified expressions}
+
+{\color{red}
+\begin{align*}
+  \frac{\partial \sigma_0}{\partial \lambda}
+  &= \frac{\sigma}{\lambda} \, \xi + o(\xi)\\
+ \frac{\partial \sigma_0}{\partial \sigma}
+  &= 1 + L \xi + o(\xi)\\
+\frac{\partial \sigma_0 }{\partial \xi}
+  &= \sigma L \, \left\{ 1 + L \xi \right\} +  o(\xi)
+\end{align*}
+}
+

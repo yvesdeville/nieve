@@ -1,0 +1,639 @@
+
+%%\chapter{GPD2: the Two-Parameter Generalised Pareto Distribution}
+
+\section{The log-density $\log f$}
+
+\subsection{Expression}
+
+Define $z$ by
+\begin{equation}
+  \label{eq:defz}
+  z := \frac{y}{\sigma}.
+\end{equation}
+
+\begin{maxima}%
+  z: y / sigma
+\end{maxima}%
+\begin{maxima}%
+  A: log(1 + xi * z)
+\end{maxima}
+\begin{maxima}%
+  B: z / (1 + xi * z)
+\end{maxima}%
+\noindent
+Define $A$  and $B$ by
+\begin{equation}
+  \label{eq:defAB}
+A := 
+\begin{maxima}%
+tex(A)
+\end{maxima},%
+\qquad
+B :=
+\begin{maxima}%
+tex(B)
+\end{maxima}%,
+\end{equation}
+%% -----------------------------------------------------------------------
+\begin{maxima}%
+  g: -log(sigma) - (1 / xi + 1) * A 
+\end{maxima}%
+\noindent then
+\[
+\log f = 
+\begin{maxima}
+  tex(g)
+\end{maxima}.
+\]
+
+%% -----------------------------------------------------------------------
+\begin{maxima}
+  g1: diff(g, sigma, 1)
+\end{maxima}%
+%%
+\begin{maxima}
+  g2: diff(g, xi, 1)
+\end{maxima}%
+%-----------------------------------------------------------------------
+
+
+\subsection{Taylor expansion for $\xi \approx 0$}
+%% ========================================================
+\subsubsection*{Raw expression}
+\begin{maxima}
+  tg: taylor(g, xi, 0, 2)
+\end{maxima}
+The Taylor approximation of $\log f$ for $\xi \approx  0$ is 
+{\color{MonVertF}
+  $$
+  \log f =
+\begin{maxima}
+  tex(tg)
+\end{maxima}
+$$
+}
+
+\subsubsection*{Simplified expression}
+
+{\color{red}
+  \begin{equation*}
+    \log f = - \left[ \log \sigma + z\right] + \frac{z (z - 2) }{2} \, \xi -
+    \frac{z^2 (2 z - 3)}{6} \, \xi^2 + o(\xi^2)
+  \end{equation*}
+}
+  
+\subsection{First-order derivatives: expressions}
+%% =======================================================
+\subsubsection*{Raw expressions}
+
+{\color{MonVertF}
+\begin{align*}
+\frac{\partial \log f}{\partial \sigma}  &=
+\begin{maxima}
+ tex(g1)
+\end{maxima}
+\\
+\frac{\partial \log f}{\partial \xi} &=
+\begin{maxima}
+ tex(g2)
+\end{maxima}
+\end{align*}
+}
+
+\subsubsection*{Simplified expressions}
+
+{\color{red}
+\begin{align*}
+  \frac{\partial \log f}{\partial \sigma}
+  &= - \frac{1}{\sigma}\, \left[1 - (\xi + 1) B \right]\\
+  \frac{\partial \log f}{\partial \xi}
+  &= \frac{1}{\xi^2} \, \left[A - \xi (\xi +1) B \right]
+\end{align*}
+}
+
+
+\subsection{First-order derivatives: Taylor expansions for $\xi \approx 0$}
+%% =============================================================================
+\subsubsection*{Raw expressions}
+%% ---------------------------------
+\begin{maxima}
+  tg1: taylor(g1, xi, 0, 1)
+\end{maxima}
+\begin{maxima}
+  tg2: taylor(g2, xi, 0, 1)
+\end{maxima}
+For $\xi \approx  0$ we have
+{\color{MonVertF}
+\begin{align*}
+  \frac{\partial \log f}{\partial \sigma} &=
+\begin{maxima}
+  tex(tg1)
+\end{maxima} \\
+\frac{\partial \log f}{\partial \xi} &=
+\begin{maxima}
+  tex(tg2)
+\end{maxima}
+\end{align*}
+}
+
+\subsubsection*{Simplified expressions}
+%%------------------------------------------
+{\color{red}
+  \begin{align*}
+    \frac{\partial \log f}{\partial \sigma}
+    &= \frac{z - 1}{\sigma} - \frac{z (z - 1)}{\sigma} \,\xi + o(\xi) \\
+    \frac{\partial \log f}{\partial \xi}
+    &=  \frac{z(z - 2)}{2} - \frac{z^2(2z - 3)}{3}\, \xi + o(\xi) 
+  \end{align*}
+}
+  
+\subsection{Second-order derivatives: expressions}
+% %% ============================================
+
+\subsubsection*{Raw expressions} 
+ 
+ \begin{maxima}
+   g11: diff(g, sigma, 2)
+ \end{maxima}%
+ \begin{maxima}
+   g11b: letsimp(g11)
+ \end{maxima}%
+ 
+ \begin{maxima}
+   g12: diff(g, sigma, 1, xi, 1)
+ \end{maxima}%
+ 
+ \begin{maxima}
+   g12b: letsimp(g12)
+ \end{maxima}%
+ 
+ \begin{maxima}
+   g22: diff(g, xi, 2)
+ \end{maxima}%
+ 
+ \begin{maxima}
+   g22b: letsimp(g22)
+ \end{maxima}%
+ 
+{\color{MonVertF}  
+$$
+\frac{\partial^2}{\partial \sigma^2} \,\log f = 
+\begin{maxima}
+  tex(g11b)
+\end{maxima}
+$$
+
+$$
+\frac{\partial^2}{\partial \sigma \partial \xi} \, \log f =
+\begin{maxima}
+  tex(g12b)
+\end{maxima}
+$$
+
+$$
+ \frac{\partial^2}{\partial \xi^2}\, \log f =
+\begin{maxima}
+ tex(g22b)
+\end{maxima}
+$$
+}
+
+\subsubsection*{Simplified  expressions}
+
+{\color{red}
+\begin{align*}
+  \frac{\partial^2}{\partial \sigma^2} \,\log f
+  &= \frac{1}{\sigma^2}\, \left[ 1 - 2 (\xi + 1) B + \xi (\xi + 1) B^2\right] \\
+ \frac{\partial^2}{\partial \sigma \partial \xi} \,\log f 
+  &= \frac{1}{\sigma}\, \left[ B - (\xi + 1) B^2\right] \\
+    \frac{\partial^2}{\partial \xi^2} \,\log f 
+  &= \frac{1}{\xi^3}\, \left[-2 A + 2 \xi  B + \xi^2 (\xi + 1) B^2\right]
+\end{align*}
+}
+
+
+
+\subsection{Second-order derivatives: limits for $\xi \to 0$}
+%% =====================================================================
+
+\subsubsection*{Raw expressions} 
+
+Here are the limits for $\xi \to 0$
+
+{\color{MonVertF}
+\begin{align*}
+\lim_{\xi \to 0} \frac{\partial^2 \log f}{\partial \sigma^2} &=
+\begin{maxima}
+tex(limit (g11, xi, 0))
+\end{maxima} \\
+\lim_{\xi \to 0} \frac{\partial^2 \log f}{\partial \sigma \partial \xi} &=
+\begin{maxima}
+tex(limit (g12, xi, 0))
+\end{maxima} \\
+\lim_{\xi \to 0} \frac{\partial^2 \log f}{\partial \xi^2} &=
+\begin{maxima}
+tex(limit (g22, xi, 0))
+\end{maxima}
+\end{align*}}
+
+\subsubsection*{Simplified expressions} 
+
+The corresponding simplified expressions are
+{\color{red}
+\begin{align*}
+\lim_{\xi \to 0} \frac{\partial^2 \log f}{\partial \sigma^2} &=
+\frac{1-2z}{\sigma^2}\\
+\lim_{\xi \to 0} \frac{\partial^2 \log f}{\partial \sigma \partial \xi} &=
+- \frac{z (z - 1)}{\sigma}\\
+\lim_{\xi \to 0} \frac{\partial^2 \log f}{\partial \xi^2} &= 
+- \frac{z^2 (2 z - 3)}{3}.
+\end{align*}
+}
+
+%%========================================================
+\section{Cumulated hazard (log-survival) $H = \log S$}
+
+\subsection{Expression}
+
+The cumulated hazard $H(y) = \log S(y)$ 
+\begin{maxima}
+  H: A / xi
+\end{maxima}
+
+$$
+H :=
+\begin{maxima}
+  tex(H)
+\end{maxima}
+$$
+
+\subsection{Taylor approximation for $\xi \approx 0$}
+
+\subsubsection*{Raw expression}
+\begin{maxima}
+  tH: taylor(H, xi, 0, 2)
+\end{maxima}
+
+{\color{MonVertF}
+\begin{equation*}
+  H = 
+  \begin{maxima}
+    tex(tH)
+  \end{maxima}
+\end{equation*}
+}
+
+\subsubsection*{Simplified expression}
+{\color{red}
+  \begin{equation}
+    \label{eq:TH}
+    H = z - \frac{z^2}{2}\, \xi +  \frac{z^3}{3}\, \xi^2 + o (\xi^2)
+  \end{equation}
+}
+%
+\begin{maxima}
+  H1: diff(H, sigma, 1)
+\end{maxima}%
+%%
+\begin{maxima}
+  H2: diff(H, xi, 1)
+\end{maxima}%
+
+
+\subsection{First-order derivatives: expressions}
+%-----------------------------------------------------------------------
+
+\subsubsection*{Raw expressions}
+
+{\color{MonVertF}
+\begin{align*}
+\frac{\partial H}{\partial \sigma}  &=
+\begin{maxima}
+ tex(H1)
+\end{maxima}
+\\
+\frac{\partial H}{\partial \xi} &=
+\begin{maxima}
+ tex(H2)
+\end{maxima}
+\end{align*}
+}
+
+\subsubsection*{Simplified expressions}
+
+{\color{red}
+\begin{align*}
+  \frac{\partial H}{\partial \sigma}
+  &= - \frac{1}{\sigma}\, B  \\
+  \frac{\partial H}{\partial \xi}
+  &= -\frac{1}{\xi^2} \, \left[A - \xi B \right]
+\end{align*}
+}
+
+
+\subsection{First-order derivatives: Taylor expansions for $\xi \approx 0$}
+%% ========================================================
+\subsubsection*{Raw expressions}
+\begin{maxima}
+  tH1: taylor(H1, xi, 0, 1)
+\end{maxima}
+\begin{maxima}
+  tH2: taylor(H2, xi, 0, 1)
+\end{maxima}
+
+Here are the limits for $\xi \approx  0$
+{\color{MonVertF}
+\begin{align*}
+  \frac{\partial H}{\partial \sigma} &=
+\begin{maxima}
+  tex(tH1)
+\end{maxima}\\
+  \frac{\partial H}{\partial \xi} &=
+\begin{maxima}
+  tex(tH2)
+\end{maxima}
+\end{align*}
+}
+
+\subsubsection*{Simplified expressions}
+
+{\color{red}
+  \begin{align*}
+    \frac{\partial H}{\partial \sigma}
+    &=  - \frac{z}{\sigma} + \frac{z^2}{\sigma}\, \xi+ o(\xi) \\
+    \frac{\partial H}{\partial \xi}
+    &=  - \frac{z^2}{2} + \frac{2 z^3}{3} \, \xi  + o(\xi)
+  \end{align*}
+}
+  
+\subsection{Second-order derivatives: expressions}
+% %% ============================================
+ \subsubsection*{Raw expressions}
+ 
+ 
+ \begin{maxima}
+   H11: diff(H, sigma, 2)
+ \end{maxima}%
+ \begin{maxima}
+   H11b: letsimp(H11)
+ \end{maxima}%
+ 
+ \begin{maxima}
+   H12: diff(H, sigma, 1, xi, 1)
+ \end{maxima}%
+ 
+ \begin{maxima}
+   H12b: letsimp(H12)
+ \end{maxima}%
+ 
+ \begin{maxima}
+   H22: diff(H, xi, 2)
+ \end{maxima}%
+ 
+ \begin{maxima}
+   H22b: letsimp(H22)
+ \end{maxima}%
+ 
+{\color{MonVertF}  
+\begin{align*}
+\frac{\partial^2}{\partial \sigma^2} \, H &= 
+\begin{maxima}
+  tex(H11b)
+\end{maxima}\\
+\frac{\partial^2}{\partial \sigma \partial \xi} \, H &=
+\begin{maxima}
+  tex(H12b)
+\end{maxima}\\
+ \frac{\partial^2}{\partial \xi^2}\, H &=
+\begin{maxima}
+ tex(H22b)
+\end{maxima}
+\end{align*}                                         
+}
+
+\subsubsection*{Simplified  expressions}
+
+{\color{red}
+\begin{align*}
+  \frac{\partial^2}{\partial \sigma^2} \,H
+  &=  \frac{1}{\sigma^2}\, \left[2 B - \xi B^2 \right]\\
+ \frac{\partial^2}{\partial \sigma \partial \xi} \, H 
+  &=  \frac{1}{\sigma}\, B^2\\
+    \frac{\partial^2}{\partial \xi^2} \, H 
+  &= \frac{1}{\xi^3}\,\left[2 A - 2 \xi B - \xi^2 B ^2 \right]
+\end{align*}
+}
+
+
+
+\subsection{Second-order derivatives: limits for $\xi \to 0$}
+
+%%========================================================
+Here are the limits for $\xi \to 0$
+
+{\color{MonVertF}
+\begin{align*}
+\lim_{\xi \to 0} \frac{\partial^2 H}{\partial \sigma^2} &=
+\begin{maxima}
+tex(limit (H11, xi, 0))
+\end{maxima} \\
+\lim_{\xi \to 0} \frac{\partial^2 H}{\partial \sigma \partial \xi} &=
+\begin{maxima}
+tex(limit (H12, xi, 0))
+\end{maxima} \\
+\lim_{\xi \to 0} \frac{\partial^2 H}{\partial \xi^2} &=
+\begin{maxima}
+tex(limit (H22, xi, 0))
+\end{maxima}
+\end{align*}}
+The corresponding simplified expresions are
+{\color{red}
+\begin{align*}
+  \lim_{\xi \to 0} \frac{\partial^2 H}{\partial \sigma^2}
+  &= \frac{2z}{\sigma^2}\\
+  \lim_{\xi \to 0} \frac{\partial^2 H}{\partial \sigma \partial \xi}
+  &= \frac{z^2}{\sigma}\\
+  \lim_{\xi \to 0} \frac{\partial^2 H}{\partial \xi^2}
+    &= \frac{2 z^3}{3}.
+\end{align*}
+}
+
+
+
+
+
+
+%%=================================================================================
+\section{Quantile or return period}
+%%
+\subsection{Expression}
+% -------------------------
+The quantile corresponding to an exceedance probability $q := 1 -p$ for $\xi \neq 0$
+\begin{maxima}
+  rho: sigma * (q^(-xi) - 1) / xi
+\end{maxima}
+%%
+\[
+\rho=
+\begin{maxima}
+ tex(rho)
+\end{maxima}
+\]
+
+
+\subsection{Taylor approximation for $\xi \approx 0$}
+% --------------------------------------------------------------
+\begin{maxima}
+ trho: taylor(rho, xi, 0, 2)
+\end{maxima}
+
+{\color{MonVertF}
+  \begin{equation}
+    \label{eq:Trho}
+    \begin{maxima}
+      tex(trho)
+    \end{maxima}
+  \end{equation}
+}
+
+%%
+\begin{maxima}
+  rho1: diff(rho, sigma, 1)
+\end{maxima}
+%%
+\begin{maxima}
+  rho2: diff(rho, xi, 1)
+\end{maxima}
+
+
+\subsection{First-order derivatives: expressions}
+%%========================================================
+When $\xi \neq 0$ we have
+\begin{align*}
+\frac{\partial \rho}{\partial \sigma}  &=
+\begin{maxima}
+ tex(rho1)
+\end{maxima}
+\\
+\frac{\partial \rho}{\partial \xi} &=
+\begin{maxima}
+ tex(rho2)
+\end{maxima}
+\end{align*}
+
+
+\subsection{First-order derivatives: Taylor approximation}
+%%========================================================
+
+\begin{maxima}
+  trho1: taylor(rho1, xi, 0, 1)
+\end{maxima}
+
+\begin{maxima}
+  trho2: taylor(rho2, xi, 0, 1)
+\end{maxima}
+
+{\color{MonVertF}
+\begin{align*}
+\frac{\partial \rho}{\partial \sigma}  &=
+\begin{maxima}
+ tex(trho1)
+\end{maxima}
+\\
+\frac{\partial \rho}{\partial \xi} &=
+\begin{maxima}
+ tex(trho2)
+\end{maxima}
+\end{align*}
+}
+
+% {\color{MonVertF}
+% \begin{align*}
+% \lim_{\xi \to 0} \frac{\partial \rho}{\partial \sigma} &= 
+% \begin{maxima}
+%  tex(limit(rho1, xi, 0))
+% \end{maxima}
+% \\
+% \lim_{\xi \to 0} \frac{\partial \rho}{\partial \xi} &= 
+% \begin{maxima}
+%  tex(limit(rho2, xi, 0))
+% \end{maxima}
+% \end{align*}}
+
+\subsection{Second-order derivatives: expressions}
+%% ========================================================
+
+\subsubsection*{Raw expressions}
+\begin{maxima}
+  rho11:  diff(rho, sigma, 2)
+\end{maxima}
+
+\begin{maxima}
+  rho12:  diff(rho, sigma, 1, xi, 1)
+\end{maxima}
+
+\begin{maxima}
+  rho22:  diff(rho, xi, 2)
+\end{maxima}
+
+{\color{MonVertF}
+\begin{align*}
+\frac{\partial^2 \rho}{\partial \sigma^2} &= 
+\begin{maxima}
+  tex(rho11)
+\end{maxima} \\ 
+\frac{\partial^2 \rho}{\partial \sigma \partial \xi} &= 
+\begin{maxima}
+  tex(rho12)
+\end{maxima} \\ 
+\frac{\partial^2 \rho}{\partial \xi^2} &= 
+\begin{maxima}
+  tex(rho22)
+\end{maxima} 
+\end{align*}
+}
+
+
+\subsubsection*{Simplified expressions}
+
+Define $V:= [q^{-\xi} - 1] / \xi$ so that $\rho = \sigma V$, and
+$$
+W := \frac{\partial V}{\partial \xi}
+=  - \frac{1}{\xi}\, \left\{ V + q^{-\xi} \log q \right\}.
+$$
+
+
+
+{\color{red}
+\begin{align*}
+  \frac{\partial^2 \rho}{\partial \sigma^2}
+  &=  0 \\ 
+  \frac{\partial^2 \rho}{\partial \sigma \partial \xi}
+  &= W\\ 
+  \frac{\partial^2 \rho}{\partial \xi^2}
+  &= \frac{\sigma}{\xi^2}\, \left\{ 2 V + q^{-\xi} \log q \left[2 + \xi \log q \right] \right\}         
+\end{align*}
+}
+
+\subsection{Second-order derivatives: limit for $\xi \to 0$}
+%% ========================================================
+
+{\color{MonVertF}
+\begin{align*}
+  \lim_{\xi \to 0} \frac{\partial^2 \rho}{\partial \sigma^2}
+  &= 
+\begin{maxima}
+ tex(limit(rho11, xi, 0))
+\end{maxima} \\
+  \lim_{\xi \to 0} \frac{\partial^2 \rho}{\partial \sigma \partial\xi}
+  &= 
+\begin{maxima}
+ tex(limit(rho12, xi, 0))
+\end{maxima} \\
+  \lim_{\xi \to 0} \frac{\partial^2 \rho}{\partial \xi^2}
+  &= 
+\begin{maxima}
+ tex(limit(rho22, xi, 0))
+\end{maxima}
+\end{align*}
+}
