@@ -1,5 +1,9 @@
 \documentclass[11pt]{article}
 
+%% ===========================================================================
+%% Copyright Yves Deville <deville.yves@alpestat.com> 2022
+%% ===========================================================================
+
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage[english]{babel}
 \usepackage[amsmath]{maxiplot}
@@ -17,8 +21,12 @@
 \definecolor{MonJaune}{rgb}{0.996,0.996,0.875}
 \definecolor{orange1}{rgb}{0.996,0.645,0}
 \definecolor{PaleVioletRed}{rgb}{0.855,0.438,0.574}
+\newcommand{\m}{\mathbf}   
+\newcommand{\bs}{\boldsymbol}
+\newcommand{\pkg}[1]{\textbf{#1}}
+\newcommand{\code}[1]{\texttt{#1}}
 
-\title{The \textbf{yaev} package: Yet Another Extreme Value package?}
+\title{\bf \Large The \textbf{yaev} package: Yet Another Extreme Value package?}
 
 \author{Yves Deville \href{mailto:deville.yves@alpestat.com}%%
   {deville.yves@alpestat.com} }
@@ -76,16 +84,17 @@ for (xi in c(1e-4, 1e-6, 1e-8)) {
 \noindent
 We see that the formula for the function works fine. However, the
 formula for the 2-nd order derivative can be completely wrong when
-$\xi$ is about $\text{1e-6}$ an the formula for the 1-st order
+$\xi$ is about $\text{1e-6}$ and the formula for the 1-st order
 derivative wan also be wrong whe $\xi$ is about $\text{1e-8}$. The
 reason is that the formulas for the derivatives involve difference
 and/or fractions or small quantities since $\xi$ or $\xi^2$ comes at
 the denominator. As a general rule the derivatives with higher order
-are more difficult to evaluate, since they involve more complex
-expressions.  Note that using $\xi \approx \text{1e-6}$ is quite
-common in EVA because the values of $\xi$ used in practice are often
-quite small, and moreover a very small value of $\xi$ is often used in
-the initialisation of the Maximum-Likelihood (ML) optimization.
+are more difficult to evaluate numerically, since they involve more
+complex expressions.  Note that using $\xi \leqslant \text{1e-6}$ is
+quite common in EVA because the values of $\xi$ used in practice are
+often quite small, and moreover a very small value of $\xi$ is often
+used in the initialisation of the Maximum-Likelihood (ML)
+optimization.
 
 Although not yet widespread, the use of the exact formulas for the
 derivatives w.r.t. the parameters can be of great help in the
@@ -102,9 +111,10 @@ $|\xi| \leqslant \epsilon$, we use a few terms from the Taylor series
 at $\xi =0$. In order to maintain the consistency between the
 derivatives, it seems good to use the same $\epsilon$ for all the
 derivatives and use consistent Taylor approximations. Since the $2$-nd
-order derivatives can be required, we must take a value for
-$\epsilon$ which is not too small: $\text{1e-4}$ or $\text{1e-5}$, not
-much smaller.
+order derivatives can be required, we must take a value for $\epsilon$
+which is not too small: $\text{1e-4}$ or $\text{1e-5}$, not much
+smaller. This method is used in some codes of the \textbf{revdbayes} package
+by Paul Northrop.
 
 \section{Deriving the formulas}
 
@@ -118,16 +128,19 @@ along with the
 package for \LaTeX{}.
 
 \begin{itemize}
-\item The {\color{MonVertF} \bf raw expressions given by Maxima are reported
-    in green}. The expressions can be regarded
-  as exact, not being influenced by manual computations. However
-  these formulas are usually difficult to use in a compiled code.
+\item The {\color{MonVertF} \bf raw expressions given by Maxima are
+    reported in green}. The expressions can be regarded as exact, not
+  being influenced by manual computations. However these formulas are
+  usually difficult to use in a compiled code and require some manual
+  transformation for this aim.
 
 \item The {\color{red} \bf simplified expressions are reported in
     red}.  These expressions are derived by us from the raw
   expressions; they are influenced by manual computations hence could
   in principle contain errors, although they have been carefully
-  checked. These formulas are used to write the compiled code.
+  checked. These formulas are used to write the compiled code.  They
+  often use auxiliary variables that are shared across several
+  formulas.
   
 \end{itemize}
 
@@ -151,10 +164,11 @@ same order of magnitude.
 
 We check that \textit{the absolute error or the relative error is
   small}. The idea is that none of these two things can come by
-chance, and if one holds, the formula used must be good. The test is
-made \textit{elementwise} meaning that the relative error is computed
-for each element of a gradient vector or Hessian matrix ignoring the
-other elements.
+chance, and if one holds, the formula used must be good even if the
+other criterion suggests an opposed conclusion. The test is made
+\textit{elementwise} meaning that the relative error is computed for
+each element of a gradient vector or Hessian matrix ignoring the other
+elements.
 
 \section{POT to NHPP parameterizations}
 
@@ -175,7 +189,103 @@ XXX To be completed
 
 \section{EV distributions from other R packages}
 
-XXX To be completed
+The EV distributions are implemented in many R packages. A variety of
+strategies regarding the problem $\xi = 0$ can be found. We now
+describe these strategies and provide a code for each of them as used
+in Table~\ref{TabXi}, columns $\xi = 0$. Each strategy is briefly
+discussed.
 
+\begin{enumerate}
+
+\item  \fbox{NT} Use only the formula for $\xi \neq 0$ i.e., {``do nothing''}.
+  In practice, an optimisation or sampling algorithm will never come
+  to the case $\xi = 0$ exactly!  If the distribution is estimated
+  with no possible constraint or initialisation with $\xi = 0$, there
+  will be no problem.
+  
+\item \fbox{$0.0$} Test the exact equality $\xi = 0$, and if this is true,
+  \textit{switch to the exponential/Gumbel formula}.  This helps only
+  when the user gives \code{xi = 0.0}. There will be some numerical
+  problems when $\xi$ is very small, say $\xi = \text{1e-8}$ or
+  less. These problems are not so crucial for the usual probability
+  functions: we get some wiggling when plotting the curves and
+  zooming. Mind however that the random generation \code{rgev} or
+  \code{rgpd} will produce silly results with very small $\xi$ if they
+  use \code{qgev} or \code{qgpd}.
+
+\item  \fbox{$\epsilon$/S}  Test the equality $ |\xi| \leqslant \epsilon$ where
+  $\epsilon >0$ is very small, and if this is true, \textit{switch
+    to the exponential/Gumbel formula}. So this produces a (very
+  small) discontinuity.  E.g., \pkg{Renext} uses
+  $\epsilon \approx \text{2e-14}$.
+  
+  
+\item \fbox{$\epsilon$/AI} Test the equality
+  $ |\xi| \leqslant \epsilon$ where $\epsilon >0$ is very small, and
+  if this is true, use a dedicated \textit{approximation or
+    interpolation}.  Several methods can be used including Taylor
+  approximations. The discontinuity should then be undetectable.  Mind
+  the probability functions although not being \textit{analytic}
+  functions, are infinitely differentiable $C^\infty$ w.r.t. the
+  parameters!
+  
+\end{enumerate}
+
+
+\begin{table}
+    \centering \small
+    \begin{tabular}{| l || c | c | c | c | c || c | c | c | c | c |}
+      \hline
+      \multicolumn{1}{|c||}{\raisebox{-0.3em}{Package}}
+      & \multicolumn{5}{c||}{GEV}
+      & \multicolumn{5}{c|}{GPD}\\ \cline{2-6} \cline{7-11}
+      \multicolumn{1}{|c||}{}
+      & \multicolumn{1}{c|}{Lang.}
+      & \multicolumn{1}{c|}{Vec. $\bs{\theta}$}
+      & \multicolumn{1}{c|}{Grad.}
+      & \multicolumn{1}{c|}{Hess.}
+      & \multicolumn{1}{c||}{$\xi=0$}
+      & \multicolumn{1}{c|}{Lang.}
+      & \multicolumn{1}{c|}{Vec. $\bs{\theta}$}
+      & \multicolumn{1}{c|}{Grad.}
+      & \multicolumn{1}{c|}{Hess.}
+      & \multicolumn{1}{c|}{$\xi=0$} \\ \hline\hline
+      \textbf{evir}
+      & R & no & no & no & NT & R & no & no & no & NT\\ \hline
+      \textbf{evd}
+      & R & no & no & no & 0.0 & R & no & no & no & 0.0\\ \hline
+      \textbf{ismev}
+      & R$^\star$ & no & no & no & NT & R$^\star$ & no & no & no & NT\\ \hline
+      \textbf{Renext}
+      &  &  &  &  &  & R & no & yes & yes & $\epsilon$/S \\ \hline
+      \textbf{POT}
+      &  &  &  &  &  & R$^\star$ & yes & no & no & 0.0 \\ \hline
+      \textbf{SpatialExtremes}
+      & R  & yes & no & no & $0.0$ & R & yes & no & no & $0.0$ \\ \hline   
+      \textbf{revdbayes}
+      & R  & yes & no & no & $\epsilon$/AI & R & yes & no & no & $\epsilon$/AI \\ \hline
+      \textbf{mev}
+      & R  & yes & yes$^\star$ & yes$^\star$& NT & R & yes & yes$^\star$
+      & yes$^\star$ & NT \\ \hline
+      {\color{red}\textbf{yaev}}
+      & C & yes & yes & yes & $\epsilon$/AI   
+      & C & yes & yes & yes & $\epsilon$/AI \\ \hline
+    \end{tabular}
+    \caption{\small \sf Features of some CRAN packages \label{TabXi}
+      \textit{Lang.}: the implementation language, \textit{Vec.}
+      $\bs{\theta}$: vectorized w.r.t. the parameters. The columns
+      \textit{Grad.} and \textit{Hess.}  indicate if the gradient and
+      Hessian are provided, and the colums $\epsilon = 0$ indicate the
+      strategy used to cope with a zero or small shape, as described
+      in the text. A star means that the functions are not exported.}
+  \end{table}
+
+
+\section*{Acknowledgments}
+
+We are grateful to the authors and contributors of \textbf{Maxima} and
+to the authors of the \textbf{maxiplot} \LaTeX{} package (J.M. Planas
+and José Manuel Mira univ. de Murcia, Spain) which helped much for the
+tedious computations required by the package.
 
 \end{document}
