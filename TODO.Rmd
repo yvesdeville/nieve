@@ -1,0 +1,23 @@
+--- 
+title: "TODO list for the **yaev** package"
+author: "Yves Deville <deville.yves@alpestat.com>"
+Date: "`r Sys.Date()`"
+linkcolor: blue
+output: github_document
+---
+
+- Implement the Taylor approximation for $\xi \approx 0$ in the
+`PP2poisGP`and `poisGP2PP` (C) functions.
+
+- Use the
+  [rchk](https://developer.r-project.org/Blog/public/2019/04/18/common-protect-errors/)
+  tool to check for possible memory erros before submitting to the
+  CRAN.
+
+- Make **NSGEV** and **potomax** rely on **yaev** for the distribution
+  functions.
+  
+- Add more tests for the case $\xi \approx 0$ in the transformations.
+`PP2poisGP`and `poisGP2PP`.
+
+- Add the Extrended GPD distributions of Papastathopoulos & Tawn.
