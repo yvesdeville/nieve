@@ -1,3 +1,6 @@
+TODO list for the **yaev** package
+----------------------------------
+
 -   Implement the Taylor approximation for *ξ* ≈ 0 in the `PP2poisGP`and
     `poisGP2PP` (C) functions.
 
