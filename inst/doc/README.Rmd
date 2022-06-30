@@ -7,25 +7,45 @@ date: "`r Sys.Date()`"
 
 ## Compile a LaTeX document using Maxima via the **maxiplot** package
 
-In order to compile a LaTeX doucment with maxima
+In order to compile a LaTeX document with maxima you need to have the
+**Maxima** system installed (possibly with its sources) and the
+**maxiplot** package working with your LaTeX distribution. Then use
 
 ```
 pdflatex mydocument.tex
 ```
+This create a number of auxiliary files, including a `.mac` file. Then
+
 ```
 maxima -b mydocument.mac
 ```
+and compile again
+```
+pdflatex mydocument.tex
+```
+This should provide the pdf file embeding the results computed by **Maxima**
+In case of problems it may be required to clean the auxiliary files `.aux`,
+`.mac` and `.mxp`. 
+
 
 ## Compiling whole document
 
-The documentations comes as 4 documents. The document `N_` do
-not have any header and can not compiled
+The documentations comes as 5 documents including the LaTeX or Sweave
+sources. Note that rhe documents `N_` do not have any header and can
+not compiled, and that the `.tex` documents require the **maxiplot**
+
 	
-- `GEV.tex` GEV distribution functions and their derivatives.
-- `GPD2.tex` the two-parameter GP2 distribution functions and their
-  derivatives.
-- `PP2PoisGP.tex` The PP to Poisson-GP transform and its derivatives.
-- `PoisGP2PP.tex` The Poisson-GP to PP transform and its derivatives.
+- `yaev.pdf` explains why and how the probability distributions are
+  evaluated in **yaev**.
+
+- `GEV.pdf` the GEV distribution functions and their derivatives.
+
+- `GPD2.pdf` the two-parameter Genaralized Pareto distribution `GP2`:
+  functions and their derivatives.
+  
+- `PP2PoisGP.pdf` The PP to Poisson-GP transform and its derivatives.
+
+- `PoisGP2PP.pdf` The Poisson-GP to PP transform and its derivatives.
 
 
 

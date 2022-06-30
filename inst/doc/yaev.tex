@@ -68,7 +68,7 @@
 \definecolor{orange1}{rgb}{0.996,0.645,0}
 \definecolor{PaleVioletRed}{rgb}{0.855,0.438,0.574}
 
-\title{The \textbf{yaev} package}
+\title{The \textbf{yaev} package: Yet Another Extreme Value package?}
 
 \author{Yves Deville \href{mailto:deville.yves@alpestat.com}%%
   {deville.yves@alpestat.com} }
@@ -77,7 +77,7 @@
 \maketitle{}
 \tableofcontents{}
 
-\section{Extreme-Value distributions}
+\section{Probability functions of Extreme-Value distributions}
   
 The probability functions for the GPD and GEV distributions depend
 smoothly on the parameters: they are infinitely differentiable
@@ -88,31 +88,35 @@ the functions are given with different formulas depending on whether
 $\xi$ is zero or not; the formulas for $\xi = 0$ relate to the
 exponential and Gumbel distributions and correspond to the limit for
 $\xi \to 0$ of the functions given by the formulas for $\xi \neq 0$.
-
 As an example consider the quantile function of the Generalized Pareto
-distribution with shape $\xi$ and unit scale 
-$$
+distribution with shape $\xi$ and unit scale
+\begin{equation}
+\label{eq:Quant}
 q(p) = \begin{cases}
   [(1 - p)^{-\xi} - 1] / \xi & \xi \neq 0 \\
-  -\log(1 - p) & \xi = 0.
-\end{cases}
-$$
-It can be shown that for $\xi \approx 0$
+  -\log(1 - p) & \xi = 0,
+\end{cases} \qquad 0 < p < 1.
+\end{equation}
+It can be shown that for $\xi \approx 0$ whatever be $p$
 $$
 q \approx - \log(1-p), \qquad
 \frac{\partial q}{\partial \xi} \approx \frac{1}{2}\, \log^2(1-p), \qquad
 \frac{\partial^2 q}{\partial \xi^2} \approx -\frac{1}{3}\, \log^2(1-p).
 $$
-It is quite easy to obtain expressions for the the derivatives. We can even
-rely on the derivation method \verb@D@ available in R
+It is quite easy to obtain expressions for the the derivatives
+w.r.t. $\xi$ using the definition (\ref{eq:Quant}). We can even rely
+on the symbolic derivation method \verb@D@ available in R which, as
+opposed to me and many other humans, never makes any mistake when
+differentiating.
+
 \begin{knitrout}\footnotesize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlstd{qEx} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{p}\hlstd{,} \hlkwc{xi}\hlstd{) ((}\hlnum{1} \hlopt{-} \hlstd{p)}\hlopt{^}\hlstd{(}\hlopt{-}\hlstd{xi)} \hlopt{-} \hlnum{1}\hlstd{)} \hlopt{/} \hlstd{xi}
 \hlstd{dqEx} \hlkwb{<-} \hlkwd{D}\hlstd{(}\hlkwd{expression}\hlstd{(((}\hlnum{1} \hlopt{-} \hlstd{p)}\hlopt{^}\hlstd{(}\hlopt{-}\hlstd{xi)} \hlopt{-} \hlnum{1}\hlstd{)} \hlopt{/} \hlstd{xi),} \hlkwc{name} \hlstd{=} \hlstr{"xi"}\hlstd{)}
 \hlstd{d2qEx} \hlkwb{<-} \hlkwd{D}\hlstd{(dqEx,} \hlkwc{name} \hlstd{=} \hlstr{"xi"}\hlstd{)}
-\hlstd{p} \hlkwb{<-} \hlnum{0.9}\hlstd{; q} \hlkwb{<-} \hlnum{1} \hlopt{-} \hlstd{p}
-\hlkwa{for} \hlstd{(xi} \hlkwa{in} \hlkwd{c}\hlstd{(}\hlnum{1e-4}\hlstd{,} \hlnum{1e-7}\hlstd{,} \hlnum{1e-9}\hlstd{)) \{}
+\hlstd{p} \hlkwb{<-} \hlnum{0.99}\hlstd{; q} \hlkwb{<-} \hlnum{1} \hlopt{-} \hlstd{p}
+\hlkwa{for} \hlstd{(xi} \hlkwa{in} \hlkwd{c}\hlstd{(}\hlnum{1e-4}\hlstd{,} \hlnum{1e-6}\hlstd{,} \hlnum{1e-8}\hlstd{)) \{}
     \hlstd{r} \hlkwb{<-} \hlkwd{rbind}\hlstd{(}\hlstr{"ord 0"} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"lim"} \hlstd{=} \hlopt{-}\hlkwd{log}\hlstd{(q),} \hlstr{"der"} \hlstd{=} \hlkwd{qEx}\hlstd{(}\hlkwc{p} \hlstd{= p,} \hlkwc{xi} \hlstd{= xi)),}
                \hlstr{"ord 1"} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"lim"} \hlstd{=} \hlkwd{log}\hlstd{(q)}\hlopt{^}\hlnum{2} \hlopt{/} \hlnum{2}\hlstd{,} \hlstr{"der"} \hlstd{=} \hlkwd{eval}\hlstd{(dqEx,} \hlkwd{list}\hlstd{(}\hlkwc{p} \hlstd{= p,} \hlkwc{xi} \hlstd{= xi))),}
                \hlstr{"ord 2"} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"lim"} \hlstd{=} \hlopt{-}\hlkwd{log}\hlstd{(q)}\hlopt{^}\hlnum{3} \hlopt{/} \hlnum{3}\hlstd{,} \hlstr{"der"} \hlstd{=} \hlkwd{eval}\hlstd{(d2qEx,} \hlkwd{list}\hlstd{(}\hlkwc{x} \hlstd{= p,} \hlkwc{xi} \hlstd{= xi))))}
@@ -122,64 +126,127 @@ rely on the derivation method \verb@D@ available in R
 \end{alltt}
 \begin{verbatim}
 ## xi =  1e-04 
-##            lim      der
-## ord 0 2.302585 2.302850
-## ord 1 2.650949 2.651356
-## ord 2 4.069357 4.069899
-## xi =  1e-07 
+##            lim       der
+## ord 0  4.60517  4.606231
+## ord 1 10.60380 10.607052
+## ord 2 32.55486 32.566137
+## xi =  1e-06 
+##            lim       der
+## ord 0  4.60517  4.605181
+## ord 1 10.60380 10.603811
+## ord 2 32.55486 68.213867
+## xi =  1e-08 
 ##            lim           der
-## ord 0 2.302585      2.302585
-## ord 1 2.650949      2.652455
-## ord 2 4.069357 -30116.312500
-## xi =  1e-09 
-##            lim           der
-## ord 0 2.302585  2.302585e+00
-## ord 1 2.650949  8.674716e+01
-## ord 2 4.069357 -1.681924e+11
+## ord 0  4.60517  4.605170e+00
+## ord 1 10.60380  1.085129e+01
+## ord 2 32.55486 -4.949912e+07
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
 
+\noindent
+We see that the formula for the function works fine. However, the
+formula for the 2-nd order derivative can be completely wrong when
+$\xi$ is about $\text{1e-6}$ an the formula for the 1-st order
+derivative wan also be wrong whe $\xi$ is about $\text{1e-8}$. The
+reason is that the formulas for the derivatives involve difference
+and/or fractions or small quantities since $\xi$ or $\xi^2$ comes at
+the denominator. As a general rule the derivatives with higher order
+are more difficult to evaluate, since they involve more complex
+expressions.  Note that using $\xi \approx \text{1e-6}$ is quite
+common in EVA because the values of $\xi$ used in practice are often
+quite small, and moreover a very small value of $\xi$ is often used in
+the initialisation of the Maximum-Likelihood (ML) optimization.
 
-The limit can be used with a quite high precision for the
-functions. However it turns out that the precision is not as good for
-the derivatives. The formulas for the functions can be wrong when $\xi$
-is as small as $\text{1e-16}$, and this may be considered as good enough in
-practice. For the derivatives, the formulas can be wrong when $\xi$ is
-about $\text{1e-8}$ for the first-order derivatives and when $\xi$ is
-about $\text{1e-4}$ for the second-order derivatives. The reason is
-that the formulas for the derivatives involve fractions or small
-quantities since $\xi$ or $\xi^2$ comes at the denominator. Although
-not yet widespread, the use of the derivatives w.r.t. the parameters
-is of great help in the optimization tasks required in EVA. These
-tasks of course involve the maximisation of the likelihood, but the
-profile-likelihood inference for models with covariates may require
-constrained optimization, and differential equations can be also used
-to derive confidence intervals. Although automatic differentiation is
-nowdays widely available, it is unclear that the derivatives are
-evaluated with a good precision even if the exact formulas are used.
+Although not yet widespread, the use of the exact formulas for the
+derivatives w.r.t. the parameters can be of great help in the
+optimization tasks required in EVA. These tasks of course involve the
+ML estimation but also profile-likelihood inference for models with
+covariates. Differential equations methods can be also used to derive
+confidence intervals. Note that using the formulas for the derivatives
+is \textit{symbolic} differentiation, which differs from
+\textit{automatic} differentiation as increasingly available.
 
+Our strategy consists in fixing a small $\epsilon >0$ and use the
+formulas only when $|\xi| > \epsilon$. When
+$|\xi| \leqslant \epsilon$, we use a few terms from the Taylor series
+at $\xi =0$. In order to maintain the consistency between the
+derivatives, it seems good to use the same $\epsilon$ for all the
+derivatives and use consistent Taylor approximations. Since the $2$-nd
+order derivatives can be required, we must take a value for
+$\epsilon$ which is not too small: $\text{1e-4}$ or $\text{1e-5}$, not
+much smaller.
 
+\section{Deriving the formulas}
 
-
-This report gives the exact expressions for the first-order and
-the second-order derivatives of the probability functions w.r.t. the
-parameters and also provides workable approximations for the case
-$\xi \approx 0$.
+The reports provided with \textbf{yaev} give the exact expressions for
+the first-order and the second-order derivatives of the probability
+functions w.r.t. the parameters and also provides workable
+approximations for the case $\xi \approx 0$. We used the
+\href{https://maxima.sourceforge.io/}{Maxima Computer Algebra System}
+along with the
+\href{https://maxima.sourceforge.io/contrib/maxiplot/maxiplot.sty}{maxiplot}
+package for \LaTeX{}.
 
 \begin{itemize}
-\item The {\color{MonVertF} \bf raw expressions given by Maxima} are reported
-  {\color{MonVertF} in green}. The expressions can be regarded
+\item The {\color{MonVertF} \bf raw expressions given by Maxima are reported
+    in green}. The expressions can be regarded
   as exact, not being influenced by manual computations. However
   these formulas are usually difficult to use in a compiled code.
 
-\item The {\color{red} \bf simplified expressions}
-  are derived by us from the raw expressions.
-  They are reported {\color{red} in red}. The expressions are
-  influenced by manual computations hence could in principle contain errors
-  although they have been carefully checked. These formulas are used
-  to write the compiled code.
+\item The {\color{red} \bf simplified expressions are reported in
+    red}.  These expressions are derived by us from the raw
+  expressions; they are influenced by manual computations hence could
+  in principle contain errors, although they have been carefully
+  checked. These formulas are used to write the compiled code.
   
 \end{itemize}
+
+\section{Testing}
+
+The \textbf{yaev} package comes with a series of tests in the format
+of the \textbf{testthat} package. The \textbf{numDeriv} package is
+used to compute the derivatives up to order 2 by numeric
+differentiation. These derivatives can be compared to those provided
+by the formulas.
+
+A quite difficult task when checking derivatives is to give a
+threshold used to decide if the difference between the numeric
+derivative and the symbolic derivative, say the ``error'', is
+acceptable or not. When a derivative is small, the relative error may
+be large.  On the other side, when a derivative is large in absolute
+value, the absolute error may also be quite large.  Mind that the
+derivatives can be quite large in practice and also that a gradient
+vector or a Hessian matrix often contain values that are not of the
+same order of magnitude.
+
+We check that \textit{the absolute error or the relative error is
+  small}. The idea is that none of these two things can come by
+chance, and if one holds, the formula used must be good. The test is
+made \textit{elementwise} meaning that the relative error is computed
+for each element of a gradient vector or Hessian matrix ignoring the
+other elements.
+
+\section{POT to NHPP parameterizations}
+
+XXX To be completed
+
+% Peak Over Threshold (POT) models are very popular in EVA. A threshold
+% $u$. 
+
+% \begin{itemize}
+% \item Poisson-GP
+% \item PP (for Point Process) or NHPP (for Non-Homogeneous Poisson
+%   Proces)
+% \end{itemize}
+
+% The main difference is that 
+
+% The \textbf{yaev} package provides the two transformations.
+
+\section{EV distributions from other R packages}
+
+XXX To be completed
+
 
 \end{document}
