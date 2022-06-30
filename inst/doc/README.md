@@ -29,10 +29,12 @@ compiled, and that the `.tex` documents require the **maxiplot**
 -   `yaev.pdf` explains why and how the probability distributions are
     evaluated in **yaev**.
 
--   `GEV.pdf` the GEV distribution functions and their derivatives.
+-   `GEV.pdf` provides details about the Generalized Extreme Value
+    distribution `GEV`: probability functions and their derivatives.
 
--   `GPD2.pdf` the two-parameter Genaralized Pareto distribution `GP2`:
-    functions and their derivatives.
+-   `GPD2.pdf` provide details about the two-parameter Genaralized
+    Pareto distribution `GP2`: probability functions and their
+    derivatives.
 
 -   `PP2PoisGP.pdf` The PP to Poisson-GP transform and its derivatives.
 
