@@ -19,10 +19,10 @@ This should provide the pdf file embeding the results computed by
 **Maxima** In case of problems it may be required to clean the auxiliary
 files `.aux`, `.mac` and `.mxp`.
 
-Compiling whole document
-------------------------
+Provided documents
+------------------
 
-The documentations comes as 5 documents including the LaTeX or Sweave
+The documentation includes 5 documents along with their LaTeX or Sweave
 sources. Note that rhe documents `N_` do not have any header and can not
 compiled, and that the `.tex` documents require the **maxiplot**
 
