@@ -91,23 +91,23 @@ reason is that the formulas for the derivatives involve difference
 and/or fractions or small quantities since $\xi$ or $\xi^2$ comes at
 the denominator. As a general rule the derivatives with higher order
 are more difficult to evaluate numerically, since they involve more
-complex expressions.  Note that using $\xi \leqslant \text{1e-6}$ is
-quite common in EVA because the values of $\xi$ used in practice are
-often quite small, and moreover a very small value of $\xi$ is often
-used in the initialisation of the Maximum-Likelihood (ML)
-optimization.
+complex expressions.  Note that using a shape $\xi$ with
+$|\xi| \leqslant \text{1e-6}$ is quite common in EVA because the
+values of $\xi$ used in practice are often quite small, and moreover 
+very small values of $\xi$ are often used in the initialisation of the
+Maximum-Likelihood (ML) optimization.
 
 Although not yet widespread, the use of the exact formulas for the
 derivatives w.r.t. the parameters can be of great help in the
 optimization tasks required in EVA. These tasks of course involve the
 ML estimation but also profile-likelihood inference for models with
 covariates. Differential equations methods can be also used to derive
-confidence intervals. Note that using the formulas for the derivatives
-is \textit{symbolic} differentiation, which differs from
-\textit{automatic} differentiation as increasingly available.
+confidence intervals. Note that the use of formulas for the
+derivatives is called \textit{symbolic} differentiation and  differs
+from \textit{automatic} differentiation as increasingly available.
 
 Our strategy consists in fixing a small $\epsilon >0$ and use the
-formulas only when $|\xi| > \epsilon$. When
+formulas for $\xi \neq 0$ only when $|\xi| > \epsilon$. When
 $|\xi| \leqslant \epsilon$, we use a few terms from the Taylor series
 at $\xi =0$
 $$
@@ -121,16 +121,27 @@ In order to maintain the consistency between the derivatives, it seems
 good to use the same $\epsilon$ for all the derivatives and use
 consistent Taylor approximations, so use the order $1$ for the
 derivative~$\partial_{\xi} q$ and the order order~$0$
-for~$\partial^2_{\xi,\xi} q$ or a crossed derivative such
+for~$\partial^2_{\xi,\xi} q$ or for a crossed derivative such
 as~$\partial^2_{\sigma,\xi} q$. Since the $2$-nd order derivatives can
 be required, we must take a value for $\epsilon$ which is not too
-small: $\text{1e-4}$ or $\text{1e-5}$, not much smaller. This method
-is used in some codes of the \textbf{revdbayes} package by Paul
-Northrop.
+small: $\text{1e-4}$ or $\text{1e-5}$, not much smaller. Note
+that~$\epsilon$ gives the level of error for the $2$-nd order
+dervivative; since the error on the function is~$O(\xi^3)$, using
+$\epsilon = \text{1e-4}$ leads to an error of order~$\text{1e-12}$
+with is suitable for practical. This kind of approximation is used in
+some codes of the \textbf{revdbayes} package by Paul Northrop, see the
+code if the \code{dgev} and \code{pgev} functions on
+\href{https://github.com/paulnorthrop/revdbayes/blob/master/R/distributions.R}{GitHub
+  repos}.
 
 \section{Deriving the formulas}
 
-The reports provided with \textbf{yaev} give the exact expressions for
+The reports provided with \textbf{yaev}: 
+\href{https://github.com/yvesdeville/yaev/blob/main/inst/doc/GEV.pdf}{GEV.pdf},
+\href{https://github.com/yvesdeville/yaev/blob/main/inst/doc/GPD2.pdf}{GPD2.pdf},
+\href{https://github.com/yvesdeville/yaev/blob/main/inst/doc/PoisGP2PP.pdf}{PoisGP2PP.pdf} and
+\href{https://github.com/yvesdeville/yaev/blob/main/inst/doc/PP2PoisGP.pdf}{PP2PoisGP.pdf}
+  give the exact expressions for
 the first-order and the second-order derivatives of the probability
 functions w.r.t. the parameters and also provides workable
 approximations for the case $\xi \approx 0$. We used the

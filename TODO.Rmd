@@ -50,3 +50,6 @@ output: github_document
 
 - Make sure that the probability functions return `NA` when an
   incorrect parameter is used (negative `scale`).
+
+- In `GPD2.tex`, recall how can the derivatives of the distribution
+  function $F$ are related to those of the cululated hazard $H$.

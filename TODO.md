@@ -47,3 +47,9 @@ Yves Deville <deville.yves@alpestat.com>
 
 -   Make sure that the probability functions return `NA` when an
     incorrect parameter is used (negative `scale`).
+
+-   In `GPD2.tex`, recall how can the derivatives of the distribution
+    function
+    ![F](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;F "F")
+    are related to those of the cululated hazard
+    ![H](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;H "H").
