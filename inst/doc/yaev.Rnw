@@ -63,8 +63,8 @@ q \approx - \log(1-p), \qquad
 $$
 It is quite easy to obtain expressions for the the derivatives
 w.r.t. $\xi$ using the definition (\ref{eq:Quant}). We can even rely
-on the symbolic derivation method \verb@D@ available in R which, as
-opposed to me and many other humans, never makes any mistake when
+on the symbolic differentiation method \verb@D@ available in R which,
+as opposed to me and many other humans, never makes any mistake when
 differentiating.
 
 <<deriv, size= "footnotesize">>=
@@ -197,11 +197,11 @@ discussed.
 
 \begin{enumerate}
 
-\item  \fbox{NT} Use only the formula for $\xi \neq 0$ i.e., {``do nothing''}.
-  In practice, an optimisation or sampling algorithm will never come
-  to the case $\xi = 0$ exactly!  If the distribution is estimated
-  with no possible constraint or initialisation with $\xi = 0$, there
-  will be no problem.
+\item \fbox{NT} Use only the formula for $\xi \neq 0$ i.e., {``do
+    nothing''}.  In practice, an optimization or sampling algorithm
+  will never come to the case $\xi = 0$ exactly!  If the distribution
+  is estimated with no possible constraint or initialisation with
+  $\xi = 0$, there will be no problem.
   
 \item \fbox{$0.0$} Test the exact equality $\xi = 0$, and if this is true,
   \textit{switch to the exponential/Gumbel formula}.  This helps only

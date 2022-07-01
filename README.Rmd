@@ -7,14 +7,14 @@ output: github_document
 
 # Yet Another Extreme Value package?
 
-The **yeav** package partially supported by the French [*Institut de
-Radioprotection et Sûreté Nucléaire* (IRSN)](https://www.irsn.fr/)
-as a for R packages IRSN/Behrig team.
+The **yaev** package was partly funded by the French [*Institut
+de Radioprotection et Sûreté Nucléaire* (IRSN)](https://www.irsn.fr/)
+and formerly was part of R packages owned by IRSN/Behrig.
 
 The **yeav** package is intended to be a "low-level" package,
-providing fast and well-tested base functions for Extreme Value
+providing fast and well-tested "basic" functions for Extreme Value
 Analysis (EVA). It is not intended to provide sophisticated EVA models
-which should be implemented in other packages.
+which should be found or be implemented in other packages.
 
 The package
 
@@ -25,15 +25,15 @@ The package
    function. The 2-nd order derivative (Hessian) is available in most
    cases.
  
- - Provides distribution functions which are vectorized w.r.t. the
+ - Provides probability functions which are vectorized w.r.t. the
    parameters as require in non-stationary EV models or in Bayesian
    inference.
 
- - Provides the transformations of the parameter vector for the two
-   parameterizations of Peaks Over Threshold (POT) models: Poisson-GP
-   to (Non-Homogeneous) Point Process (PP) and PP to Poisson-GP. The
-   transformations come with their derivative a needed to compute the
-   covariance matrices.
+ - Provides the transformations for the two usual parameterizations of
+   Peaks Over Threshold (POT) models: Poisson-GP to (Non-Homogeneous)
+   Point Process (PP) and PP to Poisson-GP. The transformations come
+   with their derivative, as needed to compute the covariance
+   matrices.
 
 # Install release version from GitHub
 
