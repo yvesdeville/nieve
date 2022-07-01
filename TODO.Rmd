@@ -21,6 +21,11 @@ output: github_document
   files:( Suitable links should be found in the package manual. Maybe 
   keep `yaev.Rnw` as a package vignette?
   
+## Documentation
+
+- Inquire about the **extRemes** package and report it in the table of
+  the vignette `yaev.Rnw`.
+  
 
 ## Computing 
 

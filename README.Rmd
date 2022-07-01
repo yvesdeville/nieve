@@ -35,6 +35,13 @@ The package
    with their derivative, as needed to compute the covariance
    matrices.
 
+Although several R packages devoted EVA compute the exact derivatives
+w.r.t. the parameters (**extRemes**, **mev**, ...), to our best
+knowledge none of these make the derivatives usable via exported
+functions.
+
+
+
 # Install release version from GitHub
 
 ## Using the *devtools* package

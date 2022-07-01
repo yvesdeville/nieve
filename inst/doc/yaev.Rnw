@@ -109,7 +109,7 @@ from \textit{automatic} differentiation as increasingly available.
 Our strategy consists in fixing a small $\epsilon >0$ and use the
 formulas for $\xi \neq 0$ only when $|\xi| > \epsilon$. When
 $|\xi| \leqslant \epsilon$, we use a few terms from the Taylor series
-at $\xi =0$
+at $\xi =0$ e.g.,
 $$
 q(p;\,\xi) \approx q(p;\, 0) +
 \left. \partial_{\xi} q(p;\, \xi)\right|_{\xi = 0} \times \xi
@@ -127,10 +127,11 @@ be required, we must take a value for $\epsilon$ which is not too
 small: $\text{1e-4}$ or $\text{1e-5}$, not much smaller. Note
 that~$\epsilon$ gives the level of error for the $2$-nd order
 dervivative; since the error on the function is~$O(\xi^3)$, using
-$\epsilon = \text{1e-4}$ leads to an error of order~$\text{1e-12}$
-with is suitable for practical. This kind of approximation is used in
-some codes of the \textbf{revdbayes} package by Paul Northrop, see the
-code if the \code{dgev} and \code{pgev} functions on
+$\epsilon = \text{1e-4}$ leads to an error of order~$\text{1e-12}$ on
+the function, which seems acceptable in practice. This kind of
+approximation is used in some codes of the \textbf{revdbayes} package
+by Paul Northrop, see the code if the \code{dgev} and \code{pgev}
+functions on
 \href{https://github.com/paulnorthrop/revdbayes/blob/master/R/distributions.R}{GitHub
   repos}.
 
@@ -148,7 +149,7 @@ approximations for the case $\xi \approx 0$. We used the
 \href{https://maxima.sourceforge.io/}{Maxima Computer Algebra System}
 along with the
 \href{https://maxima.sourceforge.io/contrib/maxiplot/maxiplot.sty}{maxiplot}
-package for \LaTeX{}.
+package for \LaTeX{}. 
 
 \begin{itemize}
 \item The {\color{MonVertF} \bf raw expressions given by Maxima are
