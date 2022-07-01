@@ -33,6 +33,8 @@ output: github_document
 
 - Remove any kind of dependence to **Renext**.
 
+- Should we keep the R implementation for the GEV distribution?
+
 - Add more tests for the case $\xi \approx 0$ in the transformations.
 `PP2poisGP`and `poisGP2PP`.
 

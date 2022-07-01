@@ -29,6 +29,8 @@ Yves Deville <deville.yves@alpestat.com>
 
 -   Remove any kind of dependence to **Renext**.
 
+-   Should we keep the R implementation for the GEV distribution?
+
 -   Add more tests for the case
     ![\\xi \\approx 0](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cxi%20%5Capprox%200 "\xi \approx 0")
     in the transformations. `PP2poisGP`and `poisGP2PP`.
