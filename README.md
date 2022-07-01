@@ -1,17 +1,14 @@
-yaev Yet Another Extreme Value package?
-================
-Yves Deville <deville.yves@alpestat.com>
+Yet Another Extreme Value package?
+==================================
 
-## Yet Another Extreme Value package?
-
-The **yeav** package partially supported by the French [*Institut de
-Radioprotection et Sûreté Nucléaire* (IRSN)](https://www.irsn.fr/) as a
-for R packages IRSN/Behrig team.
+The **yaev** package was partly funded by the French [*Institut de
+Radioprotection et Sûreté Nucléaire* (IRSN)](https://www.irsn.fr/) and
+formerly was part of R packages owned by IRSN/Behrig.
 
 The **yeav** package is intended to be a “low-level” package, providing
-fast and well-tested base functions for Extreme Value Analysis (EVA). It
-is not intended to provide sophisticated EVA models which should be
-implemented in other packages.
+fast and well-tested “basic” functions for Extreme Value Analysis (EVA).
+It is not intended to provide sophisticated EVA models which should be
+found or be implemented in other packages.
 
 The package
 
@@ -21,29 +18,28 @@ The package
     the distribution function or survival and the quantile function. The
     2-nd order derivative (Hessian) is available in most cases.
 
--   Provides distribution functions which are vectorized w.r.t. the
+-   Provides probability functions which are vectorized w.r.t. the
     parameters as require in non-stationary EV models or in Bayesian
     inference.
 
--   Provides the transformations of the parameter vector for the two
-    parameterizations of Peaks Over Threshold (POT) models: Poisson-GP
-    to (Non-Homogeneous) Point Process (PP) and PP to Poisson-GP. The
-    transformations come with their derivative a needed to compute the
-    covariance matrices.
+-   Provides the transformations for the two usual parameterizations of
+    Peaks Over Threshold (POT) models: Poisson-GP to (Non-Homogeneous)
+    Point Process (PP) and PP to Poisson-GP. The transformations come
+    with their derivative, as needed to compute the covariance matrices.
 
-# Install release version from GitHub
+Install release version from GitHub
+===================================
 
-## Using the *devtools* package
+Using the *devtools* package
+----------------------------
 
 Note that if you are using Windows, you need to have the
 [Rtools](https://cran.r-project.org/bin/windows/Rtools) installed.
 Provided that the **devtools** package is installed you can then in an R
 session use
 
-``` r
-library(devtools)
-install_github("yvesdeville/yaev", dependencies = TRUE, auth_token = myToken)
-```
+    library(devtools)
+    install_github("yvesdeville/yaev", dependencies = TRUE, auth_token = myToken)
 
 where `myToken` stands for *your* token. This should install the package
 and make it ready to use.
@@ -52,16 +48,15 @@ You can also select a specific branch or a specific commit by using the
 suitable syntax for `install_github`, see the **devtools** package
 documentation.
 
-## Clone, build and install
+Clone, build and install
+------------------------
 
 ### Cloning the repository
 
 If you do not have yet a local `yaev` repository, use `git clone` to
 clone the `yaev` repository
 
-``` bash
-git clone https://github.com/yvesdeville/yaev
-```
+    git clone https://github.com/yvesdeville/yaev
 
 This will create a `yaev` sub-directory of the current directory,
 i.e. the directory from which the git command was issued. Of course this
@@ -73,17 +68,13 @@ With these systems you can install a package from its source. Move to
 the parent directory of your cloned repository and use the following
 command from a terminal to create a tarball source file
 
-``` bash
-R CMD build yaev
-```
+    R CMD build yaev
 
 This will produce a source tarball `yaev_x.y.z` where `x`, `y` and `z`
 stand for the major, minor and patch version numbers. Then you can
 install from a command line
 
-``` bash
-R CMD INSTALL yaev_x.y.z
-```
+    R CMD INSTALL yaev_x.y.z
 
 Note that you must also have all the packages required by **yaev**
 installed.
@@ -107,9 +98,7 @@ If you have the **Rtools** installed, you can create a binary. Using a
 terminal, move if necessary by using `cd` to the directory containing
 the source tarball and R command, and then type
 
-``` bash
-R CMD INSTALL --build yaev_x.y.z
-```
+    R CMD INSTALL --build yaev_x.y.z
 
 This will create a `.zip` file that can be used on a Windows platform
 which may not be equipped with *Rtools*. For instance, with **RStudio**
