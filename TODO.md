@@ -17,6 +17,11 @@ Yves Deville <deville.yves@alpestat.com>
     files:( Suitable links should be found in the package manual. Maybe
     keep `yaev.Rnw` as a package vignette?
 
+## Documentation
+
+-   Inquire about the **extRemes** package and report it in the table of
+    the vignette `yaev.Rnw`.
+
 ## Computing
 
 -   Implement the Taylor approximation for
@@ -35,15 +40,27 @@ Yves Deville <deville.yves@alpestat.com>
     ![\\xi \\approx 0](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cxi%20%5Capprox%200 "\xi \approx 0")
     in the transformations. `PP2poisGP`and `poisGP2PP`.
 
--   Make the quantile functions work correctly for `p = 0.0` and
-    `p =   1.0`. The corresponding end-point of the distribution (be it
-    finite or infinite) must be returned.
+-   **\[Done for `qGP2`\]** Make the quantile functions work correctly
+    for `p = 0.0` and `p = 1.0`. The corresponding end-point of the
+    distribution (be it finite or infinite) must be returned.
 
 -   Make sure that the distribution functions work correctly with
     `q = -Inf` and `q = Inf`. The value `0` or `1` must be returned.
 
--   Make sure that the densities are zero (not `NA`) outside of the
-    support.
+-   Add the formal argument `log.p` to the distribution functions
+    `pGPD2` and `pGEV` to better conform to what is done for
+    distribution functions.
+
+-   Add the formal argument `log.p` to the quantile functions `qGPD2`
+    and `qGEV` to better conform to what is done for distribution
+    functions. This of course implies changing the derivative and the
+    Hessian.
+
+-   **\[Done for `dGP2`\]** Make sure that the densities are zero (not
+    `NA`) outside of the support.
+
+-   **\[Done for `pGP2`\]** Make sure that the distribution function is
+    OK outside or the support.
 
 -   Make sure that the probability functions return `NA` when an
     incorrect parameter is used (negative `scale`).

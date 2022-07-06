@@ -232,3 +232,77 @@ test_that(desc = "Gradient of the GPD2 distribution function shape == 0",
 test_that(desc = "Hessian of the GPD2 distribution function shape == 0",
             expect_lt(max(abs(drop(attr(fval, "hessian")) - Hnum)),
                       1e-3))
+
+## ==========================================================================
+## Check that the quantile function works correcly when p = 0.0 and p
+## = 1.0 are used
+## ==========================================================================
+
+nt <- 10
+sigma <- runif(nt)
+xi <- rnorm(nt, sd = 0.05)
+
+qval0 <- qGPD2(0.0, scale = sigma, shape = xi, deriv = FALSE, hessian = FALSE)
+test_that(desc = "Quantile function of the GPD2 distribution for p = 0.0",
+          expect_equal(qval0, rep(0.0, nt)))
+
+sigma <- runif(nt)
+xi <- -rexp(nt)
+qval1 <- qGPD2(1.0, scale = sigma, shape = xi, deriv = FALSE, hessian = FALSE)
+test_that(desc = "Quantile function of the GPD2 distribution for p = 1.0",
+          expect_equal(qval1, -sigma / xi))
+xi <- rexp(nt)
+qval1 <- qGPD2(1.0, scale = sigma, shape = xi, deriv = FALSE, hessian = FALSE)
+test_that(desc = "Quantile function of the GPD2 distribution for p = 1.0",
+          expect_equal(qval1, rep(Inf, nt)))
+
+## ==========================================================================
+## Check that the distribution function works correcly when q = -Inf and
+## q = Inf are used
+## ==========================================================================
+
+nt <- 10
+sigma <- runif(nt)
+xi <- rnorm(nt, sd = 0.05)
+
+pval0 <- pGPD2(-Inf, scale = sigma, shape = xi, deriv = FALSE, hessian = FALSE)
+test_that(desc = "Distribution function of the GPD2 distribution for q = -Inf",
+          expect_equal(pval0, rep(0.0, nt)))
+
+pval1 <- pGPD2(Inf, scale = sigma, shape = xi, deriv = FALSE, hessian = FALSE)
+test_that(desc = "Distribution function of the GPD2 distribution for q = Inf",
+          expect_equal(pval1, rep(1.0, nt)))
+
+## ==========================================================================
+## Test that the distribution function is OK outside of the support
+## ==========================================================================
+
+pval0 <- pGPD2(q = -rexp(nt), scale = sigma, shape = xi,
+               deriv = FALSE, hessian = FALSE)
+test_that(desc = "Distribution function of the GPD2 distribution outside of support",
+          expect_equal(pval0, rep(0.0, nt)))
+
+sigma <- runif(nt)
+xi <- -rexp(nt)
+omega <- - sigma / xi
+pval1 <- pGPD2(q = omega + rexp(nt), scale = sigma, shape = xi,
+               deriv = FALSE, hessian = FALSE)
+test_that(desc = "Distribution function of the GPD2 distribution outside of support",
+          expect_equal(pval1, rep(1.0, nt)))
+
+## ==========================================================================
+## Test that the density is zero outside of the support
+## ==========================================================================
+
+dval0 <- dGPD2(x = -rexp(nt), scale = sigma, shape = xi,
+               deriv = FALSE, hessian = FALSE)
+test_that(desc = "Density function of the GPD2 distribution outside of support",
+          expect_equal(dval0, rep(0.0, nt)))
+
+sigma <- runif(nt)
+xi <- -rexp(nt)
+omega <- - sigma / xi
+dval1 <- dGPD2(x = omega + rexp(nt), scale = sigma, shape = xi,
+               deriv = FALSE, hessian = FALSE)
+test_that(desc = "Density function of the GPD2 distribution outside of support",
+          expect_equal(dval1, rep(0.0, nt)))

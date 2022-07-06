@@ -13,13 +13,14 @@
    distribution and the quantile functions. The implementation in C is
    faster than a pure R implementation. Unlike some other
    implementations in existing R packages, NAs are returned when the
-   shape is negative, which can be a desirable behaviour for when
+   scale is negative, which can be a desirable behaviour when
    unconstrained optimisation is used to maximise the log-likelihood.
  
-   NOTE This program is part of the 'potomax' R package.
+   We are using here the .Call interface, because we want to return 
+   the derivatives as attributes of the result. As a side effect, we 
+   can not use the macros like `R_Q_P01_boundaries` 
 
-   LICENCE Contact the author for details. The 'potomax' R package is
-   still in a early stage of development.
+   NOTE This program is part of the 'yaev' R package.
    =========================================================================== */  
 
 
@@ -114,6 +115,20 @@ SEXP Call_dGPD2(SEXP x,             /*  double                          */
 	  rhess[i + 3 * n] = NA_REAL;
 	}
 	
+      } else if (rx[ix] < 0.0) {
+
+	rval[i] = 0.0;
+	
+	rgrad[i] = 0.0;
+	rgrad[i + n] = 0.0;
+
+	if (hessian) {
+	  rhess[i] = 0.0;
+	  rhess[i + n] = 0.0;
+	  rhess[i + 2 * n] = 0.0;
+	  rhess[i + 3 * n] = 0.0;
+	}
+
       } else {
 	
 	z = rx[ix] / rscale[iscale];
@@ -259,7 +274,11 @@ SEXP Call_dGPD2(SEXP x,             /*  double                          */
       if (ISNA(rx[ix]) || (rscale[iscale] <= 0.0)) {
 	
 	rval[i] = NA_REAL;
-		
+
+      } else if (rx[ix] < 0.0) {
+	
+	rval[i] = 0.0;
+
       } else {
 	
 	z = rx[ix] / rscale[iscale];
@@ -310,6 +329,7 @@ SEXP Call_dGPD2(SEXP x,             /*  double                          */
 
  /* ==========================================================================
   * Distribution function
+  * 
   * ========================================================================== */
 
 SEXP Call_pGPD2(SEXP q,               /*  double                          */
@@ -320,6 +340,7 @@ SEXP Call_pGPD2(SEXP q,               /*  double                          */
 		SEXP hessianFlag) {   /*  integer                         */
  
   int n, nq, nscale, nshape, i, iq, iscale, ishape,
+    lowerTail = INTEGER(lowerTailFlag)[0], 
     deriv = INTEGER(derivFlag)[0], hessian = INTEGER(hessianFlag)[0];
   
   double eps = 1e-6, z, V, A, B, S, sigma, xi, u, H, dHdsigma, dHdxi;
@@ -397,6 +418,36 @@ SEXP Call_pGPD2(SEXP q,               /*  double                          */
 	  // row 'xi'
 	  rhess[i + n] = NA_REAL;
 	  rhess[i + 3 * n] = NA_REAL;
+	}
+
+      } else if (((rq[iq] == R_NegInf) && lowerTail) ||
+		 ((rq[iq] == R_PosInf) && !lowerTail)) {
+	
+	rval[i] = 0.0;
+	
+	rgrad[i] = 0.0;
+	rgrad[i + n] = 0.0;
+
+	if (hessian) {
+	  rhess[i ] = 0.0;
+	  rhess[i + 2 * n] = 0.0;
+	  rhess[i + n] = 0.0;
+	  rhess[i + 3 * n] = 0.0;
+	}
+	
+      } else if (((rq[iq] == R_PosInf) && lowerTail) ||
+		 ((rq[iq] == R_NegInf) && !lowerTail)) {
+	
+	rval[i] = 1.0;
+
+	rgrad[i] = 0.0;
+	rgrad[i + n] = 0.0;
+
+	if (hessian) {
+	  rhess[i ] = 0.0;
+	  rhess[i + 2 * n] = 0.0;
+	  rhess[i + n] = 0.0;
+	  rhess[i + 3 * n] = 0.0;
 	}
 	
       } else {
@@ -529,7 +580,15 @@ SEXP Call_pGPD2(SEXP q,               /*  double                          */
 	   ++i) {
       
       if (ISNA(rq[iq]) || (rscale[iscale] <= 0.0)) {
-	rval[i] = NA_REAL;	
+
+	rval[i] = NA_REAL;
+	
+      } else if (((rq[iq] == R_NegInf) && lowerTail) ||
+		 ((rq[iq] == R_PosInf) && !lowerTail)) {
+	rval[i] = 0.0;
+      } else if (((rq[iq] == R_PosInf) && lowerTail) ||
+		 ((rq[iq] == R_NegInf) && !lowerTail)) {
+	rval[i] = 1.0;
       } else {
 	z = rq[iq] / rscale[iscale];
 	xi = rshape[ishape];
@@ -589,6 +648,7 @@ SEXP Call_qGPD2(SEXP p,               /*  double                          */
 		SEXP hessianFlag) {   /*  integer                         */
   
   int n, np, nscale, nshape, i, ip, iscale, ishape,
+    lowerTail = INTEGER(lowerTailFlag)[0],
     deriv = INTEGER(derivFlag)[0], hessian = INTEGER(hessianFlag)[0] ;
   
   double eps = 1e-6, q, lq, q1, xi, sigma, V, W, rpi;
@@ -665,7 +725,6 @@ SEXP Call_qGPD2(SEXP p,               /*  double                          */
 	rgrad[i + n] = NA_REAL;
 	
 	if (hessian) {
-	  
 	  // row 'sigma'
 	  rhess[i] = 0.0;
 	  rhess[i + n] = NA_REAL;
@@ -674,6 +733,57 @@ SEXP Call_qGPD2(SEXP p,               /*  double                          */
 	  rhess[i + 3 * n] = NA_REAL;
 	}
 
+      } else if (((rp[ip] == 0.0) && lowerTail) ||
+		 ((rp[ip] == 1.0) && !lowerTail)) {
+	
+	rval[i] = 0.0;
+	
+	rgrad[i] = 0.0;
+	rgrad[i + n] = 0.0;
+	
+	if (hessian) {  
+	  rhess[i] = 0.0;
+	  rhess[i + n] = 0.0;
+	  rhess[i + 2 * n] = 0.0;
+	  rhess[i + 3 * n] = 0.0;
+	}
+	
+      } else if (((rp[ip] == 1.0) && lowerTail) ||
+		 ((rp[ip] == 0.0 && !lowerTail))) {
+	
+	xi = rshape[ishape];
+	sigma = rscale[iscale];
+
+	if (xi >= 0.0) {
+	  
+	  rval[i] = R_PosInf;
+	
+	  rgrad[i] =  NA_REAL;
+	  rgrad[i + n] =  NA_REAL;
+
+	  if (hessian) {  
+	    rhess[i] = NA_REAL;
+	    rhess[i + n] = NA_REAL;
+	    rhess[i + 2 * n] = NA_REAL;
+	    rhess[i + 3 * n] = NA_REAL;
+	  } 
+
+	} else {
+
+	  rval[i] = - sigma / xi;
+	  
+	  rgrad[i] = lowerTail ? - 1.0 / xi : 1.0 / xi;
+	  rgrad[i + n] = lowerTail? sigma / xi / xi : -sigma / xi / xi;
+	  
+	  if (hessian) {  
+	    rhess[i] = 0.0;
+	    rhess[i + n] = 1.0 / xi / xi;
+	    rhess[i + 2 * n] = 0.0;
+	    rhess[i + 3 * n] = -2.0 * sigma / xi / xi / xi;
+	  } 
+	  
+	}
+	
       } else {
 
 	rpi = rp[ip];
@@ -755,7 +865,21 @@ SEXP Call_qGPD2(SEXP p,               /*  double                          */
       if (ISNA(rp[ip]) || (rscale[iscale] <= 0.0)) {
 	
 	rval[i] = NA_REAL;
-		
+
+      } else if (((rp[ip] == 0.0) && lowerTail) ||
+		 ((rp[ip] == 1.0) && !lowerTail)) {
+	
+	rval[i] = 0.0;
+	
+      } else if (((rp[ip] == 1.0) && lowerTail) ||
+		 ((rp[ip] == 0.0 && !lowerTail))) {
+
+	if (rshape[ishape] >= 0.0) {
+	  rval[i] = R_PosInf;
+	} else {
+	  rval[i] = - rscale[iscale] / rshape[ishape];
+	}
+	
       } else {
 
 	rpi = rp[ip];

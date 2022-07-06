@@ -43,15 +43,27 @@ output: github_document
 - Add more tests for the case $\xi \approx 0$ in the transformations.
 `PP2poisGP`and `poisGP2PP`.
 
-- Make the quantile functions work correctly for `p = 0.0` and `p =
-  1.0`. The corresponding end-point of the distribution (be it finite
-  or infinite) must be returned.
+- **[Done for `qGP2`]** Make the quantile functions work correctly for
+  `p = 0.0` and `p = 1.0`. The corresponding end-point of the
+  distribution (be it finite or infinite) must be returned.
   
 - Make sure that the distribution functions work correctly with `q = -Inf` 
   and `q = Inf`. The value `0` or `1` must be returned.
   
-- Make sure that the densities are zero (not `NA`) outside of the
-  support.
+- Add the formal argument `log.p` to the distribution functions
+  `pGPD2` and `pGEV` to better conform to what is done for
+  distribution functions.
+ 
+- Add the formal argument `log.p` to the quantile functions `qGPD2`
+  and `qGEV` to better conform to what is done for distribution
+  functions. This of course implies changing the derivative and the
+  Hessian.
+
+- **[Done for `dGP2`]** Make sure that the densities are zero (not
+  `NA`) outside of the support.
+
+- **[Done for `pGP2`]** Make sure that the distribution function 
+  is OK outside or the support.
 
 - Make sure that the probability functions return `NA` when an
   incorrect parameter is used (negative `scale`).
