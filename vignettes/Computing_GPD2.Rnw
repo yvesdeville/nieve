@@ -1,0 +1,9 @@
+\documentclass{article}
+\usepackage{pdfpages}
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{Computing the two parameter GP Distribution}
+%\VignetteEncoding{UTF-8}
+
+\begin{document}
+\includepdf[pages=-, fitpaper=true]{../inst/computing/GPD2.pdf}
+\end{document}

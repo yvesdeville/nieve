@@ -12,15 +12,19 @@ Yves Deville <deville.yves@alpestat.com>
 -   Make **NSGEV** and **potomax** rely on **yaev** for the distribution
     functions and discard the implementation therein.
 
--   Make sure that the the `inst/doc` directory is not provided to the
-    CRAN since it may fail to conform to CRAN rules. Nearly 1MO of pdf
-    files:( Suitable links should be found in the package manual. Maybe
-    keep `yaev.Rnw` as a package vignette?
+-   Make sure that the the `inst/computing` directory and the four
+    vignettes `GEV.Rnw`, `GPD2.Rnw`, `PP2PoisGP.Rnw`, `PoisGP2PP.Rnw`
+    are not provided to the CRAN since the package may then fail to
+    conform to CRAN rules. Nearly 1MO of pdf files:( Suitable links
+    should be found in the package manual. Maybe keep `yaev.Rnw` as a
+    package vignette with a few examples?
 
 ## Documentation
 
 -   Inquire about the **extRemes** package and report it in the table of
     the vignette `yaev.Rnw`.
+
+-   Add a `.bib` file with the citations for the packages.
 
 ## Computing
 
@@ -59,8 +63,8 @@ Yves Deville <deville.yves@alpestat.com>
 -   **\[Done for `dGP2`\]** Make sure that the densities are zero (not
     `NA`) outside of the support.
 
--   **\[Done for `pGP2`\]** Make sure that the distribution function is
-    OK outside or the support.
+-   **\[Done for `pGP2`\]** Make sure that the distribution functions
+    are OK outside or the support (zero or one).
 
 -   Make sure that the probability functions return `NA` when an
     incorrect parameter is used (negative `scale`).
@@ -68,5 +72,5 @@ Yves Deville <deville.yves@alpestat.com>
 -   In `GPD2.tex`, recall how can the derivatives of the distribution
     function
     ![F](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;F "F")
-    are related to those of the cululated hazard
+    are related to those of the cumulated hazard
     ![H](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;H "H").

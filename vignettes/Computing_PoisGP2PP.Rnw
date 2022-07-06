@@ -1,0 +1,9 @@
+\documentclass{article}
+\usepackage{pdfpages}
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{Computing: from the Poisson-GP parameterization to the PP}
+%\VignetteEncoding{UTF-8}
+
+\begin{document}
+\includepdf[pages=-, fitpaper=true]{../inst/computing/PoisGP2PP.pdf}
+\end{document}

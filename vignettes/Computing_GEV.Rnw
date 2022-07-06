@@ -1,0 +1,9 @@
+\documentclass{article}
+\usepackage{pdfpages}
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{Computing the GEV distribution}
+%\VignetteEncoding{UTF-8}
+
+\begin{document}
+\includepdf[pages=-, fitpaper=true]{../inst/computing/GEV.pdf}
+\end{document}
