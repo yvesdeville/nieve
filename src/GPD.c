@@ -36,6 +36,7 @@ SEXP Call_dGPD2(SEXP x,             /*  double                          */
 		SEXP hessianFlag) { /*  integer                         */
   
   int n, nx, nscale, nshape, i, ix, iscale, ishape,
+    logF = INTEGER(logFlag)[0],
     deriv = INTEGER(derivFlag)[0], hessian = INTEGER(hessianFlag)[0];
   
   double eps = 1e-6, z, V, xi;
@@ -62,6 +63,9 @@ SEXP Call_dGPD2(SEXP x,             /*  double                          */
   
   PROTECT(val = allocVector(REALSXP, n));
   double *rval = REAL(val);
+
+  // Rprintf("logFlag %d\n", logF);
+  // Rprintf("derivFlag %d\n", deriv);
   
   if (deriv) {
 
@@ -76,19 +80,15 @@ SEXP Call_dGPD2(SEXP x,             /*  double                          */
        case, it seems that this does not work. It seems that the
        compilator does not see declarations inside two nested 'if'.
        ===================================================================== */
-
-    // if (hessian) { 
-
-      SEXP hess;
-
-      PROTECT(hess = allocVector(REALSXP, n * 2 * 2));
-      double *rhess = REAL(hess);
-
-      // specific auxiliary variables for hessian
-      int j, k;
-      double A, B, B1, sigma, sigma2;
-
-      // }
+    
+    SEXP hess;
+    
+    PROTECT(hess = allocVector(REALSXP, n * 2 * 2));
+    double *rhess = REAL(hess);
+    
+    // specific auxiliary variables for hessian
+    int j, k;
+    double A, B, B1, sigma, sigma2;
     
     PROTECT(attrNm = NEW_CHARACTER(1)); 
     SET_STRING_ELT(attrNm, 0, mkChar("gradient"));
@@ -117,7 +117,9 @@ SEXP Call_dGPD2(SEXP x,             /*  double                          */
 	
       } else if (rx[ix] < 0.0) {
 
-	rval[i] = 0.0;
+	// remind that for now we are evaluating the log-density
+	// the exponential transformation will come later.
+	rval[i] = R_NegInf;
 	
 	rgrad[i] = 0.0;
 	rgrad[i + n] = 0.0;
@@ -128,7 +130,7 @@ SEXP Call_dGPD2(SEXP x,             /*  double                          */
 	  rhess[i + 2 * n] = 0.0;
 	  rhess[i + 3 * n] = 0.0;
 	}
-
+	
       } else {
 	
 	z = rx[ix] / rscale[iscale];
@@ -230,25 +232,27 @@ SEXP Call_dGPD2(SEXP x,             /*  double                          */
 
 	} /* non-exponential case */
 	
-	if (!INTEGER(logFlag)[0]) {
-	  rval[i] = exp(rval[i]);
-	  rgrad[i] *= rval[i];
-	  rgrad[i + n] *= rval[i];
-
-	  if (hessian) {
-	    // multiply the hessian by the density and add the
-	    // 'tcrossprod' of the gradient
-	    for (j = 0; j < 2; j++) {
-	      for (k = 0; k < 2; k++) {
-		rhess[i + (j + k * 2) * n] *= rval[i];
-		rhess[i + (j + k * 2) * n] += rgrad[i + j * n] * rgrad[i + k * n];
-	      }
+      }   /* non-NA case     */
+      	
+      if (logF == 0) {
+	
+	rval[i] = exp(rval[i]);
+	
+	rgrad[i] *= rval[i];
+	rgrad[i + n] *= rval[i];
+	
+	if (hessian) {
+	  // multiply the hessian by the density and add the
+	  // 'tcrossprod' of the gradient
+	  for (j = 0; j < 2; j++) {
+	    for (k = 0; k < 2; k++) {
+	      rhess[i + (j + k * 2) * n] *= rval[i];
+	      rhess[i + (j + k * 2) * n] += rgrad[i + j * n] * rgrad[i + k * n];
 	    }
 	  }
-	  
 	}
 	
-      }   /* non-NA case     */
+      }
       
     }
 
@@ -277,7 +281,7 @@ SEXP Call_dGPD2(SEXP x,             /*  double                          */
 
       } else if (rx[ix] < 0.0) {
 	
-	rval[i] = 0.0;
+	rval[i] = R_NegInf;
 
       } else {
 	
@@ -310,13 +314,14 @@ SEXP Call_dGPD2(SEXP x,             /*  double                          */
 
 	  // Rprintf("V =  %6.3f, val = %6.3f\n", V, rval[i]);
 	  
-	} /* non-expoential case */
+	} /* non-exponential case */
 	
-	if (!INTEGER(logFlag)[0]) {
-	  rval[i] = exp(rval[i]);
-	}
-
       }   /* non-NA case     */
+
+      if (logF == 0) {
+	rval[i] = exp(rval[i]);
+      }
+     
       
     }
   

@@ -24,7 +24,8 @@ Yves Deville <deville.yves@alpestat.com>
 -   Inquire about the **extRemes** package and report it in the table of
     the vignette `yaev.Rnw`.
 
--   Add a `.bib` file with the citations for the packages.
+-   Add a `.bib` file with the citations for the packages and cite the
+    package in the vignette.
 
 ## Computing
 
@@ -40,9 +41,14 @@ Yves Deville <deville.yves@alpestat.com>
 
 -   Should we keep the R implementation for the GEV distribution?
 
--   Add more tests for the case
+-   Add tests for the specific case
     ![\\xi \\approx 0](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cxi%20%5Capprox%200 "\xi \approx 0")
-    in the transformations. `PP2poisGP`and `poisGP2PP`.
+    (more precisely,
+    ![\\xi \< \\epsilon](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cxi%20%3C%20%5Cepsilon "\xi < \epsilon"))
+    in the transformations `PP2poisGP`and `poisGP2PP`.
+
+-   Add a test checking that the transformation `PP2poisGP`and
+    `poisGP2PP` are reciprocal to each other (in both directions).
 
 -   **\[Done for `qGP2`\]** Make the quantile functions work correctly
     for `p = 0.0` and `p = 1.0`. The corresponding end-point of the
@@ -53,15 +59,15 @@ Yves Deville <deville.yves@alpestat.com>
 
 -   Add the formal argument `log.p` to the distribution functions
     `pGPD2` and `pGEV` to better conform to what is done for
-    distribution functions.
+    distribution functions in the **stats** package.
 
 -   Add the formal argument `log.p` to the quantile functions `qGPD2`
     and `qGEV` to better conform to what is done for distribution
     functions. This of course implies changing the derivative and the
     Hessian.
 
--   **\[Done for `dGP2`\]** Make sure that the densities are zero (not
-    `NA`) outside of the support.
+-   **\[Done for `dGP2`\]** Make sure that the density functions are
+    zero (not `NA`) outside of the support.
 
 -   **\[Done for `pGP2`\]** Make sure that the distribution functions
     are OK outside or the support (zero or one).

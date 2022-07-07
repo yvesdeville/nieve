@@ -291,18 +291,32 @@ test_that(desc = "Distribution function of the GPD2 distribution outside of supp
           expect_equal(pval1, rep(1.0, nt)))
 
 ## ==========================================================================
-## Test that the density is zero outside of the support
+## Test that the density is zero outside of the support. Should be
+## done for the two possible values of 'log' and 'deriv'.
 ## ==========================================================================
 
-dval0 <- dGPD2(x = -rexp(nt), scale = sigma, shape = xi,
-               deriv = FALSE, hessian = FALSE)
-test_that(desc = "Density function of the GPD2 distribution outside of support",
-          expect_equal(dval0, rep(0.0, nt)))
-
-sigma <- runif(nt)
-xi <- -rexp(nt)
-omega <- - sigma / xi
-dval1 <- dGPD2(x = omega + rexp(nt), scale = sigma, shape = xi,
-               deriv = FALSE, hessian = FALSE)
-test_that(desc = "Density function of the GPD2 distribution outside of support",
-          expect_equal(dval1, rep(0.0, nt)))
+for (logVal in c(TRUE, FALSE)) {
+    
+    densVal  <- ifelse(logVal, -Inf, 0.0)
+    
+    for (derivVal in c(TRUE, FALSE)) {
+        dval0 <- dGPD2(x = -rexp(nt), scale = sigma, shape = xi,
+                       log = logVal, deriv = derivVal, hessian = derivVal)
+        test_that(desc = sprintf(paste0("Density function of the GPD2 ", 
+                                        "outside of support: left side, ",
+                                        "log = %s, deriv = %s"), logVal, derivVal),
+                  expect_equal(dval0[1:nt], rep(densVal, nt)))
+        
+        sigma <- runif(nt)
+        xi <- -rexp(nt)
+        omega <- - sigma / xi
+        dval1 <- dGPD2(x = omega + rexp(nt), scale = sigma, shape = xi,
+                       log = logVal, deriv = derivVal, hessian = derivVal)
+  
+        test_that(desc = sprintf(paste0("Density function of the GPD2 ", 
+                                        "outside of support: right side, ",
+                                        "log = %s, deriv = %s"), logVal, derivVal),
+                  expect_equal(dval1[1:nt], rep(densVal, nt)))
+    }
+}
+        

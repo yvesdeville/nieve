@@ -72,10 +72,11 @@ Density, distribution function, quantile function and
 \details{
 Let \eqn{\sigma >0} and \eqn{\xi} denote the scale and the shape; the
 survival function \eqn{S(x) := \text{Pr}[X > x]}{Pr[X < x]} is given
-for \eqn{x \geq 0}{x  >= 0} by
+for \eqn{x \geq 0}{x >= 0} by
 \deqn{S(x) = \left[1 + \xi x/ \sigma \right]_+^{-1/\xi}}{[1 + \xi * x / \sigma]_+^(-1/\xi)} for \eqn{\xi \neq 0}{\xi != 0} where \eqn{v_+ := \max\{v, \, 0\}}{v_+ = max(v, 0)} 
 and by \deqn{S(x) = \exp\{-x/\sigma\}}{exp(- x / \sigma)}
-for \eqn{\xi = 0}{\xi = 0}.
+for \eqn{\xi = 0}{\xi = 0}. For \eqn{x < 0} we have \eqn{S(x) = 1}:
+the support of the distribution is \eqn{(0,\,\infty(}{(0, Inf(}.
 
 The probability functions \code{d}, \code{p} and \code{q} all
 allow each of the two GP parameters to be a vector. Then the
