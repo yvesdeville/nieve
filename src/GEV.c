@@ -15,11 +15,8 @@
    shape is negative, which can be a desirable behaviour for when
    unconstrained optimisation is used to maximise the log-likelihood.
  
-   NOTE This program is part of the 'NSGEV' R package with financial
+   NOTE This program is part of the 'yaev' R package with financial
    and technical support from IRSN-Behrig, www.irsn.fr.
-
-   LICENCE Contact IRSN for details. The NSGEV is still in a early
-   stage of development.
    =========================================================================== */  
 
 

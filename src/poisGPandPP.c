@@ -44,12 +44,7 @@
 
    DETAILS 
 
-   See 'Renext Computing Details'
-
-   LICENCE 
-
-   Contact the author for details. The 'potomax' R package is still in a
-   early stage of development.
+   See the documentation in the 'computing' directory of the package.
    =========================================================================== */  
 
 
