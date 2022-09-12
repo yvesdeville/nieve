@@ -46,8 +46,10 @@ SEXP Call_dexp1(SEXP x, /*  double                          */
   nx = LENGTH(x);
   nscale = LENGTH(scale);
 
-  if ((nx == 0) || (nscale == 0))
+  if ((nx == 0) || (nscale == 0)) {
+    UNPROTECT(2);
     return(allocVector(REALSXP, 0));
+  }
 
   n = nx;
   if (n < nscale) n = nscale;
@@ -121,7 +123,7 @@ SEXP Call_dexp1(SEXP x, /*  double                          */
 	  rgrad[i] = -(1.0 - z) / sigma;
 
 	  if (hessian) {
-	    rhess[i] =  (1 - 2 * z) / sigma / sigma;
+	    rhess[i] =  (1.0 - 2.0 * z) / sigma / sigma;
 	  }
 	}
 
@@ -215,8 +217,10 @@ SEXP Call_pexp1(SEXP q,               /*  double                          */
   nq = LENGTH(q);
   nscale = LENGTH(scale);
 
-  if ((nq == 0) || (nscale == 0))
+  if ((nq == 0) || (nscale == 0)) {
+    UNPROTECT(2);
     return(allocVector(REALSXP, 0));
+  }
 
   n = nq;
   if (n < nscale) n = nscale;
@@ -365,8 +369,10 @@ SEXP Call_qexp1(SEXP p,               /*  double                          */
   np = LENGTH(p);
   nscale = LENGTH(scale);
 
-  if ((np == 0) || (nscale == 0))
+  if ((np == 0) || (nscale == 0)) {
+    UNPROTECT(2);
     return(allocVector(REALSXP, 0));
+  }
 
   n = np;
   if (n < nscale) n = nscale;

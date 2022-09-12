@@ -52,8 +52,10 @@ SEXP Call_dGEV(SEXP x,             /*  double                          */
   nscale = LENGTH(scale);		
   nshape = LENGTH(shape);
   
-  if ((nx == 0) || (nloc == 0) || (nscale == 0) || (nshape == 0)) 			
-    return(allocVector(REALSXP, 0));				
+  if ((nx == 0) || (nloc == 0) || (nscale == 0) || (nshape == 0)) {
+    UNPROTECT(4);
+    return(allocVector(REALSXP, 0));
+  }
   
   n = nx;							
   if (n < nloc) n = nloc;						
@@ -80,16 +82,16 @@ SEXP Call_dGEV(SEXP x,             /*  double                          */
 
     // if (hessian) { 
 
-      SEXP hess;
-
-      PROTECT(hess = allocVector(REALSXP, n * 3 * 3));
-      double *rhess = REAL(hess);
-
-      // specific auxiliary variables for hessian
-      int j, k;
-      double L, zVm1, zVm2, L2, sigma, sigma2, sigmaV;
-
-      // }
+    SEXP hess;
+    
+    PROTECT(hess = allocVector(REALSXP, n * 3 * 3));
+    double *rhess = REAL(hess);
+    
+    // specific auxiliary variables for hessian
+    int j, k;
+    double L, zVm1, zVm2, L2, sigma, sigma2, sigmaV;
+    
+    // }
     
     PROTECT(attrNm = NEW_CHARACTER(1)); 
     SET_STRING_ELT(attrNm, 0, mkChar("gradient"));
@@ -276,7 +278,7 @@ SEXP Call_dGEV(SEXP x,             /*  double                          */
 	
       }   /* non-NA case     */
       
-    }
+    }    /* loop */
 
     SET_ATTR(val, attrNm, grad);
 
@@ -378,8 +380,10 @@ SEXP Call_pGEV(SEXP q,               /*  double                          */
   nscale = LENGTH(scale);		
   nshape = LENGTH(shape);
   
-  if ((nq == 0) || (nloc == 0) || (nscale == 0) || (nshape == 0)) 			
-    return(allocVector(REALSXP, 0));				
+  if ((nq == 0) || (nloc == 0) || (nscale == 0) || (nshape == 0)) {
+    UNPROTECT(4);
+    return(allocVector(REALSXP, 0));
+  }
   
   n = nq;							
   if (n < nloc) n = nloc;						
@@ -582,8 +586,10 @@ SEXP Call_qGEV(SEXP p,               /*  double                          */
   nscale = LENGTH(scale);		
   nshape = LENGTH(shape);
   
-  if ((np == 0) || (nloc == 0) || (nscale == 0) || (nshape == 0)) 			
+  if ((np == 0) || (nloc == 0) || (nscale == 0) || (nshape == 0)) {
+    UNPROTECT(4);
     return(allocVector(REALSXP, 0));				
+  }
   
   n = np;							
   if (n < nloc) n = nloc;						
@@ -605,15 +611,14 @@ SEXP Call_qGEV(SEXP p,               /*  double                          */
 
  // if (hessian) { 
 
-      SEXP hess;
-
-      PROTECT(hess = allocVector(REALSXP, n * 3 * 3));
-      double *rhess = REAL(hess);
-      double dV, d2V;
-
-      // }
+    SEXP hess;
+    
+    PROTECT(hess = allocVector(REALSXP, n * 3 * 3));
+    double *rhess = REAL(hess);
+    double dV, d2V;
+    
+    // }
    
-
     for (i = ip = iloc = iscale = ishape = 0;  i < n; 
 	 ip = (++ip == np) ? 0 : ip, 	       
 	 iloc = (++iloc == nloc) ? 0 : iloc, 

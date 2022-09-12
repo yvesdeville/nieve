@@ -54,8 +54,10 @@ SEXP Call_dGPD2(SEXP x,             /*  double                          */
   nscale = LENGTH(scale);		
   nshape = LENGTH(shape);
   
-  if ((nx == 0) || (nscale == 0) || (nshape == 0)) 			
+  if ((nx == 0) || (nscale == 0) || (nshape == 0)) {
+    UNPROTECT(3);
     return(allocVector(REALSXP, 0));				
+  }
   
   n = nx;						       			
   if (n < nscale) n = nscale;
@@ -363,8 +365,10 @@ SEXP Call_pGPD2(SEXP q,               /*  double                          */
   nscale = LENGTH(scale);		
   nshape = LENGTH(shape);
   
-  if ((nq == 0) || (nscale == 0) || (nshape == 0)) 			
-    return(allocVector(REALSXP, 0));				
+  if ((nq == 0) || (nscale == 0) || (nshape == 0)) {
+    UNPROTECT(3);
+    return(allocVector(REALSXP, 0));
+  }
   
   n = nq;						       						
   if (n < nscale) n = nscale;
@@ -498,8 +502,17 @@ SEXP Call_pGPD2(SEXP q,               /*  double                          */
 	  if (z < 0.0) {
 	    S = 1.0;
 	    rval[i] = S;
+
 	    rgrad[i] = 0.0;
-	    rgrad[i + n] = 0.0;	    
+	    rgrad[i + n] = 0.0;
+
+	    if (hessian) {
+	      rhess[i] = 0.0;
+	      rhess[i + 2 * n] = 0.0;
+	      rhess[i + n] = 0.0;
+	      rhess[i + 3 * n] = 0.0;
+	    }
+	    
 	  } else {
 	    
 	    V = 1.0 + xi * z;
@@ -671,8 +684,10 @@ SEXP Call_qGPD2(SEXP p,               /*  double                          */
   nscale = LENGTH(scale);		
   nshape = LENGTH(shape);
   
-  if ((np == 0) || (nscale == 0) || (nshape == 0)) 			
+  if ((np == 0) || (nscale == 0) || (nshape == 0)) {
+    UNPROTECT(3);
     return(allocVector(REALSXP, 0));				
+  }
   
   n = np;		  			
   if (n < nscale) n = nscale;

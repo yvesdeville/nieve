@@ -8,7 +8,7 @@ output: github_document
 
 ## Package management
 
-- Use the
+- **[X]**Use the
   [rchk](https://developer.r-project.org/Blog/public/2019/04/18/common-protect-errors/)
   tool to check for possible memory errors/problems before submitting
   to the CRAN.
@@ -52,7 +52,7 @@ output: github_document
 - Add a test checking that the transformation `PP2poisGP`and
   `poisGP2PP` are reciprocal to each other (in both directions).
 
-- **[Done for `qGP2`]** Make the quantile functions work correctly for
+- **[Done for `qGPD2`]** Make the quantile functions work correctly for
   `p = 0.0` and `p = 1.0`. The corresponding end-point of the
   distribution (be it finite or infinite) must be returned.
   
@@ -68,10 +68,10 @@ output: github_document
   functions. This of course implies changing the derivative and the
   Hessian.
 
-- **[Done for `dGP2`]** Make sure that the density functions are zero
+- **[Done for `dGPD2`]** Make sure that the density functions are zero
   (not `NA`) outside of the support.
 
-- **[Done for `pGP2`]** Make sure that the distribution functions are
+- **[Done for `pGPD2`]** Make sure that the distribution functions are
   OK outside or the support (zero or one).
 
 - Make sure that the probability functions return `NA` when an

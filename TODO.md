@@ -1,10 +1,7 @@
-TODO list for the **yaev** package
-================
-Yves Deville <deville.yves@alpestat.com>
+Package management
+------------------
 
-## Package management
-
--   Use the
+-   **\[X\]**Use the
     [rchk](https://developer.r-project.org/Blog/public/2019/04/18/common-protect-errors/)
     tool to check for possible memory errors/problems before submitting
     to the CRAN.
@@ -19,7 +16,8 @@ Yves Deville <deville.yves@alpestat.com>
     should be found in the package manual. Maybe keep `yaev.Rnw` as a
     package vignette with a few examples?
 
-## Documentation
+Documentation
+-------------
 
 -   Inquire about the **extRemes** package and report it in the table of
     the vignette `yaev.Rnw`.
@@ -27,30 +25,28 @@ Yves Deville <deville.yves@alpestat.com>
 -   Add a `.bib` file with the citations for the packages and cite the
     package in the vignette.
 
-## Computing
+Computing
+---------
 
--   Implement the Taylor approximation for
-    ![\\xi \\approx 0](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cxi%20%5Capprox%200 "\xi \approx 0")
-    in the `PP2poisGP`and `poisGP2PP` (C) functions.
+-   Implement the Taylor approximation for *ξ* ≈ 0 in the `PP2poisGP`and
+    `poisGP2PP` (C) functions.
 
 -   Add the Extrended GPD distributions of Papastathopoulos & Tawn.
 
-## Testing and polishing
+Testing and polishing
+---------------------
 
 -   Remove any kind of dependence to **Renext**.
 
 -   Should we keep the R implementation for the GEV distribution?
 
--   Add tests for the specific case
-    ![\\xi \\approx 0](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cxi%20%5Capprox%200 "\xi \approx 0")
-    (more precisely,
-    ![\\xi \< \\epsilon](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cxi%20%3C%20%5Cepsilon "\xi < \epsilon"))
-    in the transformations `PP2poisGP`and `poisGP2PP`.
+-   Add tests for the specific case *ξ* ≈ 0 (more precisely,
+    *ξ* &lt; *ϵ*) in the transformations `PP2poisGP`and `poisGP2PP`.
 
 -   Add a test checking that the transformation `PP2poisGP`and
     `poisGP2PP` are reciprocal to each other (in both directions).
 
--   **\[Done for `qGP2`\]** Make the quantile functions work correctly
+-   **\[Done for `qGPD2`\]** Make the quantile functions work correctly
     for `p = 0.0` and `p = 1.0`. The corresponding end-point of the
     distribution (be it finite or infinite) must be returned.
 
@@ -66,17 +62,14 @@ Yves Deville <deville.yves@alpestat.com>
     functions. This of course implies changing the derivative and the
     Hessian.
 
--   **\[Done for `dGP2`\]** Make sure that the density functions are
+-   **\[Done for `dGPD2`\]** Make sure that the density functions are
     zero (not `NA`) outside of the support.
 
--   **\[Done for `pGP2`\]** Make sure that the distribution functions
+-   **\[Done for `pGPD2`\]** Make sure that the distribution functions
     are OK outside or the support (zero or one).
 
 -   Make sure that the probability functions return `NA` when an
     incorrect parameter is used (negative `scale`).
 
 -   In `GPD2.tex`, recall how can the derivatives of the distribution
-    function
-    ![F](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;F "F")
-    are related to those of the cumulated hazard
-    ![H](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;H "H").
+    function *F* are related to those of the cumulated hazard *H*.

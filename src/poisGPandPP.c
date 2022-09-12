@@ -79,9 +79,11 @@ SEXP Call_poisGP2PP(SEXP lambda,        /*  double                          */
 
   w0 = REAL(w)[0];
   
-  if ((nlambda == 0) || (nloc == 0) || (nscale == 0) || (nshape == 0)) 			
+  if ((nlambda == 0) || (nloc == 0) || (nscale == 0) || (nshape == 0)) {
+    UNPROTECT(5);
     return(allocVector(REALSXP, 0));				
-  
+  }
+    
   n = nlambda;
   if (n < nloc) n = nloc;					       			
   if (n < nscale) n = nscale;
@@ -95,9 +97,10 @@ SEXP Call_poisGP2PP(SEXP lambda,        /*  double                          */
 	
     SEXP grad, attrNm;
     PROTECT(grad = allocVector(REALSXP, n * 3 * 4));
-    double *rgrad = REAL(grad);	  
+    double *rgrad = REAL(grad);
+    
     PROTECT(attrNm = NEW_CHARACTER(1)); 
-    SET_STRING_ELT(attrNm, 0, mkChar("gradient"));
+    // SET_STRING_ELT(attrNm, 0, mkChar("gradient"));
  
     for (i = ilambda = iloc = iscale = ishape = 0;  i < n; 
 	 ilambda = (++ilambda == nlambda) ? 0 : ilambda,
@@ -306,8 +309,10 @@ SEXP Call_PP2poisGP(SEXP locStar,           /*  double                          
   
   w0 = REAL(w)[0];
   
-  if ((nlocStar == 0) || (nscaleStar == 0) || (nshapeStar == 0) || (nthreshold == 0)) 			
-    return(allocVector(REALSXP, 0));				
+  if ((nlocStar == 0) || (nscaleStar == 0) || (nshapeStar == 0) || (nthreshold == 0)) {
+    UNPROTECT(5);
+    return(allocVector(REALSXP, 0));
+  }
 
   // 'n' is the max of 'nloc', 'nscale', 'nshape' and 'nthreshold'
   n = nlocStar;					       			
@@ -325,7 +330,7 @@ SEXP Call_PP2poisGP(SEXP locStar,           /*  double                          
     PROTECT(grad = allocVector(REALSXP, n * 3 * 3));
     double *rgrad = REAL(grad);	  
     PROTECT(attrNm = NEW_CHARACTER(1)); 
-    SET_STRING_ELT(attrNm, 0, mkChar("gradient"));
+    // SET_STRING_ELT(attrNm, 0, mkChar("gradient"));
  
     for (i = ilocStar = iscaleStar = ishapeStar = ithreshold = 0; i < n; 
 	 ilocStar = (++ilocStar == nlocStar) ? 0 : ilocStar,

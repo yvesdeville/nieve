@@ -10,7 +10,8 @@
 Random Generation for the Two-Parameter Generalized Pareto
 Distribution (GPD)}
 \usage{
-dGPD2(x, scale = 1, shape = 0, log = FALSE, deriv = FALSE, hessian = FALSE)
+dGPD2(x, scale = 1, shape = 0, log = FALSE, deriv = FALSE,
+  hessian = FALSE)
 
 pGPD2(q, scale = 1, shape = 0, lower.tail = TRUE, deriv = FALSE,
   hessian = FALSE)

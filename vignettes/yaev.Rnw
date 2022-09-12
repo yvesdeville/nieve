@@ -12,7 +12,6 @@
 \usepackage[english]{babel}
 \usepackage{hyperref}
 \usepackage{fullpage}
-\usepackage{tikz}
 \definecolor{MonVert}{rgb}{0.398,0.801,0.000} 
 \definecolor{MonVertF}{rgb}{0.13,0.54,0.13}
 \definecolor{MonBleu}{rgb}{0.000,0.602,0.801} 
@@ -39,14 +38,14 @@
   
 The probability functions for the GPD and GEV distributions depend
 smoothly on the parameters: they are infinitely differentiable
-functions of the parameters. However these functions are not analytic
-functions of the parameters and a singularity exists for all the
-functions when the shape parameter say $\xi$ is zero.  In practice,
-the functions are given with different formulas depending on whether
-$\xi$ is zero or not; the formulas for $\xi = 0$ relate to the
+functions of the parameters. However, these functions are not
+\textit{analytic} functions of the parameters and a singularity exists
+for all of them when the shape parameter, say $\xi$, is zero.  In
+practice, the functions are given with different formulas depending on
+whether $\xi$ is zero or not; the formulas for $\xi = 0$ relate to the
 exponential and Gumbel distributions and correspond to the limit for
 $\xi \to 0$ of the functions given by the formulas for $\xi \neq 0$.
-As an example consider the quantile function of the Generalized Pareto
+As an example, consider the quantile function of the Generalized Pareto
 distribution with shape $\xi$ and unit scale
 \begin{equation}
 \label{eq:Quant}
@@ -88,7 +87,7 @@ $\xi$ is about $\text{1e-6}$ and the formula for the 1-st order
 derivative can also be wrong when $\xi$ is about $\text{1e-8}$. The
 reason is that the formulas for the derivatives involve difference
 and/or fractions or small quantities since $\xi$ or $\xi^2$ comes at
-the denominator. As a general rule the derivatives with higher order
+the denominator. As a general rule, the derivatives with higher order
 are more difficult to evaluate numerically, since they involve more
 complex expressions.  Note that using a shape $\xi$ with
 $|\xi| \leqslant \text{1e-6}$ is quite common in EVA because the
@@ -99,7 +98,7 @@ Maximum-Likelihood (ML) optimization.
 Although not yet widespread, the use of the exact formulas for the
 derivatives w.r.t. the parameters can be of great help in the
 optimization tasks required in EVA. These tasks of course involve the
-ML estimation but also profile-likelihood inference for models with
+ML estimation, but also profile-likelihood inference for models with
 covariates. Differential equations methods can be also used to derive
 confidence intervals. Note that the use of formulas for the
 derivatives is called \textit{symbolic} differentiation and  differs
@@ -125,7 +124,7 @@ as~$\partial^2_{\sigma,\xi} q$. Since the $2$-nd order derivatives can
 be required, we must take a value for $\epsilon$ which is not too
 small: $\text{1e-4}$ or $\text{1e-5}$, not much smaller. Note
 that~$\epsilon$ gives the level of error for the $2$-nd order
-dervivative; since the error on the function is~$O(\xi^3)$, using
+derivative; since the error on the function is~$O(\xi^3)$, using
 $\epsilon = \text{1e-4}$ leads to an error of order~$\text{1e-12}$ on
 the function, which seems acceptable in practice. This kind of
 approximation is used in some codes of the \textbf{revdbayes} package
@@ -199,7 +198,7 @@ We check that either the \textit{absolute} error or the
 \textit{relative} error is small. The idea is that none of these two
 things can come by chance, and if one holds, the formula used must be
 good even if the other criterion suggests an opposed conclusion. The
-test is made \textit{elementwise} meaning that the relative error is
+test is made \textit{elementwise}, meaning that the relative error is
 computed for each element of a gradient vector or Hessian matrix
 ignoring the other elements.
 
