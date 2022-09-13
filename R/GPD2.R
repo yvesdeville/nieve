@@ -45,8 +45,9 @@
 ##'
 ##' @param n Sample size.
 ##' 
-##' @param lower.tail Logical; if \code{TRUE} (default), probabilities are
-##' \eqn{\text{Pr}[X \leq x]}{Pr[X <= x]}, otherwise, \eqn{\text{Pr}[X > x]}{Pr[X > x]}.
+##' @param lower.tail Logical; if \code{TRUE} (default), probabilities
+##'     are \eqn{\textrm{Pr}[X \leq x]}{Pr[X <= x]}, otherwise,
+##'     \eqn{\textrm{Pr}[X > x]}{Pr[X > x]}.
 ##'
 ##' @return A numeric vector with length equal to the maximum of the
 ##' four lengths: that of the first argument and that of the two
@@ -59,7 +60,7 @@
 ##'
 ##' @details
 ##' Let \eqn{\sigma >0} and \eqn{\xi} denote the scale and the shape; the
-##' survival function \eqn{S(x) := \text{Pr}[X > x]}{Pr[X < x]} is given
+##' survival function \eqn{S(x) := \textrm{Pr}[X > x]}{Pr[X < x]} is given
 ##' for \eqn{x \geq 0}{x >= 0} by
 ##' \deqn{S(x) = \left[1 + \xi x/ \sigma \right]_+^{-1/\xi}}{[1 + \xi * x / \sigma]_+^(-1/\xi)} for \eqn{\xi \neq 0}{\xi != 0} where \eqn{v_+ := \max\{v, \, 0\}}{v_+ = max(v, 0)} 
 ##' and by \deqn{S(x) = \exp\{-x/\sigma\}}{exp(- x / \sigma)}

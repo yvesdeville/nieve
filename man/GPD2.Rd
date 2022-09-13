@@ -47,8 +47,9 @@ numeric array with dimension \code{c(n, 2, 2)} where \code{n} is
 the length of the first argument, i.e. \code{x}, \code{p} or
 depending on the function.}
 
-\item{lower.tail}{Logical; if \code{TRUE} (default), probabilities are
-\eqn{\text{Pr}[X \leq x]}{Pr[X <= x]}, otherwise, \eqn{\text{Pr}[X > x]}{Pr[X > x]}.}
+\item{lower.tail}{Logical; if \code{TRUE} (default), probabilities
+are \eqn{\textrm{Pr}[X \leq x]}{Pr[X <= x]}, otherwise,
+\eqn{\textrm{Pr}[X > x]}{Pr[X > x]}.}
 
 \item{p}{Vector of probabilities.}
 
@@ -72,7 +73,7 @@ Density, distribution function, quantile function and
 }
 \details{
 Let \eqn{\sigma >0} and \eqn{\xi} denote the scale and the shape; the
-survival function \eqn{S(x) := \text{Pr}[X > x]}{Pr[X < x]} is given
+survival function \eqn{S(x) := \textrm{Pr}[X > x]}{Pr[X < x]} is given
 for \eqn{x \geq 0}{x >= 0} by
 \deqn{S(x) = \left[1 + \xi x/ \sigma \right]_+^{-1/\xi}}{[1 + \xi * x / \sigma]_+^(-1/\xi)} for \eqn{\xi \neq 0}{\xi != 0} where \eqn{v_+ := \max\{v, \, 0\}}{v_+ = max(v, 0)} 
 and by \deqn{S(x) = \exp\{-x/\sigma\}}{exp(- x / \sigma)}

@@ -41,8 +41,8 @@ the length of the first argument, i.e. \code{x}, \code{p} or
 depending on the function.}
 
 \item{lower.tail}{Logical; if \code{TRUE} (default), probabilities
-are \eqn{\text{Pr}[X \leq x]}{Pr[X <= x]}, otherwise,
-\eqn{\text{Pr}[X > x]}{Pr[X < x]}.}
+are \eqn{\textrm{Pr}[X \leq x]}{Pr[X <= x]}, otherwise,
+\eqn{\textrm{Pr}[X > x]}{Pr[X < x]}.}
 
 \item{p}{Vector of probabilities.}
 

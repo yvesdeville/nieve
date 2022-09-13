@@ -8,7 +8,7 @@ output: github_document
 
 ## Package management
 
-- **[X]**Use the
+- **[X]** Use the
   [rchk](https://developer.r-project.org/Blog/public/2019/04/18/common-protect-errors/)
   tool to check for possible memory errors/problems before submitting
   to the CRAN.

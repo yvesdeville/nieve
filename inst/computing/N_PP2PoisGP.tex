@@ -102,7 +102,7 @@ $\boldsymbol{\theta}_0 $.
 
 {\color{red}
 \begin{align*}
-  \lambda &= e^{-z_0} w^{-1} \,  \left\{ 1 + z_0^2 \, \xi -
+  \lambda &= e^{-z_0} w^{-1} \,  \left\{ 1 + z_0^2 \, \xi_0 -
             \frac{z_0^3}{24}\, \left[ 8 - 3 z_0 \right] \xi_0^2 \right\}
             + o(\xi_0^2)\\
   \sigma &= \sigma_0 \,  \left[ 1 + z_0 \, \xi  \right] + o(\xi_0^2)\\
@@ -137,7 +137,7 @@ $\boldsymbol{\theta}_0 $.
  \frac{\partial{\lambda}}{\partial \sigma_0}
   &=
 \begin{maxima}
-  tex(dlambdadxi_0)
+  tex(dlambdadsigma_0)
 \end{maxima}\\
 \frac{\partial{\lambda}}{\partial \xi_0}
   &=
@@ -155,7 +155,7 @@ $\boldsymbol{\theta}_0 $.
   &= \frac{\lambda}{\sigma_0 C} \\
  \frac{\partial{\lambda}}{\partial \sigma_0}
   &=
- \frac{z \lambda}{\sigma_0 C}\\
+ \frac{z_0 \lambda}{\sigma_0 C}\\
 \frac{\partial{\lambda}}{\partial \xi_0}
   &=  \frac{\lambda}{\xi_0^2} \, \left[ \log C - \xi_0 \frac{z_0}{C} \right]\\
 \end{align*}

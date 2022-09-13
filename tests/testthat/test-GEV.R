@@ -14,7 +14,6 @@
 ##
 ## ***************************************************************************
 
-library(yaev)
 library(numDeriv)
 library(testthat)
 context("GEV")

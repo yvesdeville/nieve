@@ -40,8 +40,8 @@
 ##' @param n Sample size.
 ##' 
 ##' @param lower.tail Logical; if \code{TRUE} (default), probabilities
-##'     are \eqn{\text{Pr}[X \leq x]}{Pr[X <= x]}, otherwise,
-##'     \eqn{\text{Pr}[X > x]}{Pr[X < x]}.
+##'     are \eqn{\textrm{Pr}[X \leq x]}{Pr[X <= x]}, otherwise,
+##'     \eqn{\textrm{Pr}[X > x]}{Pr[X < x]}.
 ##'
 ##' @return A numeric vector with its length equal to the maximum of
 ##'     the two lengths: that of the first argument and that of the

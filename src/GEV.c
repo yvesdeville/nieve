@@ -566,10 +566,11 @@ SEXP Call_qGEV(SEXP p,               /*  double                          */
 	       SEXP derivFlag,        /* integer                          */
                SEXP hessianFlag) {   /*  integer                         */
  
-  int n, np, nloc, nscale, nshape, i, ip, iloc, iscale, ishape,
-    deriv = INTEGER(derivFlag)[0], hessian = INTEGER(hessianFlag)[0] ;
-  
-  double eps = 2e-4, A, logA, V, xi, prob;
+  int n, np, nloc, nscale, nshape, i, ip, iloc, iscale, ishape, j,
+    deriv = INTEGER(derivFlag)[0], hessian = INTEGER(hessianFlag)[0],
+    lowerTail = INTEGER(lowerTailFlag)[0];
+    
+  double eps = 2e-4, A, logA, V, xi, prob, mu, sigma;
   
   SEXP val;
   
@@ -626,39 +627,115 @@ SEXP Call_qGEV(SEXP p,               /*  double                          */
 	   ishape = (++ishape == nshape) ? 0 : ishape,
 	   ++i) {
       
-      // as a general rule, only 3 elements of the hessan can be non
-      // zero
-      if (hessian) {
-	// row 'mu'
-	rhess[i] = 0.0;
-	rhess[i + n] = 0.0;
-	rhess[i + 3 * n] = 0.0;
-	rhess[i + 2 * n] = 0.0;
-	rhess[i + 6 * n] = 0.0;
-	// row 'sigma'
-	rhess[i + 4 * n] = 0.0;
-      }
       
       if (ISNA(rp[ip]) || (rscale[iscale] <= 0.0)) {
 	// Rprintf("NA case\n");
 
 	rval[i] = NA_REAL;
 	
-	rgrad[i] = NA_REAL;
-	rgrad[i + n] = NA_REAL;
-	rgrad[i + 2 * n] = NA_REAL; 
-	
-	if (hessian) {
-	  // row 'sigma'
-	  rhess[i + 5 * n] = NA_REAL;
-	  rhess[i + 7 * n] = NA_REAL;
-	  // row 'xi'
-	  rhess[i + 8 * n] = NA_REAL;
+	for (j = 0; j < 3; j++) {
+	  rgrad[i + j * n] = NA_REAL;
 	}
+	  
+	if (hessian) {
+	  for (j = 0; j < 9; j++) {
+	    rhess[i + j * n] = NA_REAL;
+	  }
+	}
+	
+      } else if (((rp[ip] == 0.0) && lowerTail) ||
+		 ((rp[ip] == 1.0) && !lowerTail)) {
 
+	if (xi > 0.0) {
+
+	  xi = rshape[ishape];
+	  sigma = rscale[iscale];
+	  mu = rloc[iloc];
+	  
+	  rval[i] = mu - sigma / xi;
+	
+	  rgrad[i] = 1.0;
+	  rgrad[i + n] = - 1.0 / xi;
+	  rgrad[i + 2 * n] = sigma / xi / xi;
+	  
+	  if (hessian) {
+	    rhess[i] = 0.0;
+	    rhess[i + n] = 0.0;
+	    rhess[i + 2 * n] = 0.0;
+	    rhess[i + 3 * n] = 0.0;
+	    rhess[i + 4 * n] = 0.0;
+	    rhess[i + 6 * n] = 0.0;
+	    // row 'sigma'
+	    rhess[i + 5 * n] = 1.0 / xi / xi;
+	    rhess[i + 7 * n] = rhess[i + 5 * n];
+	    // row 'xi'
+	    rhess[i + 8 * n] = - 2.0 * sigma / xi / xi / xi;
+	  }
+	  
+	} else {
+	  
+	  rval[i] = R_NegInf;
+	  
+	  for (j = 0; j < 3; j++) {
+	    rgrad[i + j * n] = NA_REAL;
+	  }
+	  
+	  if (hessian) {
+	    for (j = 0; j < 9; j++) {
+	      rhess[i + j * n] = NA_REAL;
+	    }
+	  }
+
+	}
+	
+      } else if (((rp[ip] == 1.0) && lowerTail) ||
+		 ((rp[ip] == 0.0) && !lowerTail)) {
+	
+	if (xi >= 0.0) {
+	  
+	  rval[i] = R_PosInf;
+	  
+	  for (j = 0; j < 3; j++) {
+	    rgrad[i + j * n] = NA_REAL;
+	  }
+	  
+	  if (hessian) {
+	    for (j = 0; j < 9; j++) {
+	      rhess[i + j * n] = NA_REAL;
+	    }
+	  }
+	  
+	} else {
+
+	  xi = rshape[ishape];
+	  sigma = rscale[iscale];
+	  mu = rloc[iloc];
+	  
+	  rval[i] =  mu - sigma / xi;
+	  
+	  rgrad[i] =  1.0;
+	  rgrad[i + n] =  -1.0 / xi;
+	  rgrad[i + 2 * n] =  sigma / xi / xi;
+	  
+	  if (hessian) {
+	    rhess[i] = 0.0;
+	    rhess[i + n] = 0.0;
+	    rhess[i + 2 * n] = 0.0;
+	    rhess[i + 3 * n] = 0.0;
+	    rhess[i + 4 * n] = 0.0;
+	    rhess[i + 6 * n] = 0.0;
+	    // row sigma
+	    rhess[i + 5 * n] = 1.0 / xi / xi;
+	    rhess[i + 7 * n] = rhess[i + 5 * n];
+	    // row 'xi'
+	    rhess[i + 8 * n] = - 2.0 * sigma / xi / xi / xi;
+	  } 
+	    
+	}
+	
       } else {
 
-	if (!INTEGER(lowerTailFlag)[0]) {
+	if (!lowerTail) {
 	  prob = 1.0 - rp[ip];
 	} else {
 	  prob = rp[ip];
@@ -680,11 +757,17 @@ SEXP Call_qGEV(SEXP p,               /*  double                          */
 	  rgrad[i + 2 * n] = rscale[iscale] * logA * logA * (0.5 - logA * xi / 3.0);
 
 	  if (hessian) {
+	    rhess[i] = 0.0;
+	    rhess[i + n] = 0.0;
+	    rhess[i + 2 * n] = 0.0;
+	    rhess[i + 3 * n] = 0.0;
+	    rhess[i + 4 * n] = 0.0;
+	    rhess[i + 6 * n] = 0.0;
 	    // row 'sigma'
 	    rhess[i + 5 * n] = logA * logA / 2.0;
 	    rhess[i + 7 * n] = rhess[i + 5 * n];
 	    // row 'xi'
-	      rhess[i + 8 * n] = - logA * logA * logA * rscale[iscale] / 3.0;
+	    rhess[i + 8 * n] = - logA * logA * logA * rscale[iscale] / 3.0;
 	  }
 
 	} else {
@@ -699,6 +782,12 @@ SEXP Call_qGEV(SEXP p,               /*  double                          */
 	  if (hessian) {
 	    dV = - (V - logA) / xi - V * logA;
             d2V =  (V - logA) / xi / xi - dV * (logA + 1.0 / xi);
+	    rhess[i] = 0.0;
+	    rhess[i + n] = 0.0;
+	    rhess[i + 2 * n] = 0.0;
+	    rhess[i + 3 * n] = 0.0;
+	    rhess[i + 4 * n] = 0.0;
+	    rhess[i + 6 * n] = 0.0;
 	    // row 'sigma'
 	    rhess[i + 5 * n] = -dV;
 	    rhess[i + 7 * n] = rhess[i + 5 * n];
@@ -727,7 +816,7 @@ SEXP Call_qGEV(SEXP p,               /*  double                          */
 
     for (i = ip = iloc = iscale = ishape = 0;  i < n; 
 	 ip = (++ip == np) ? 0 : ip, 	       
-	 iloc = (++iloc == nloc) ? 0 : iloc, 
+	   iloc = (++iloc == nloc) ? 0 : iloc, 
 	   iscale = (++iscale == nscale) ? 0 : iscale,
 	   ishape = (++ishape == nshape) ? 0 : ishape,
 	   ++i) {
@@ -735,15 +824,33 @@ SEXP Call_qGEV(SEXP p,               /*  double                          */
       if (ISNA(rp[ip]) || (rscale[iscale] <= 0.0)) {
 	
 	rval[i] = NA_REAL;
-		
+	
+      } else if (((rp[ip] == 0.0) && lowerTail) ||
+		 ((rp[ip] == 1.0) && !lowerTail)) {
+	
+	if (xi > 0.0) {
+	  rval[i] = rloc[iloc] - rscale[iscale] / rshape[ishape];
+	} else {
+	  rval[i] = R_NegInf;
+	}
+	
+      } else if (((rp[ip] == 1.0) && lowerTail) ||
+		 ((rp[ip] == 0.0 && !lowerTail))) {
+	
+	if (xi >= 0.0) {	  
+	  rval[i] = R_PosInf;
+	} else {
+	  rval[i] = rloc[iloc] - rscale[iscale] / rshape[ishape];
+	}
+	
       } else {
 	
-	if (!INTEGER(lowerTailFlag)[0]) {
+	if (!lowerTail) {
 	  prob = 1.0 - rp[ip];
 	} else {
 	  prob = rp[ip];
 	}
-      
+	
 	xi = rshape[ishape];
 	A = -log(prob);
 

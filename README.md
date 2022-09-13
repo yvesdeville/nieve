@@ -2,13 +2,13 @@ yaev Yet Another Extreme Value package?
 ================
 Yves Deville <deville.yves@alpestat.com>
 
-# Yet Another Extreme Value package?
+# Goals and scope
 
 The **yaev** package was partly funded by the French [*Institut de
 Radioprotection et Sûreté Nucléaire* (IRSN)](https://www.irsn.fr/) and
 formerly was part of R packages owned by IRSN/Behrig.
 
-The **yeav** package is intended to be a “low-level” package, providing
+The **yaev** package is intended to be a “low-level” package, providing
 fast and well-tested “basic” functions for Extreme Value Analysis (EVA).
 It is not intended to provide sophisticated EVA models which should be
 found or be implemented in other packages.
@@ -28,10 +28,11 @@ The package
 -   Provides the transformations for the two usual parameterizations of
     Peaks Over Threshold (POT) models: Poisson-GP to (Non-Homogeneous)
     Point Process (PP) and PP to Poisson-GP. The transformations come
-    with their derivative, as needed to compute the covariance matrices.
+    with their derivatives, as needed to compute the covariance
+    matrices.
 
 Although several R packages devoted EVA compute the exact derivatives
-w.r.t. the parameters (**extRemes**, **mev**, …), to our best knowledge
+w.r.t. the parameters (**extRemes**, **mev**, …), to our best knowledge,
 none of these make the derivatives usable via exported functions.
 
 # Install release version from GitHub

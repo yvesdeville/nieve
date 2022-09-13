@@ -62,7 +62,7 @@
 ##'     random generation for the Generalized Extreme Value (GEV)
 ##'     distribution with parameters \code{loc}, \code{scale} and
 ##'     \code{shape}.
-##'     The distribution function \eqn{F(x) = \text{Pr}[X \leq x]}{F(x)= Pr[X <= x]}
+##'     The distribution function \eqn{F(x) = \textrm{Pr}[X \leq x]}{F(x)= Pr[X <= x]}
 ##'     is given by 
 ##'     \deqn{F(x) = \exp\left\{-[1 + \xi z]^{-1/\xi}\right\}}{F(x) = exp(-(1 + xi * z))}
 ##'     when \eqn{\xi \neq 0}{xi != 0} and \eqn{1 + \xi z > 0}{1 + xi * z > 0}, and by 
@@ -112,8 +112,9 @@
 ##'
 ##' @param n Sample size.
 ##' 
-##' @param lower.tail Logical; if \code{TRUE} (default), probabilities are
-##' \eqn{\text{Pr}[X \leq x]}{Pr[X <= x]}, otherwise, \eqn{\text{Pr}[X>x]}{Pr[X > x]}.
+##' @param lower.tail Logical; if \code{TRUE} (default), probabilities
+##'     are \eqn{\textrm{Pr}[X \leq x]}{Pr[X <= x]}, otherwise,
+##'     \eqn{\textrm{Pr}[X>x]}{Pr[X > x]}.
 ##'
 ##' @return A numeric vector with length \code{n} as described in the
 ##'     \bold{Details} section. When \code{deriv} is \code{TRUE}, the
