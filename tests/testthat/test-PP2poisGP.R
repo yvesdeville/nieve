@@ -9,10 +9,10 @@ library(testthat)
 
 set.seed(1234)
 
-n <- 4
+n <- 10
 locStar <- rnorm(n, sd = 20)
 scaleStar <- rgamma(n, shape = 2)
-shapeStar <- c(rnorm(n - 1, sd = 0.1), 1e-6)
+shapeStar <- rnorm(n, sd = 0.1)
 
 p <- runif(n)
 threshold <- rep(NA, n)
@@ -21,13 +21,11 @@ for (i in 1:n) {
                          shape = shapeStar[i])
 }
 
-cases <- c(rep("non-zero", n - 1), "non-zero")
-
 ## ===========================================================================
-## Check the n - 1 cases with non-zero shape
+## Check the n cases with non-zero shape
 ## ===========================================================================
 
-for (i in n - 1) {
+for (i in n) {
     
     res <- PP2poisGP(locStar = locStar[i],
                      scaleStar = scaleStar[i],
@@ -50,13 +48,13 @@ for (i in n - 1) {
     
     e <- drop(res) - res0
     test_that(desc = sprintf("Case shape %s, consistency of value with Renext",
-                  cases[i]),
+                  "non-zero"),
               expect_lt(max(abs(e)), 1e-10))
 
     e <- g - g0[-2, ]
 
     test_that(desc = sprintf("Case shape %s, consistency of jacobian with Renext",
-                  cases[i]),
+                  "non-zero"),
               expect_lt(max(abs(e)), 1e-10))
 
 }
@@ -64,6 +62,8 @@ for (i in n - 1) {
 ## ===========================================================================
 ## Check case 'n' zero shape. Use the Jacobian
 ## ===========================================================================
+
+shapeStar <- runif(n, min = -1e-5, max = 1e-5)
 
 PP2poisGPFun <- function(thetaStar, threshold) {
     PP2poisGP(locStar = thetaStar[1],
@@ -74,28 +74,32 @@ PP2poisGPFun <- function(thetaStar, threshold) {
     
 }
 
-thetaStar <- c("loc" = locStar[n], "scale" = scaleStar[n],
-               "shape" = shapeStar[n])
+for (i in 1:n) {
 
-jacNum <- jacobian(func = PP2poisGPFun, x = thetaStar, threshold = threshold[n])
-
-res <- PP2poisGP(locStar = locStar[n],
-                 scaleStar = scaleStar[n],
-                 shapeStar = shapeStar[n],
-                 threshold = threshold[n],
+    thetaStar <- c("loc" = locStar[i], "scale" = scaleStar[i],
+                   "shape" = shapeStar[i])
+    
+    jacNum <- jacobian(func = PP2poisGPFun, x = thetaStar, threshold = threshold[i])
+    
+    res <- PP2poisGP(locStar = locStar[i],
+                 scaleStar = scaleStar[i],
+                 shapeStar = shapeStar[i],
+                 threshold = threshold[i],
                  deriv = TRUE)
-g <- drop(attr(res, "gradient"))
+    g <- drop(attr(res, "gradient"))
+    
+    e <- g - jacNum
+    
+    cond <- (max(abs(g - jacNum)) < 4e-2) ||
+        (max(abs(g - jacNum) / (abs(g) + 1e-9)) < 4e-2)
+    
+    if (!cond) {
+        print(g)
+        print(jacNum)
+    }
+    
+    test_that(desc = sprintf("Case shape %s, Jacobian and numeric Jacobian",
+                             "zero"),
+              expect_true(cond))
 
-e <- g - jacNum
-
-cond <- (max(abs(g - jacNum)) < 4e-2) ||
-    (max(abs(g - jacNum) / (abs(g) + 1e-9)) < 4e-2)
-
-if (!cond) {
-    print(g)
-    print(jacNum)
 }
-
-test_that(desc = sprintf("Case shape %s, Jacobian and numeric Jacobian",
-                         cases[n]),
-          expect_true(cond))

@@ -3,30 +3,35 @@ context("poisGP2PP")
 ## ***************************************************************************
 ## AUTHOR: Yves Deville <deville.yves@alpestat.com>
 ## GOAL: Test the transformation poisGP -> PP and its derivative
-## *************G**************************************************************
+## ***************************************************************************
 
 library(numDeriv)
 library(testthat)
 
 set.seed(1234)
 
-n <- 1
+## =============================================================================
+## We begin with 'n' checks for the case where the shape is
+## non-zero. We then check the consistency with Renext
+## =============================================================================
+
+n <- 6
 lambda <- rexp(n)
 loc <- rnorm(n, sd = 20)
 scale <- rgamma(n, shape = 2)
-shape <- c(rnorm(n, sd = 0.1) , 0.0)
-cases <- c("non-zero", "zero")
+shape <- rnorm(n, sd = 0.1)
+w <- rexp(n)
 
 for (i in seq_along(shape)) {
     
-    res <- poisGP2PP(lambda = lambda,
-                     loc = loc, scale = scale, shape = shape[i],
+    res <- poisGP2PP(lambda = lambda[i],
+                     loc = loc[i], scale = scale[i], shape = shape[i],
                      deriv = TRUE)
     
-    theta <- c("lambda" = lambda, "scale" = scale, "shape" = shape[i])
-
+    theta <- c("lambda" = lambda[i], "scale" = scale[i], "shape" = shape[i])
+    
     ## Compute with Renext
-    res0 <- Renext::Ren2gev(theta, threshold = loc)
+    res0 <- Renext::Ren2gev(theta, threshold = loc[i])
     
     g <- drop(attr(res, "gradient"))
     g0 <- attr(res0, "jacobian")
@@ -36,13 +41,56 @@ for (i in seq_along(shape)) {
     
     e <- drop(res) - res0
     test_that(desc = sprintf("Case shape %s, consistency of value with Renext",
-                  cases[i]),
+                  "non-zero"),
               expect_lt(max(abs(e)), 1e-10))
-
-    e <- g[ , -2] - g0
+    
+    e <- g[ , -2]  - g0
 
     test_that(desc = sprintf("Case shape %s, consistency of jacobian with Renext",
-                  cases[i]),
+                  "non-zero"),
               expect_lt(max(abs(e)), 1e-10))
+
+}
+
+## ===========================================================================
+## Check case 'n' zero shape. Use the Jacobian
+## ===========================================================================
+
+shape <- runif(n, min = -1e-5, max = 1e-5)
+
+poisGP2PPFun <- function(theta, loc) {
+    
+    poisGP2PP(lambda = theta[1],
+              scale = theta[2],
+              shape = theta[3],
+              loc = loc,
+              deriv = FALSE)
+    
+}
+
+for (i in 1:n) {
+
+    theta <- c("lambda" = lambda[i], "scale" = scale[i],
+               "shape" = shape[i])
+    
+    jacNum <- jacobian(func = poisGP2PPFun, x = theta, loc = loc[i])
+    
+    res <- poisGP2PP(lambda = lambda[i],
+                     loc = loc[i],
+                     scale = scale[i],
+                     shape = shape[i],
+                     deriv = TRUE)
+    g <- drop(attr(res, "gradient"))
+    g <- g[ , -2]
+    
+    e <- g - jacNum
+    
+    cond <- (max(abs(g - jacNum)) < 4e-2) ||
+        (max(abs(g - jacNum) / (abs(g) + 1e-9)) < 4e-2)
+   
+    
+    test_that(desc = sprintf("Case shape %s, Jacobian and numeric Jacobian",
+                             "zero"),
+              expect_true(cond))
 
 }

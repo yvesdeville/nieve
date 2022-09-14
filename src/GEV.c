@@ -646,9 +646,10 @@ SEXP Call_qGEV(SEXP p,               /*  double                          */
       } else if (((rp[ip] == 0.0) && lowerTail) ||
 		 ((rp[ip] == 1.0) && !lowerTail)) {
 
+	xi = rshape[ishape];
+	
 	if (xi > 0.0) {
 
-	  xi = rshape[ishape];
 	  sigma = rscale[iscale];
 	  mu = rloc[iloc];
 	  
@@ -691,6 +692,8 @@ SEXP Call_qGEV(SEXP p,               /*  double                          */
       } else if (((rp[ip] == 1.0) && lowerTail) ||
 		 ((rp[ip] == 0.0) && !lowerTail)) {
 	
+	xi = rshape[ishape];
+
 	if (xi >= 0.0) {
 	  
 	  rval[i] = R_PosInf;
@@ -827,6 +830,8 @@ SEXP Call_qGEV(SEXP p,               /*  double                          */
 	
       } else if (((rp[ip] == 0.0) && lowerTail) ||
 		 ((rp[ip] == 1.0) && !lowerTail)) {
+
+	xi = rshape[ishape];
 	
 	if (xi > 0.0) {
 	  rval[i] = rloc[iloc] - rscale[iscale] / rshape[ishape];
@@ -837,6 +842,8 @@ SEXP Call_qGEV(SEXP p,               /*  double                          */
       } else if (((rp[ip] == 1.0) && lowerTail) ||
 		 ((rp[ip] == 0.0 && !lowerTail))) {
 	
+	xi = rshape[ishape];
+
 	if (xi >= 0.0) {	  
 	  rval[i] = R_PosInf;
 	} else {

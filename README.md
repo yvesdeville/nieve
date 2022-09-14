@@ -98,7 +98,7 @@ If you are using the **RStudio** IDE, you can alternatively use menus.
 
 In order to install the package from its source, you must have a
 suitable Windows platform with
-[Rtools](https://cran.r-project.org/bin/windows/Rtools) installed. Then
+[Rtools](https://cran.r-project.org/bin/windows/Rtools/) installed. Then
 you can proceed as Unix or MacOS users, with a `build` step from command
 line.
 

@@ -1,7 +1,7 @@
 Package management
 ------------------
 
--   **\[X\]**Use the
+-   **\[X\]** Use the
     [rchk](https://developer.r-project.org/Blog/public/2019/04/18/common-protect-errors/)
     tool to check for possible memory errors/problems before submitting
     to the CRAN.
@@ -40,18 +40,19 @@ Testing and polishing
 
 -   Should we keep the R implementation for the GEV distribution?
 
--   Add tests for the specific case *ξ* ≈ 0 (more precisely,
+-   **\[X\]** Add tests for the specific case *ξ* ≈ 0 (more precisely,
     *ξ* &lt; *ϵ*) in the transformations `PP2poisGP`and `poisGP2PP`.
 
 -   Add a test checking that the transformation `PP2poisGP`and
     `poisGP2PP` are reciprocal to each other (in both directions).
 
--   **\[Done for `qGPD2`\]** Make the quantile functions work correctly
+-   **\[X except for exp1\]** Make the quantile functions work correctly
     for `p = 0.0` and `p = 1.0`. The corresponding end-point of the
     distribution (be it finite or infinite) must be returned.
 
--   Make sure that the distribution functions work correctly with
-    `q = -Inf` and `q = Inf`. The value `0` or `1` must be returned.
+-   **\[X execpt for exp1\]** Make sure that the distribution functions
+    work correctly with `q = -Inf` and `q = Inf`. The value `0` or `1`
+    must be returned.
 
 -   Add the formal argument `log.p` to the distribution functions
     `pGPD2` and `pGEV` to better conform to what is done for
@@ -73,3 +74,5 @@ Testing and polishing
 
 -   In `GPD2.tex`, recall how can the derivatives of the distribution
     function *F* are related to those of the cumulated hazard *H*.
+
+-   Test the function related to the `Exp1`distribution.
