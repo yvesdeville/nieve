@@ -9,10 +9,15 @@
 ##' 
 ##' The \pkg{yaev} package provides utility functions for Extreme
 ##' Value Analysis. It includes the probability functions for the
-##' Generalized Pareto Distribution (GPD) and for the Generalized
-##' Extreme Value (GEV) distribution. These functions are vectorized
-##' w.r.t. the parameters and optionnaly provide the exact derivatives
-##' w.r.t. the parameters: gradient and Hessian.
+##' two-parameter Generalized Pareto Distribution (GPD) and for the
+##' three-parameter Generalized Extreme Value (GEV)
+##' distribution. These functions are vectorized w.r.t. the parameters
+##' and optionnaly provide the exact derivatives w.r.t. the
+##' parameters: gradient and Hessian which can be used in optimisation
+##' e.g., to maximise the log-likelihood. Since the gradient is
+##' available for the distribution function, the exact gradient of the
+##' log-likelihood function is available even when censored
+##' observations are used.
 ##'
 ##' These functions should behave like the probability functions of
 ##' the \pkg{stats} package: when a probability \code{p = 0.0} or
@@ -21,8 +26,6 @@
 ##' evaluated at \code{-Inf} and \code{Inf} the probability functions
 ##' should return \code{0.0} and \code{1.0}.
 ##' 
-##' @section \pkg{yaev} functions: The \pkg{yaev} functions ...
-##'
 ##' @docType package
 ##' @name yaev-package
 ##' @useDynLib yaev, .registration=TRUE
