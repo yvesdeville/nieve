@@ -75,4 +75,4 @@ Testing and polishing
 -   In `GPD2.tex`, recall how can the derivatives of the distribution
     function *F* are related to those of the cumulated hazard *H*.
 
--   Test the function related to the `Exp1`distribution.
+-   Test the functions related to the `Exp1`distribution.

@@ -1,6 +1,6 @@
 Package: yaev
 Type: Package
-Title: Miscellaneaous Utils for Extreme Value Anaysis
+Title: Miscellaneous Utils for Extreme Value Analysis
 Version: 0.1.0
 Author: Yves Deville <deville.yves@alpestat.com>
 Maintainer: Yves Deville <deville.yves@alpestat.com>

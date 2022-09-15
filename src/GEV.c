@@ -15,8 +15,8 @@
    shape is negative, which can be a desirable behaviour for when
    unconstrained optimisation is used to maximise the log-likelihood.
  
-   NOTE This program is part of the 'yaev' R package with financial
-   and technical support from IRSN-Behrig, www.irsn.fr.
+   NOTE This program is part of the 'yaev' R package with partial
+   financial and technical support from IRSN-Behrig, www.irsn.fr.
    =========================================================================== */  
 
 
@@ -161,7 +161,7 @@ SEXP Call_dGEV(SEXP x,             /*  double                          */
 	  } else {
 	    emz = exp(-z);
 
-	    // improved approximation base on Taylor expansion
+	    // improved approximation based on Taylor expansion
 	    xiz = xi * z;
 	    rval[i] = -log(rscale[iscale]) - z - emz +
 	      xiz * (0.5 * ((1.0 - emz) * z - 2.0) -
@@ -347,7 +347,6 @@ SEXP Call_dGEV(SEXP x,             /*  double                          */
   }
 
 }
-
 
 /* ==========================================================================
  * Distribution function
