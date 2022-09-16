@@ -13,6 +13,9 @@
 \usepackage{hyperref}
 \usepackage[T1]{fontenc} 
 \usepackage{fullpage}
+\usepackage{natbib}
+\setcitestyle{author}
+
 \definecolor{MonVert}{rgb}{0.398,0.801,0.000} 
 \definecolor{MonVertF}{rgb}{0.13,0.54,0.13}
 \definecolor{MonBleu}{rgb}{0.000,0.602,0.801} 
@@ -26,6 +29,9 @@
 \newcommand{\code}[1]{\texttt{#1}}
 \newcommand{\Gre}[1]{{\color{MonVertF}#1}}
 
+
+
+
 \title{\bf \Large The \textbf{yaev} package: Yet Another Extreme Value package?}
 
 \author{Yves Deville \href{mailto:deville.yves@alpestat.com}%%
@@ -37,8 +43,9 @@
 
 \section{Probability functions of Extreme-Value distributions}
   
-The probability functions for the GPD and GEV distributions depend
-smoothly on the parameters: they are infinitely differentiable
+The probability functions for the Generalised Pareto (GP) and
+Generalised Extreme Value (GEV) distributions \cite{Coles_ISMEV}
+depend smoothly on the parameters: they are infinitely differentiable
 functions of the parameters. However, these functions are not
 \textit{analytic} functions of the parameters and a singularity exists
 for all of them when the shape parameter, say $\xi$, is zero.  In
@@ -46,8 +53,8 @@ practice, the functions are given with different formulas depending on
 whether $\xi$ is zero or not; the formulas for $\xi = 0$ relate to the
 exponential and Gumbel distributions and correspond to the limit for
 $\xi \to 0$ of the functions given by the formulas for $\xi \neq 0$.
-As an example, consider the quantile function of the Generalised Pareto
-distribution with shape $\xi$ and unit scale
+As an example, consider the quantile function of the Generalised
+Pareto distribution with shape $\xi$ and unit scale
 \begin{equation}
 \label{eq:Quant}
 q(p) = \begin{cases}
@@ -211,7 +218,8 @@ sequence or random times $T_1 < T_2 < \dots$ we observe a random
 variable $Y_i$ called the \textit{mark}. In applications, the $T_i$
 are typically the times of occurrence for storms and the $Y_i$ can be
 an amounts of precipitation or sea levels.  The following two
-frameworks are commonly used.
+frameworks are commonly used, see~\cite{NorthropEtAl_NSExtremes} for
+more details.
 
 \begin{itemize}
 \item The \textit{Poisson-GP} framework involves a given threshold $u$
@@ -256,7 +264,7 @@ frameworks are commonly used.
 
 If we take the observation region for the PP model as being the
 product of the time interval $(0, \, t^\dag)$ by the $y$-interval
-$(u, \, \infty)$ where $u$ is such that
+$(u, \, \infty)$ where the threshold~$u$ is such that
 $\sigma_w^\star + \xi^\star [y - \mu_w^\star] > 0$, we get the same
 model as the Poisson-GP on $(0, \, t^\dag)$, up to a
 re-parameterisation. As an interesting feature of the PP parameter
@@ -283,11 +291,11 @@ $\bs{\theta}_w^\star$ is given by
     \begin{array}{c c l}
       \mu^\star_w &=& u + \frac{(\lambda_u w)^\xi - 1}{\xi} \, \sigma_u, \\
       \sigma^\star_w &=& (\lambda_u w)^\xi \, \sigma_u, \rule{0pt}{1em}\\
-      \xi^\star &=& \xi. \rule{0pt}{1em}
+      \xi^\star &=& \xi, \rule{0pt}{1em}
     \end{array}
   \right.
 \end{equation}
-The fraction $[(\lambda_u w)^\xi - 1]/\xi$ of the first equation is to
+the fraction $[(\lambda_u w)^\xi - 1]/\xi$ of the first equation being to
 be replaced for $\xi = 0$ by its limit $\log(\lambda_u w)$. The
 reciprocal transformation is
 \begin{equation}
@@ -297,11 +305,12 @@ reciprocal transformation is
       \sigma_u &=& \sigma_w^\star + \xi^\star \left[ u - \mu_w^\star \right],\\
       \lambda_u &=& w^{-1} \, \left[\sigma_u / \sigma_w^\star \right]^{-1/ \xi^\star},
                     \rule{0pt}{1.1em}\\
-      \xi &=& \xi^\star. \rule{0pt}{1.1em}  \\
+      \xi &=& \xi^\star, \rule{0pt}{1.1em}  \\
     \end{array}
   \right.
 \end{equation}
-The second equation becomes $\lambda = w^{-1}$ for $\xi^\star = 0$.
+where the second equation becomes $\lambda = w^{-1}$ for
+$\xi^\star = 0$.
  
 \begin{figure}
   \centering
@@ -312,28 +321,38 @@ The second equation becomes $\lambda = w^{-1}$ for $\xi^\star = 0$.
 When a vector $\m{x}$ of covariates is used, two different kinds of
 so-called \textit{non-stationary} POT models can be obtained by
 relating or ``linking'' the three parameters to the covariates either
-parametrically or non-parametrically.  Anyway, for non-stationary
-models it is often useful to transform one of the two parameterisation
-into the other. If a Poisson-GP model is used, we may be interested in
-the GEV reference distribution conditional on a given value
-$\m{x}$. When instead a PP model is used, it may be useful to
-investigate the relation of the implied rate $\lambda$ with the
+parametrically or non-parametrically. For instance the Poisson-GP
+scale or its logarithm can be specified as having the form
+$\m{x}^\top \bs{\beta}^\sigma$ where $\bs{\beta}^\sigma$ is a vector
+of parameters. Different forms of models arise from the two
+frameworks, and Poisson-GP models relate to a specific threshold
+$u(\m{x})$ which in general should depend on the covariates.  Anyway,
+for non-stationary models it is often useful to transform one of the
+two parameterisation into the other. If a Poisson-GP model is used, we
+may be interested in the GEV reference distribution conditional on a
+given value $\m{x}$. When instead a PP model is used, it may be useful
+to investigate the relation of the implied rate $\lambda_u$ with the
 covariates, and possibly to compare the POT estimate with a
 non-parametric estimate.
+
 
 The \textbf{yaev} package provides the two
 transformations~(\ref{eq:poisGP2PP}) and~(\ref{eq:PP2poisGP}) along
 with their Jacobian, under the names \verb@poisGP2PP@ and
 \verb@PP2poisGP@. As for the probability functions, the singularity
-for $\xi = 0$ and $\xi^\star = 0$ is coped with by using a
-second-order Taylor approximation. As often required when coping with
+for $\xi = 0$ or $\xi^\star = 0$ is coped with by using a second-order
+Taylor approximation. As often required when coping with
 non-stationary POT models, the functions \verb@poisGP2PP@ and
 \verb@PP2poisGP@ are vectorised w.r.t. their arguments including
 \verb@threshold@ for the \verb@PP2poisGP@ transformation. Each element
-in the provided vectors such as \verb@lambda@ correspond to a value
-$\m{x}$ of the covariates and most often the threshold is then also
-chosen as depending on the covariates.
-
+$i$ in the provided vectors such as \verb@lambda@ correspond to a
+value $\m{x}_i$ of the covariates and most often the threshold is then
+also chosen as depending on the covariates hence used via a vector
+with $n$ elements $u_i = u(\m{x}_i)$. The  condition
+$$
+    \sigma^\star_i + \xi^\star_i [u_i - \mu^\star_i] > 0, \qquad i=1,\, \dots,\, n
+$$
+should then hold.
 
   
 % Peak Over Threshold (POT) models are very popular in EVA. A threshold
@@ -393,6 +412,18 @@ describe these strategies and provide for each of them a ``code''
   
 \end{enumerate}
 
+Note that some of the cited packages are quite old:
+\pkg{evir}~\citep{pack_evir}, \pkg{evd}~\citep{pack_evd},
+\pkg{ismev}~\citep{pack_ismev}, \pkg{Renext}~\citep{pack_Renext},
+\pkg{POT}~\citep{pack_POT} and
+\pkg{SpatialExtremes}~\cite{pack_SpatialExtremes}. The packages
+\pkg{revdbayes}~\citep{pack_revdbayes} and \pkg{mev}~\citep{pack_mev}
+are more recent. See the CRAN Task View on Extreme Value Analysis
+\citep{TV_ExtremeValue} for an extended list of packages. Also it is
+worth mentioning that the \pkg{extRemes} package~\citep{pack_extRemes}
+optionally uses the exact gradient of the log-likelihood for models
+with GEV and GP margins but the derivatives are coded (in R) only for
+internal use.
 
 \begin{table}
     \centering \small
@@ -452,5 +483,7 @@ to the authors of the \textbf{maxiplot} \LaTeX{} package (J.M. Planas
 and José Manuel Mira univ. de Murcia, Spain) which helped much for the
 tedious computations required by the package.
 
+\bibliographystyle{apalike}
+\bibliography{yaev}
 
 \end{document}

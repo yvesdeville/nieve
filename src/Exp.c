@@ -355,7 +355,9 @@ SEXP Call_qexp1(SEXP p,               /*  double                          */
 		SEXP hessianFlag) {   /*  integer                         */
 
   int n, np, nscale, i, ip, iscale,
-    deriv = INTEGER(derivFlag)[0], hessian = INTEGER(hessianFlag)[0] ;
+    deriv = INTEGER(derivFlag)[0], hessian = INTEGER(hessianFlag)[0],
+    lowerTail = INTEGER(lowerTailFlag)[0];
+
 
   double q, lq, sigma, rpi;
 
@@ -406,6 +408,20 @@ SEXP Call_qexp1(SEXP p,               /*  double                          */
 	rgrad[i] = NA_REAL;
 	rhess[i] = NA_REAL;
 
+      } else if (((rp[ip] == 0.0) && lowerTail) ||
+		 ((rp[ip] == 1.0) && !lowerTail)) { 
+
+	rval[i] = 0.0;
+	rgrad[i] = 0.0;
+	rhess[i] = 0.0;
+
+      } else if (((rp[ip] == 1.0) && lowerTail) ||
+		 ((rp[ip] == 0.0) && !lowerTail)) {
+
+	rval[i] = R_PosInf;
+	rgrad[i] = NA_REAL;
+	rhess[i] = NA_REAL;
+	
       } else {
 
 	if (hessian) {
@@ -448,6 +464,16 @@ SEXP Call_qexp1(SEXP p,               /*  double                          */
       if (ISNA(rp[ip]) || (rscale[iscale] <= 0.0)) {
 
 	rval[i] = NA_REAL;
+
+      } else if (((rp[ip] == 0.0) && lowerTail) ||
+		 ((rp[ip] == 1.0) && !lowerTail)) { 
+
+	rval[i] = 0.0;
+
+      } else if (((rp[ip] == 1.0) && lowerTail) ||
+		 ((rp[ip] == 0.0) && !lowerTail)) {
+
+	rval[i] = R_PosInf;
 
       } else {
 
