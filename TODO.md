@@ -1,8 +1,5 @@
-TODO list for the **yaev** package
-================
-Yves Deville <deville.yves@alpestat.com>
-
-## Package scope and management
+Package scope and management
+----------------------------
 
 -   **\[X\]** Use the
     [rchk](https://developer.r-project.org/Blog/public/2019/04/18/common-protect-errors/)
@@ -24,21 +21,25 @@ Yves Deville <deville.yves@alpestat.com>
 
 -   Should we keep the R implementation for the GEV distribution?
 
-## Documentation
+Documentation
+-------------
 
 -   **\[X\]** Inquire about the **extRemes** package and report it in
     the table of the vignette `yaev.Rnw`. The package does not aim at
     exporting probability functions which are rather seen as being for
     internal use.
 
--   Add a `.bib` file with the citations for the packages and cite the
-    package in the vignette.
+-   **{X\]** Add a `.bib` file with the citations for the packages and
+    cite the packages in the vignette.
 
-## Computing
+-   In `GPD2.tex`, recall how can the derivatives of the distribution
+    function *F* are related to those of the cumulated hazard *H*.
 
--   **\[X\]** Implement the Taylor approximation for
-    ![\\xi \\approx 0](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cxi%20%5Capprox%200 "\xi \approx 0")
-    in the `PP2poisGP`and `poisGP2PP` (C) functions.
+Computing
+---------
+
+-   **\[X\]** Implement the Taylor approximation for *ξ* ≈ 0 in the
+    `PP2poisGP`and `poisGP2PP` (C) functions.
 
 -   Add the *Extended GPD distributions* of Papastathopoulos & Tawn.
     Since the distribution functions or survival are obtained by
@@ -46,13 +47,11 @@ Yves Deville <deville.yves@alpestat.com>
 
 -   Should there be a `Gumbel2` distribution?
 
-## Testing and polishing
+Testing and polishing
+---------------------
 
--   **\[X\]** Add tests for the specific case
-    ![\\xi \\approx 0](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cxi%20%5Capprox%200 "\xi \approx 0")
-    (more precisely,
-    ![\\xi \< \\epsilon](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cxi%20%3C%20%5Cepsilon "\xi < \epsilon"))
-    in the transformations `PP2poisGP`and `poisGP2PP`.
+-   **\[X\]** Add tests for the specific case *ξ* ≈ 0 (more precisely,
+    *ξ* &lt; *ϵ*) in the transformations `PP2poisGP`and `poisGP2PP`.
 
 -   Add a test checking that the transformation `PP2poisGP`and
     `poisGP2PP` are reciprocal to each other (in both directions).
@@ -82,11 +81,5 @@ Yves Deville <deville.yves@alpestat.com>
 
 -   Make sure that the probability functions return `NA` when an
     incorrect parameter is used (negative `scale`).
-
--   In `GPD2.tex`, recall how can the derivatives of the distribution
-    function
-    ![F](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;F "F")
-    are related to those of the cumulated hazard
-    ![H](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;H "H").
 
 -   Test the functions related to the `Exp1`distribution.
