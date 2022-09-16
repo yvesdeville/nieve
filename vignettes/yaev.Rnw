@@ -215,9 +215,9 @@ ignoring the other elements.
 Peaks Over Threshold (POT) models are very popular in EVA. These
 models relate to marked Poisson Process: at each time $T_i$ in a
 sequence or random times $T_1 < T_2 < \dots$ we observe a random
-variable $Y_i$ called the \textit{mark}. In applications, the $T_i$
-are typically the times of occurrence for storms and the $Y_i$ can be
-an amounts of precipitation or sea levels.  The following two
+variable $Y_i$ called the \textit{mark}. In applications, the time
+$T_i$ is typically for the occurrence a storm and the mark $Y_i$ can
+be an amount of precipitation or a sea levels.  The following two
 frameworks are commonly used, see~\cite{NorthropEtAl_NSExtremes} for
 more details.
 
@@ -275,7 +275,7 @@ Figure~\ref{BlockMaxima}. This distribution is indeed essentially the
 $\text{GEV}(\mu_w^\star, \, \sigma_w^\star,\,\xi^\star)$, up to an
 atom corresponding to the possibility that no mark is observed during
 the time interval. We can then define $M:= -\infty$ since this is
-arguably the maximum of the empty set, the probability of the
+arguably the maximum of the empty set, and the probability of the
 corresponding event is $\exp\{- \lambda_u w\}$. We may speak of
 $\text{GEV}(\mu_w^\star, \, \sigma_w^\star,\,\xi^\star)$ as the
 \textit{GEV reference distribution} in relation to~$w$, although this
@@ -309,7 +309,7 @@ reciprocal transformation is
     \end{array}
   \right.
 \end{equation}
-where the second equation becomes $\lambda = w^{-1}$ for
+where the second equation becomes $\lambda_u = w^{-1}$ for
 $\xi^\star = 0$.
  
 \begin{figure}
@@ -318,37 +318,39 @@ $\xi^\star = 0$.
   \caption{\sf \small Two parameterisations for POT models.}
 \end{figure}
 
-When a vector $\m{x}$ of covariates is used, two different kinds of
-so-called \textit{non-stationary} POT models can be obtained by
-relating or ``linking'' the three parameters to the covariates either
+When a vector $\m{x}$ of covariates can be used, two different kinds
+of so-called \textit{non-stationary} POT models can be obtained by
+relating or ``linking'' the three parameters to the covariates, either
 parametrically or non-parametrically. For instance the Poisson-GP
-scale or its logarithm can be specified as having the form
+scale or its logarithm can be specified as having the parametric form
 $\m{x}^\top \bs{\beta}^\sigma$ where $\bs{\beta}^\sigma$ is a vector
 of parameters. Different forms of models arise from the two
-frameworks, and Poisson-GP models relate to a specific threshold
-$u(\m{x})$ which in general should depend on the covariates.  Anyway,
-for non-stationary models it is often useful to transform one of the
-two parameterisation into the other. If a Poisson-GP model is used, we
-may be interested in the GEV reference distribution conditional on a
-given value $\m{x}$. When instead a PP model is used, it may be useful
-to investigate the relation of the implied rate $\lambda_u$ with the
-covariates, and possibly to compare the POT estimate with a
-non-parametric estimate.
+frameworks. Moreover, parametric Poisson-GP models relate to a
+specific threshold since the same form of link can not persist when
+the threshold is changed. Remind also that the threshold should in
+general depend on the covariates.  Anyway, for non-stationary models
+it is often useful to transform one of the two parameterisations into
+the other. If a Poisson-GP model is used, we may be interested in the
+GEV reference distribution conditional on a given value $\m{x}$. When
+instead a PP model is used, it may be useful to investigate the
+relation of the implied rate $\lambda_u$ with the covariates, and
+possibly to compare the POT estimate with a non-parametric estimate.
 
 
 The \textbf{yaev} package provides the two
-transformations~(\ref{eq:poisGP2PP}) and~(\ref{eq:PP2poisGP}) along
-with their Jacobian, under the names \verb@poisGP2PP@ and
-\verb@PP2poisGP@. As for the probability functions, the singularity
-for $\xi = 0$ or $\xi^\star = 0$ is coped with by using a second-order
-Taylor approximation. As often required when coping with
-non-stationary POT models, the functions \verb@poisGP2PP@ and
-\verb@PP2poisGP@ are vectorised w.r.t. their arguments including
-\verb@threshold@ for the \verb@PP2poisGP@ transformation. Each element
-$i$ in the provided vectors such as \verb@lambda@ correspond to a
-value $\m{x}_i$ of the covariates and most often the threshold is then
-also chosen as depending on the covariates hence used via a vector
-with $n$ elements $u_i = u(\m{x}_i)$. The  condition
+transformations~(\ref{eq:poisGP2PP}) and~(\ref{eq:PP2poisGP}) required
+for all these tasks --~along with their Jacobian, under the names
+\verb@poisGP2PP@ and \verb@PP2poisGP@. As for the probability
+functions, the singularity for $\xi = 0$ or $\xi^\star = 0$ is coped
+with by using a second-order Taylor approximation. As often required
+when coping with non-stationary POT models, the functions
+\verb@poisGP2PP@ and \verb@PP2poisGP@ are vectorised w.r.t. their
+arguments including \verb@threshold@ for the \verb@PP2poisGP@
+transformation. Each element $i$ in the provided vector arguments
+(such as \verb@lambda@) correspond to a value $\m{x}_i$ of the
+covariates, and most often the threshold is then also chosen as
+depending on the covariates, hence used via a vector with $n$ elements
+$u_i = u(\m{x}_i)$. The condition
 $$
     \sigma^\star_i + \xi^\star_i [u_i - \mu^\star_i] > 0, \qquad i=1,\, \dots,\, n
 $$
@@ -373,20 +375,20 @@ should then hold.
 The EV distributions are implemented in many R packages. A variety of
 strategies regarding the problem $\xi = 0$ can be found. We now
 describe these strategies and provide for each of them a ``code''
-(\fbox{NT}, ...) that is used in Table~\ref{TabXi}, columns $\xi =
-0$. Each strategy is briefly discussed.
+(shown as framed: \fbox{NT}, ...) that is used in Table~\ref{TabXi},
+columns $\xi = 0$. Each strategy is briefly discussed.
 
 \begin{enumerate}
 
 \item \fbox{NT} Use only the formula for $\xi \neq 0$ i.e., {``do
     nothing''}.  In practice, an optimisation or sampling algorithm
   will never come to the case $\xi = 0$ \textit{exactly} and this can
-  only happen when the user gives this value e.g. as an initial value.
+  only happen when the user gives this value e.g., as an initial value.
   There will be some numerical problems when $\xi$ is very small, say
   $\xi = \text{1e-14}$ or less. These problems are not so crucial for
   the usual probability functions: we get some wiggling when plotting
   the curves and zooming. Mind however that the random generation
-  \code{rgev} or \code{rgpd} will produce silly results with very
+  \code{rgev} or \code{rgpd} will produce silly results with a very
   small $\xi$ if they use \code{qgev} or \code{qgpd}.
   
 \item \fbox{$0.0$} Test the exact equality $\xi = 0$, and if this is true,
@@ -419,11 +421,12 @@ Note that some of the cited packages are quite old:
 \pkg{SpatialExtremes}~\cite{pack_SpatialExtremes}. The packages
 \pkg{revdbayes}~\citep{pack_revdbayes} and \pkg{mev}~\citep{pack_mev}
 are more recent. See the CRAN Task View on Extreme Value Analysis
-\citep{TV_ExtremeValue} for an extended list of packages. Also it is
-worth mentioning that the \pkg{extRemes} package~\citep{pack_extRemes}
-optionally uses the exact gradient of the log-likelihood for models
-with GEV and GP margins but the derivatives are coded (in R) only for
-internal use.
+\citep{TV_ExtremeValue} for an extended list of packages devoted to
+EVA. Also it is worth mentioning that the \pkg{extRemes}
+package~\citep{pack_extRemes} optionally uses the exact gradient of
+the log-likelihood for models with GEV and GP margins but the
+derivatives are coded (in R) only for internal use in optimisation
+tasks.
 
 \begin{table}
     \centering \small

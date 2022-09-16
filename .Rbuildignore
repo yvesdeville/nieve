@@ -6,3 +6,4 @@
 ^TODO.Rmd
 ^TODO.md
 ^doc/.*\.tex$
+vignettes/yaev.pdf
