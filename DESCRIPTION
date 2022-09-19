@@ -6,10 +6,9 @@ Author: Yves Deville <deville.yves@alpestat.com>
 Maintainer: Yves Deville <deville.yves@alpestat.com>
 Description: Provides utility functions and objects for Extreme Value Analysis, 
     including some distribution functions.
-License: GPL
+License: GPL (>= 2)
 Suggests: testthat, numDeriv, Renext, knitr
 Encoding: UTF-8
 URL: https://github.com/yvesdeville/yaev/
-Roxygen: list(old_usage = TRUE)
 RoxygenNote: 7.2.1
 VignetteBuilder: knitr

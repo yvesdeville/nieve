@@ -7,6 +7,9 @@
 /* ===========================================================================
    AUTHOR Yves Deville <deville.yves@alpestat.com>
    
+   LICENSE This program is part of the 'yaev' R package. See the
+   LICENSE of the package.
+
    GOAL 
 
    Compute the transformation of Poisson-GP parameters into PP
@@ -45,8 +48,8 @@
    DETAILS 
 
    See the documentation in the 'computing' directory of the package.
-   =========================================================================== */  
 
+   =========================================================================== */  
 
 SEXP Call_poisGP2PP(SEXP lambda,        /*  double                          */
 		    SEXP loc,           /*  double                          */
@@ -109,10 +112,9 @@ SEXP Call_poisGP2PP(SEXP lambda,        /*  double                          */
 	   ishape = (++ishape == nshape) ? 0 : ishape,
 	   ++i) {
       
-      if ((rscale[iscale] <= 0.0)) {
-	// do something here
+      if ((rscale[iscale] <= 0.0) || rlambda[ilambda] <= 0.0) {
+	error("'scale' and 'lambda' must contain only positive elements");
       }
-
       
       sigma = rscale[iscale];
       A = rlambda[ilambda] * w0;
@@ -340,7 +342,7 @@ SEXP Call_PP2poisGP(SEXP locStar,           /*  double                          
 	   ++i) {
       
       if ((rscaleStar[iscaleStar] <= 0.0)) {
-	// do something here
+	error("'scaleStar' must contain only positive elements");
       }
 
       z = (rthreshold[ithreshold] - rlocStar[ilocStar]) / rscaleStar[iscaleStar];

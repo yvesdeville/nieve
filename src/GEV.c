@@ -6,7 +6,10 @@
 
 /* ===========================================================================
    AUTHOR Yves Deville <deville.yves@alpestat.com>
-   
+
+   NOTE This program is part of the 'yaev' R package. See the LICENSE
+   of the package.
+
    GOAL Compute the probability functions related to the Generalised
    Extreme Value (GEV) distribution, possibly including the gradient
    and the Hessian (for the density). The implementation in C is
@@ -14,9 +17,6 @@
    implementations in existing R packages, NAs are returned when the
    shape is negative, which can be a desirable behaviour for when
    unconstrained optimisation is used to maximise the log-likelihood.
- 
-   NOTE This program is part of the 'yaev' R package with partial
-   financial and technical support from IRSN-Behrig, www.irsn.fr.
    =========================================================================== */  
 
 

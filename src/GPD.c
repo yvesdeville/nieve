@@ -6,6 +6,9 @@
 
 /* ===========================================================================
    AUTHOR Yves Deville <deville.yves@alpestat.com>
+
+   LICENSE This program is part of the 'yaev' R package. See the
+   LICENSE of the package.
    
    GOAL Compute the probability functions related to the two-parameter
    Generalized Pareto Distribution (GPD), possibly including the
@@ -20,7 +23,6 @@
    the derivatives as attributes of the result. As a side effect, we 
    can not use the macros like `R_Q_P01_boundaries` 
 
-   NOTE This program is part of the 'yaev' R package.
    =========================================================================== */  
 
 

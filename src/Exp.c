@@ -7,6 +7,9 @@
 /* ===========================================================================
    AUTHOR Yves Deville <deville.yves@alpestat.com>
 
+   LICENSE This program is part of the 'yaev' R package. See the
+   LICENSE of the package.
+
    GOAL Compute the probability functions related to the one parameter
    Exponential Distribution, possibly including the gradient and the
    Hessian for the density, the cumulative distribution and the
@@ -14,11 +17,6 @@
    implementation. NAs are returned when the shape is negative, which
    can be a desirable behaviour for when unconstrained optimization is
    used to maximize the log-likelihood.
-
-   NOTE This program is part of the 'potomax' R package.
-
-   LICENCE Contact the author for details. The 'potomax' R package is
-   still in a early stage of development.
    =========================================================================== */
 
 /* ==========================================================================

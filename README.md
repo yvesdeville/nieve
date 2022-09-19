@@ -3,7 +3,7 @@ Goals and scope
 
 The **yaev** package was partly funded by the French [*Institut de
 Radioprotection et Sûreté Nucléaire* (IRSN)](https://www.irsn.fr/) and
-formerly was part of R packages owned by IRSN/Behrig.
+some of the code formerly was part of R packages owned by IRSN/Behrig.
 
 The **yaev** package is intended to be a “low-level” package, providing
 fast and well-tested “basic” functions for Extreme Value Analysis (EVA).
@@ -12,25 +12,25 @@ found or be implemented in other packages.
 
 The package
 
--   Provides the derivatives w.r.t. the parameters for the probability
+-   Provides the *derivatives w.r.t. the parameters* for the probability
     functions related to the Generalized Pareto (GP) and the Generalized
     Extreme Value (GEV) distributions. This involves: the log-density,
     the distribution function or survival and the quantile function. The
     2-nd order derivative (Hessian) is available in most cases.
 
--   Provides probability functions which are vectorized w.r.t. the
-    parameters as require in non-stationary EV models or in Bayesian
+-   Provides probability functions which are *vectorised w.r.t. the
+    parameters*, as required in non-stationary EV models or in Bayesian
     inference.
 
--   Provides the transformations for the two usual parameterizations of
-    Peaks Over Threshold (POT) models: Poisson-GP to (Non-Homogeneous)
-    Point Process (PP) and PP to Poisson-GP. The transformations come
-    with their derivatives, as needed to compute the covariance
-    matrices.
+-   Provides the *transformations for the two usual parameterisations*
+    of Peaks Over Threshold (POT) models: *Poisson-GP* and *Point
+    Process* (PP). The two transformations come with their derivatives,
+    as needed to compute the covariance matrices.
 
 Although several R packages devoted EVA compute the exact derivatives
 w.r.t. the parameters (**extRemes**, **mev**, …), to our best knowledge,
-none of these make the derivatives usable via exported functions.
+none of these packages make the derivatives usable via exported
+functions.
 
 Install release version from GitHub
 ===================================
