@@ -41,7 +41,7 @@ SEXP Call_dGPD2(SEXP x,             /*  double                          */
     logF = INTEGER(logFlag)[0],
     deriv = INTEGER(derivFlag)[0], hessian = INTEGER(hessianFlag)[0];
   
-  double eps = 1e-6, z, V, xi;
+  double eps = 1e-4, z, V, xi;
   
   SEXP val;
   
@@ -352,7 +352,7 @@ SEXP Call_pGPD2(SEXP q,               /*  double                          */
     lowerTail = INTEGER(lowerTailFlag)[0], 
     deriv = INTEGER(derivFlag)[0], hessian = INTEGER(hessianFlag)[0];
   
-  double eps = 1e-6, z, V, A, B, S, sigma, xi, u, H, dHdsigma, dHdxi;
+  double eps = 1e-4, z, V, A, B, S, sigma, xi, u, H, dHdsigma, dHdxi;
   
   SEXP val;
   
@@ -671,7 +671,7 @@ SEXP Call_qGPD2(SEXP p,               /*  double                          */
     lowerTail = INTEGER(lowerTailFlag)[0],
     deriv = INTEGER(derivFlag)[0], hessian = INTEGER(hessianFlag)[0] ;
   
-  double eps = 1e-6, q, lq, q1, xi, sigma, V, W, rpi;
+  double eps = 1e-4, q, lq, q1, xi, sigma, V, W, rpi;
   
   SEXP val;
   
