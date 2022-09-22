@@ -5,7 +5,7 @@ Version: 0.1.0
 Author: Yves Deville <deville.yves@alpestat.com>
 Maintainer: Yves Deville <deville.yves@alpestat.com>
 Description: Provides utility functions and objects for Extreme Value Analysis, 
-    including some distribution functions.
+    including some probability functions.
 License: GPL (>= 2)
 Suggests: testthat, numDeriv, Renext, knitr
 Encoding: UTF-8
