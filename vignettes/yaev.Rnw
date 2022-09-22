@@ -30,8 +30,6 @@
 \newcommand{\Gre}[1]{{\color{MonVertF}#1}}
 
 
-
-
 \title{\bf \Large The \textbf{yaev} package: Yet Another Extreme Value package?}
 
 \author{Yves Deville \href{mailto:deville.yves@alpestat.com}%%
@@ -433,7 +431,6 @@ columns $\xi = 0$. Each strategy is briefly discussed.
     to the exponential/Gumbel formula}. So this produces a (very
   small) discontinuity.  E.g., \pkg{Renext} uses
   $\epsilon \approx \text{2e-14}$.
-  
   
 \item \fbox{$\epsilon$/AI} Test the equality
   $ |\xi| \leqslant \epsilon$ where $\epsilon >0$ is very small, and
