@@ -62,7 +62,7 @@ SEXP Call_poisGP2PP(SEXP lambda,        /*  double                          */
     i, i12, ilambda, iloc, iscale, ishape, 
     deriv = INTEGER(derivFlag)[0];
   
-  double eps = 1e-6, w0, xi, sigma, A, L, E, BC;
+  double eps = 1e-4, w0, xi, sigma, A, L, E, BC;
   
   SEXP val;
 
@@ -291,7 +291,7 @@ SEXP Call_PP2poisGP(SEXP locStar,           /*  double                          
     i, i12, ilocStar, iscaleStar, ishapeStar, ithreshold,
     deriv = INTEGER(derivFlag)[0];
   
-  double eps = 1e-6, w0, xiStar, sigmaStar, C, L, z, lambda, emz, A, B, D;
+  double eps = 1e-4, w0, xiStar, sigmaStar, C, L, z, lambda, emz, A, B, D;
   
   SEXP val;
   

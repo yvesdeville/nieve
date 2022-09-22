@@ -47,6 +47,9 @@ Computing
 
 -   Should there be a `Gumbel2` distribution?
 
+-   Use a global variable for `eps` in order to share a value across
+    functions? Or add a new argument for each function?
+
 Testing and polishing
 ---------------------
 

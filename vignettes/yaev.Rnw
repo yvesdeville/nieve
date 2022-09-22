@@ -249,7 +249,7 @@ models relate to marked Poisson Process: at each time $T_i$ in a
 sequence or random times $T_1 < T_2 < \dots$ we observe a random
 variable $Y_i$ called the \textit{mark}. In applications, the time
 $T_i$ is typically for the occurrence a storm and the mark $Y_i$ can
-be an amount of precipitation or a sea levels.  The following two
+be an amount of precipitation or a sea level.  The following two
 frameworks are commonly used, see~\cite{NorthropEtAl_NSExtremes} for
 more details.
 
