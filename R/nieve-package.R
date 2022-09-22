@@ -1,13 +1,13 @@
 ##'
-##' @title \packageTitle{yaev}
+##' @title \packageTitle{nieve}
 ##' 
 ##' @description
 ##' 
 ##' The DESCRIPTION file:
-##' \packageDESCRIPTION{yaev}
-##' \packageIndices{yaev}
+##' \packageDESCRIPTION{nieve}
+##' \packageIndices{nieve}
 ##' 
-##' The \pkg{yaev} package provides utility functions for Extreme
+##' The \pkg{nieve} package provides utility functions for Extreme
 ##' Value Analysis. It includes the probability functions for the
 ##' two-parameter Generalized Pareto Distribution (GPD) and for the
 ##' three-parameter Generalized Extreme Value (GEV)
@@ -27,7 +27,7 @@
 ##' should return \code{0.0} and \code{1.0}.
 ##' 
 ##' @docType package
-##' @name yaev-package
-##' @useDynLib yaev, .registration=TRUE
+##' @name nieve-package
+##' @useDynLib nieve, .registration=TRUE
 NULL
 #> NULL

@@ -54,6 +54,10 @@ for (i in seq_along(shape)) {
 
 ## ===========================================================================
 ## Check case 'n' zero shape. Use the Jacobian
+##
+## Note that it was found that the numeric derivatives suffer from a
+## lack of precision (difficult to explain). So we decided to compare the
+## approximation and the true formula as implemented in 'Renext'.
 ## ===========================================================================
 
 shape <- runif(n, min = -1e-5, max = 1e-5)
@@ -83,11 +87,29 @@ for (i in 1:n) {
     g <- drop(attr(res, "gradient"))
     g <- g[ , -2]
     
-    e <- g - jacNum
+    res0 <- Renext::Ren2gev(theta, threshold = loc[i],
+                            distname.y = "GPD")
     
-    cond <- (max(abs(g - jacNum)) < 4e-2) ||
-        (max(abs(g - jacNum) / (abs(g) + 1e-9)) < 4e-2)
-   
+    jacTest <- attr(res0, "jacobian")
+    
+    cond <- (max(abs(g - jacTest)) < 1e-3) ||
+        (max(abs(g - jacTest) / (abs(g) + 1e-9)) < 1e-3)
+    
+    if (!cond) {
+        cat("================= test failure details ================\n")
+        cat("o Parameter value 'theta'\n")
+        print(theta)
+        attributes(res) <- NULL
+        attributes(res0) <- NULL
+        fval <- rbind("nieve" = res, "Renext" = res0)
+        colnames(fval) <- c("locStar", "scaleStar", "shapeStar")
+        cat("o Function value\n")
+        print(fval)
+        cat("\no Jacobian matrix\n")
+        colnames(jacTest) <- paste0(c("loc", "scale", "shape"), "Test")
+        print(cbind(g, jacTest))
+        cat("\n")
+    }
     
     test_that(desc = sprintf("Case shape %s, Jacobian and numeric Jacobian",
                              "zero"),

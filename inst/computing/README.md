@@ -26,8 +26,8 @@ The documentation includes 5 documents along with their LaTeX or Sweave
 sources. Note that rhe documents `N_` do not have any header and can not
 compiled, and that the `.tex` documents require the **maxiplot**
 
--   `yaev.pdf` explains why and how the probability distributions are
-    evaluated in **yaev**.
+-   `nieve.pdf` explains why and how the probability distributions are
+    evaluated in **nieve**.
 
 -   `GEV.pdf` provides details about the Generalized Extreme Value
     distribution `GEV`: probability functions and their derivatives.

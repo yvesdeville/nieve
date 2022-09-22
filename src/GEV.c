@@ -7,7 +7,7 @@
 /* ===========================================================================
    AUTHOR Yves Deville <deville.yves@alpestat.com>
 
-   NOTE This program is part of the 'yaev' R package. See the LICENSE
+   NOTE This program is part of the 'nieve' R package. See the LICENSE
    of the package.
 
    GOAL Compute the probability functions related to the Generalised

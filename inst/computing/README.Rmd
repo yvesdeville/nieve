@@ -1,5 +1,5 @@
 ---
-title: "Long-form documentation of the **yaev** package"
+title: "Long-form documentation of the **nieve** package"
 author: "Yves Deville `<deville.yves@alpestat.com>`"
 date: "`r Sys.Date()`"
 ---
@@ -36,8 +36,8 @@ and can not compiled, and that the `.tex` documents require the
 **maxiplot**
 
 	
-- `yaev.pdf` explains why and how the probability distributions are
-  evaluated in **yaev**.
+- `nieve.pdf` explains why and how the probability distributions are
+  evaluated in **nieve**.
 
 - `GEV.pdf` provides details about the Generalized Extreme Value
   distribution `GEV`: probability functions and their derivatives.

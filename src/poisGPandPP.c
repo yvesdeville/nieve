@@ -291,7 +291,7 @@ SEXP Call_PP2poisGP(SEXP locStar,           /*  double                          
     i, i12, ilocStar, iscaleStar, ishapeStar, ithreshold,
     deriv = INTEGER(derivFlag)[0];
   
-  double eps = 1e-4, w0, xiStar, sigmaStar, C, L, z, lambda, emz, A, B, D;
+  double eps = 1e-4, w0, xiStar, sigmaStar, C, L, z, lambda, sigma, emz, A, B, D;
   
   SEXP val;
   
@@ -353,18 +353,18 @@ SEXP Call_PP2poisGP(SEXP locStar,           /*  double                          
 
 	emz = exp(-z);
 	// in this case we have C = 1.0
-	lambda = emz * (1.0 + z * z * xiStar -
-			z * z * z  * (8.0 - 3.0 * z) * xiStar * xiStar / 24.0) / w0;
-	sigmaStar = rscaleStar[iscaleStar] * (1.0 + z * xiStar);
+	lambda = emz * (1.0 + 0.5 * z * z * xiStar *
+			(1.0 + z * (3.0 * z - 8.0) * xiStar / 12.0)) / w0;
+	sigma = rscaleStar[iscaleStar] * (1.0 + z * xiStar);
 	rval[i] =  lambda;                   // lambda
-	rval[i + n] = sigmaStar;             // scale
+	rval[i + n] = sigma;                 // scale
 	rval[i + 2 * n] = xiStar;            // shape
 	
 	// row #1      i1 = i, i2 = 0, i3 = 0 to 2
 	i12 = i;
 	A = emz / rscaleStar[iscaleStar] / w0;
 	B = A * (1.0 + z * (z - 2.0) * xiStar / 2.0);
-	D =  (1.0 + z * (3.0 * z - 8.0) * xiStar / 12.0);
+	D = (1.0 + z * (3.0 * z - 8.0) * xiStar / 6.0);
 	
 	rgrad[i12] = B;                                      // @lambda / @locStar
 	rgrad[i12 + n3] = z * rgrad[i12];                    // @lambda / @scaleStar
@@ -374,7 +374,7 @@ SEXP Call_PP2poisGP(SEXP locStar,           /*  double                          
 	i12 = i + n;
 	rgrad[i12] = 0.0;                                    // @scale / @locStar
 	rgrad[i12 + n3] = 1.0;                               // @scale / @scaleStar
-	rgrad[i12 + n3 * 2] = sigmaStar * z;                 // @scale / @shapeStar
+	rgrad[i12 + n3 * 2] = rscaleStar[iscaleStar] * z;    // @scale / @shapeStar
 	
 	// row #3     i2 = 2, i2 = 2, i3 = 0 to 2
 	i12 = i + 2 * n;

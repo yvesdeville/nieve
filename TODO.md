@@ -6,15 +6,15 @@ Package scope and management
     tool to check for possible memory errors/problems before submitting
     to the CRAN.
 
--   Make **NSGEV** and **potomax** rely on **yaev** for the distribution
-    functions, and discard the implementation of the probability
-    functions therein.
+-   Make **NSGEV** and **potomax** rely on **nieve** for the
+    distribution functions, and discard the implementation of the
+    probability functions therein.
 
 -   Make sure that the the `inst/computing` directory and the four
     vignettes `GEV.Rnw`, `GPD2.Rnw`, `PP2PoisGP.Rnw`, `PoisGP2PP.Rnw`
     are not provided to the CRAN since the package may then fail to
     conform to CRAN rules. Nearly 1MO of pdf files:( Suitable links
-    should be found in the package manual. Maybe keep `yaev.Rnw` as a
+    should be found in the package manual. Maybe keep `nieve.Rnw` as a
     package vignette with a few examples?
 
 -   Remove any kind of dependence to **Renext**?
@@ -25,7 +25,7 @@ Documentation
 -------------
 
 -   **\[X\]** Inquire about the **extRemes** package and report it in
-    the table of the vignette `yaev.Rnw`. The package does not aim at
+    the table of the vignette `nieve.Rnw`. The package does not aim at
     exporting probability functions which are rather seen as being for
     internal use.
 

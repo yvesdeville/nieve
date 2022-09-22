@@ -1,2 +1,2 @@
 library(testthat)
-test_check("yaev")
+test_check("nieve")

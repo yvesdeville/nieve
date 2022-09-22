@@ -1,4 +1,4 @@
-Package: yaev
+Package: nieve
 Type: Package
 Title: Miscellaneous Utils for Extreme Value Analysis
 Version: 0.1.0
@@ -9,6 +9,6 @@ Description: Provides utility functions and objects for Extreme Value Analysis,
 License: GPL (>= 2)
 Suggests: testthat, numDeriv, Renext, knitr
 Encoding: UTF-8
-URL: https://github.com/yvesdeville/yaev/
+URL: https://github.com/yvesdeville/nieve/
 RoxygenNote: 7.2.1
 VignetteBuilder: knitr
