@@ -96,7 +96,7 @@ We see that the formula for the function works fine. However, the
 formula for the 2-nd order derivative can be completely wrong when
 $\xi$ is about $\text{1e-6}$ and the formula for the 1-st order
 derivative can also be wrong when $\xi$ is about
-$\text{1e-8}$. Although evaluated ar a reasonably small value of
+$\text{1e-8}$. Although evaluated at a reasonably small value of
 $\xi$, the derivative given in the column \code{der} differs much from
 its limit in column~\code{lim}. The reason is that the formulas for
 the derivatives involve difference and/or fractions or small
