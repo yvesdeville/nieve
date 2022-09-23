@@ -1,11 +1,11 @@
 Goals and scope
 ===============
 
-The **yaev** package was partly funded by the French [*Institut de
+The **nieve** package was partly funded by the French [*Institut de
 Radioprotection et Sûreté Nucléaire* (IRSN)](https://www.irsn.fr/) and
 some of the code formerly was part of R packages owned by IRSN/Behrig.
 
-The **yaev** package is intended to be a “low-level” package, providing
+The **nieve** package is intended to be a “low-level” package, providing
 fast and well-tested “basic” functions for Extreme Value Analysis (EVA).
 It is not intended to provide sophisticated EVA models which should be
 found or be implemented in other packages.
@@ -44,7 +44,7 @@ Provided that the **devtools** package is installed you can then in an R
 session use
 
     library(devtools)
-    install_github("yvesdeville/yaev", dependencies = TRUE, auth_token = myToken)
+    install_github("yvesdeville/nieve", dependencies = TRUE, auth_token = myToken)
 
 where `myToken` stands for *your* token. This should install the package
 and make it ready to use.
@@ -58,12 +58,12 @@ Clone, build and install
 
 ### Cloning the repository
 
-If you do not have yet a local `yaev` repository, use `git clone` to
-clone the `yaev` repository
+If you do not have yet a local `nieve` repository, use `git clone` to
+clone the `nieve` repository
 
-    git clone https://github.com/yvesdeville/yaev
+    git clone https://github.com/yvesdeville/nieve
 
-This will create a `yaev` sub-directory of the current directory,
+This will create a `nieve` sub-directory of the current directory,
 i.e. the directory from which the git command was issued. Of course this
 can work only if you have the authorisation to clone.
 
@@ -73,15 +73,15 @@ With these systems you can install a package from its source. Move to
 the parent directory of your cloned repository and use the following
 command from a terminal to create a tarball source file
 
-    R CMD build yaev
+    R CMD build nieve
 
-This will produce a source tarball `yaev_x.y.z` where `x`, `y` and `z`
+This will produce a source tarball `nieve_x.y.z` where `x`, `y` and `z`
 stand for the major, minor and patch version numbers. Then you can
 install from a command line
 
-    R CMD INSTALL yaev_x.y.z
+    R CMD INSTALL nieve_x.y.z
 
-Note that you must also have all the packages required by **yaev**
+Note that you must also have all the packages required by **nieve**
 installed.
 
 If you are using the **RStudio** IDE, you can alternatively use menus.
@@ -103,7 +103,7 @@ If you have the **Rtools** installed, you can create a binary. Using a
 terminal, move if necessary by using `cd` to the directory containing
 the source tarball and R command, and then type
 
-    R CMD INSTALL --build yaev_x.y.z
+    R CMD INSTALL --build nieve_x.y.z
 
 This will create a `.zip` file that can be used on a Windows platform
 which may not be equipped with *Rtools*. For instance, with **RStudio**
