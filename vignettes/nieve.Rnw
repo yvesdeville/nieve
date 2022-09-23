@@ -35,6 +35,8 @@
 \author{Yves Deville \href{mailto:deville.yves@alpestat.com}%%
   {deville.yves@alpestat.com} }
 
+\date{September 23, 2022}
+
 \begin{document}
 \maketitle{}
 \tableofcontents{}
@@ -42,17 +44,19 @@
 \section{Probability functions of Extreme-Value distributions}
   
 The probability functions for the Generalised Pareto (GP) and
-Generalised Extreme Value (GEV) distributions \cite{Coles_ISMEV}
+Generalised Extreme Value (GEV) distributions \cite{Coles_ISMEV} are
+of ubiquitous use in Extreme Value (EV) analysis. These functions
 depend smoothly on the parameters: they are infinitely differentiable
 functions of the parameters. However, these functions are not
 \textit{analytic} functions of the parameters and a singularity exists
 for all of them when the shape parameter, say $\xi$, is zero.  In
 practice, the functions are given with different formulas depending on
-whether $\xi$ is zero or not; the formulas for $\xi = 0$ relate to the
-exponential and Gumbel distributions and correspond to the limit for
-$\xi \to 0$ of the functions given by the formulas for $\xi \neq 0$.
-As an example, consider the quantile function of the Generalised
-Pareto distribution with shape $\xi$ and unit scale
+whether the shape parameter~$\xi$ is zero or not; the formulas for
+$\xi = 0$ relate to the exponential and Gumbel distributions and
+correspond to the limit for $\xi \to 0$ of the functions given by the
+formulas for $\xi \neq 0$.  As an example, consider the quantile
+function of the Generalised Pareto distribution with shape $\xi$ and
+unit scale
 \begin{equation}
 \label{eq:Quant}
 q(p) = \begin{cases}
@@ -93,16 +97,17 @@ formula for the 2-nd order derivative can be completely wrong when
 $\xi$ is about $\text{1e-6}$ and the formula for the 1-st order
 derivative can also be wrong when $\xi$ is about
 $\text{1e-8}$. Although evaluated ar a reasonably small value of
-$\xi$, the derivative given in the column \code{der} differs much from its limit
-in column~\code{lim}. The reason is that the formulas for the
-derivatives involve difference and/or fractions or small quantities
-because~$\xi$ or $\xi^2$ comes at the denominator. As a general rule,
-the derivatives with higher order are more difficult to evaluate
-numerically, since they involve more complex expressions.  Note that
-using a shape $\xi$ with $|\xi| \leqslant \text{1e-6}$ is quite common
-in EVA because the values of $\xi$ used in practice are often quite
-small, and moreover very small values of $\xi$ are often used in the
-initialisation of the Maximum-Likelihood (ML) optimisation.
+$\xi$, the derivative given in the column \code{der} differs much from
+its limit in column~\code{lim}. The reason is that the formulas for
+the derivatives involve difference and/or fractions or small
+quantities because~$\xi$ or $\xi^2$ comes at the denominator. As a
+general rule, the derivatives with higher order are more difficult to
+evaluate numerically, since they involve more complex expressions.
+Note that using a shape $\xi$ with $|\xi| \leqslant \text{1e-6}$ is
+quite common in EV analysis because the values of $\xi$ used in
+practice are often quite small, and moreover very small values of
+$\xi$ are often used in the initialisation of the Maximum-Likelihood
+(ML) optimisation.
 
 Let us now see what \pkg{nieve} tells about the derivatives. These can
 be found as attributes of the result returned by the \verb@qGPD2@ function,
@@ -131,12 +136,12 @@ So, no more major departures from the theory can be seen.
 
 Although not yet widespread, the use of the exact formulas for the
 derivatives w.r.t. the parameters can be of great help in the
-optimisation tasks required in EVA. These tasks of course involve the
-ML estimation, but also profile-likelihood inference for models with
-covariates. Differential equations methods can be also used to derive
-confidence intervals. Note that the use of formulas for the
-derivatives is called \textit{symbolic} differentiation and differs
-from \textit{automatic} differentiation as increasingly
+optimisation tasks required in EV analysis. These tasks of course
+involve the ML estimation, but also profile-likelihood inference for
+models with covariates. Differential equations methods can be also
+used to derive confidence intervals. Note that the use of formulas for
+the derivatives is called \textit{symbolic} differentiation and
+differs from \textit{automatic} differentiation as increasingly
 available. However, from the previous analysis it transpires that the
 cure might be worse than the disease.  Unless the derivatives are
 evaluated with great care, they can merely ruin an optimisation in
@@ -173,19 +178,19 @@ functions on
 
 \section{Deriving the formulas}
 
-The reports provided with \textbf{nieve}: 
+The reports provided with \textbf{nieve}:
 \href{https://github.com/yvesdeville/nieve/blob/main/inst/doc/GEV.pdf}{GEV.pdf},
 \href{https://github.com/yvesdeville/nieve/blob/main/inst/doc/GPD2.pdf}{GPD2.pdf},
-\href{https://github.com/yvesdeville/nieve/blob/main/inst/doc/PoisGP2PP.pdf}{PoisGP2PP.pdf} and
+\href{https://github.com/yvesdeville/nieve/blob/main/inst/doc/PoisGP2PP.pdf}{PoisGP2PP.pdf}
+and
 \href{https://github.com/yvesdeville/nieve/blob/main/inst/doc/PP2PoisGP.pdf}{PP2PoisGP.pdf}
-  give the exact expressions for
-the first-order and the second-order derivatives of the probability
-functions w.r.t. the parameters and also provides workable
-approximations for the case $\xi \approx 0$. We used the
-\href{https://maxima.sourceforge.io/}{Maxima Computer Algebra System}
-along with the
+give the exact expressions for the first-order and the second-order
+derivatives of the probability functions w.r.t. the parameters and
+also provides workable approximations for the case $\xi \approx 0$. We
+used the \href{https://maxima.sourceforge.io/}{Maxima Computer Algebra
+  System}~\cite{Maxima} along with the
 \href{https://maxima.sourceforge.io/contrib/maxiplot/maxiplot.sty}{maxiplot}
-package for \LaTeX{}. 
+package for \LaTeX{}.
 
 \begin{itemize}
 \item The {\color{MonVertF} \bf raw expressions given by Maxima are
@@ -242,12 +247,12 @@ ignoring the other elements.
 
 \section{Parameterisations for Peaks Over Threshold models}
 
-Peaks Over Threshold (POT) models are very popular in EVA. These
-models relate to marked Poisson Process: at each time $T_i$ in a
-sequence or random times $T_1 < T_2 < \dots$ we observe a random
-variable $Y_i$ called the \textit{mark}. In applications, the time
-$T_i$ is typically for the occurrence a storm and the mark $Y_i$ can
-be an amount of precipitation or a sea level.  The following two
+Peaks Over Threshold (POT) models are very popular in EV
+analysis. These models relate to marked Poisson Process: at each time
+$T_i$ in a sequence or random times $T_1 < T_2 < \dots$ we observe a
+random variable $Y_i$ called the \textit{mark}. In applications, the
+time $T_i$ is typically for the occurrence a storm and the mark $Y_i$
+can be an amount of precipitation or a sea level.  The following two
 frameworks are commonly used, see~\cite{NorthropEtAl_NSExtremes} for
 more details.
 
@@ -384,21 +389,9 @@ $u_i = u(\m{x}_i)$. The condition
 $$
     \sigma^\star_i + \xi^\star_i [u_i - \mu^\star_i] > 0, \qquad i=1,\, \dots,\, n
 $$
-should then hold.
-
-  
-% Peak Over Threshold (POT) models are very popular in EVA. A threshold
-% $u$. 
-
-% \begin{itemize}
-% \item Poisson-GP
-% \item PP (for Point Process) or NHPP (for Non-Homogeneous Poisson
-%   Proces)
-% \end{itemize}
-
-% The main difference is that 
-
-% The \textbf{nieve} package provides the two transformations.
+should then hold. There does not seem to exist any motivation for
+using a reference duration~$w$ depending on $i$, hence the function
+\code{poisGP2PP} only accepts a length-one argument~\code{w}.
 
 \section{EV distributions from other R packages}
 
@@ -413,13 +406,15 @@ columns $\xi = 0$. Each strategy is briefly discussed.
 \item \fbox{NT} Use only the formula for $\xi \neq 0$ i.e., {``do
     nothing''}.  In practice, an optimisation or sampling algorithm
   will never come to the case $\xi = 0$ \textit{exactly} and this can
-  only happen when the user gives this value e.g., as an initial value.
-  There will be some numerical problems when $\xi$ is very small, say
-  $\xi = \text{1e-14}$ or less. These problems are not so crucial for
-  the usual probability functions: we get some wiggling when plotting
-  the curves and zooming. Mind however that the random generation
-  \code{rgev} or \code{rgpd} will produce silly results with a very
-  small $\xi$ if they use \code{qgev} or \code{qgpd}.
+  only happen when the user gives this value e.g., as an initial
+  value.  There will be some numerical problems when $\xi$ is very
+  small, say $\xi = \text{1e-14}$ or less. These problems are not so
+  crucial for the usual probability functions: we get some wiggling
+  when plotting the curves and zooming. Mind however that the random
+  generation functions\footnote{Usually given names such as
+    \code{"rgev"} or \code{"rgpd"}.} will produce silly results with a
+  very small $\xi$ if they are based on the corresponding
+  quantile functions.
   
 \item \fbox{$0.0$} Test the exact equality $\xi = 0$, and if this is true,
   \textit{switch to the exponential/Gumbel formula}.  This helps only
@@ -451,7 +446,7 @@ Note that some of the cited packages are quite old:
 \pkg{revdbayes}~\citep{pack_revdbayes} and \pkg{mev}~\citep{pack_mev}
 are more recent. See the CRAN Task View on Extreme Value Analysis
 \citep{TV_ExtremeValue} for an extended list of packages devoted to
-EVA. Also it is worth mentioning that the \pkg{extRemes}
+EV. Also it is worth mentioning that the \pkg{extRemes}
 package~\citep{pack_extRemes} optionally uses the exact gradient of
 the log-likelihood for models with GEV and GP margins but the
 derivatives are coded (in R) only for internal use in optimisation
@@ -506,7 +501,6 @@ tasks.
       zero or small shape, as described in the text. A star $\star$
       means that the functions are not exported.}
   \end{table}
-
 
 \section*{Acknowledgments}
 
