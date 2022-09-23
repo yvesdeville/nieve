@@ -65,6 +65,3 @@ Report. (Chap. 3 and Appendix A)
 \code{\link{poisGP2PP}} for the reciprocal
 transformation.
 }
-\author{
-Yves Deville
-}

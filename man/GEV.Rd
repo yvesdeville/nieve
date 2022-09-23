@@ -150,6 +150,3 @@ y <- rGEV(n = 40, loc = mu, scale = 1, shape = 0.05)
 matplot(ti, y, type = "l", col = "gray")
 lines(ti, apply(y, 1, mean))
 }
-\author{
-Yves Deville
-}

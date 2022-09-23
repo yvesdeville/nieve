@@ -25,6 +25,13 @@
 ##' lower and the upper end-point, be they finite or not. Also when
 ##' evaluated at \code{-Inf} and \code{Inf} the probability functions
 ##' should return \code{0.0} and \code{1.0}.
+##'
+##' The \pkg{nieve} package was partly funded by the French
+##' \href{https://www.irsn.fr/}{Institut de Radioprotection et Sûreté
+##' Nucléaire (IRSN)} and some of the code formerly was part of R
+##' packages owned by the IRSN \emph{Bureau d'Expertise en
+##' Hydrogéologie et sur les Risques d'Inondation, météorologiques et
+##' Géotechniques} (Behrig).
 ##' 
 ##' @docType package
 ##' @name nieve-package

@@ -117,6 +117,3 @@ pGPD2(1:4, scale = 1:4, shape = 0.0, lower.tail = FALSE) - exp(-1.0)
 ## With gradient and Hessian.
 pGPD2(c(1.1, 1.7), scale = 1, shape = 0, deriv = TRUE, hessian = TRUE)
 }
-\author{
-Yves Deville
-}

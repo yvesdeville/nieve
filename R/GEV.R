@@ -158,8 +158,6 @@
 ##'     involving very small and very large values. This is fixed in
 ##'     the C implementation which should be preferred.
 ##' 
-##' @author Yves Deville
-##'
 ##' @examples
 ##' ti <- 1:10; names(ti) <- 2000 + ti
 ##' mu <- 1.0 + 0.1 * ti

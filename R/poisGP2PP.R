@@ -36,8 +36,6 @@
 ##' @return A matrix with three columns representing the Point-Process
 ##' parameters \code{loc}, \code{scale} and \code{shape}.
 ##'
-##' @author Yves Deville
-##'
 ##' @note This function is essentially a re-implementation in C of the
 ##' function \code{\link[Renext]{Ren2gev}} of \bold{Renext}. As a
 ##' major improvement, this function is "vectorised" w.r.t. the

@@ -84,8 +84,6 @@
 ##' drop the extra dimension if wanted i.e. to get a gradient vector
 ##' and a Hessian matrix.
 ##' 
-##' @author Yves Deville
-##' 
 ##' @examples
 ##' ## Illustrate the effect of recycling rule.
 ##' pGPD2(1.0, scale = 1:4, shape = 0.0, lower.tail = FALSE) - exp(-1.0 / (1:4))

@@ -69,8 +69,6 @@
 ##'     \code{n} equals \code{1}. Use the \code{drop} method on these
 ##'     objects to drop the extra dimension if wanted i.e. to get a
 ##'     gradient vector and a Hessian matrix.
-##' 
-##' @author Yves Deville
 ##'
 ##' @examples
 ##' ## Illustrate the effect of recycling rule.

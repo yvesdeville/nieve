@@ -91,6 +91,3 @@ pexp1(1:4, scale = 1:4, lower.tail = FALSE) - exp(-1.0)
 ## With gradient and Hessian.
 pexp1(c(1.1, 1.7), scale = 1, deriv = TRUE, hessian = TRUE)
 }
-\author{
-Yves Deville
-}
