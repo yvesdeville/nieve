@@ -188,7 +188,7 @@ give the exact expressions for the first-order and the second-order
 derivatives of the probability functions w.r.t. the parameters and
 also provides workable approximations for the case $\xi \approx 0$. We
 used the \href{https://maxima.sourceforge.io/}{Maxima Computer Algebra
-  System}~\cite{Maxima} along with the
+  System}~\citep{Maxima} along with the
 \href{https://maxima.sourceforge.io/contrib/maxiplot/maxiplot.sty}{maxiplot}
 package for \LaTeX{}.
 
