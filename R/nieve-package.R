@@ -12,9 +12,9 @@
 ##' two-parameter Generalized Pareto Distribution (GPD) and for the
 ##' three-parameter Generalized Extreme Value (GEV)
 ##' distribution. These functions are vectorized w.r.t. the parameters
-##' and optionnaly provide the exact derivatives w.r.t. the
-##' parameters: gradient and Hessian which can be used in optimisation
-##' e.g., to maximise the log-likelihood. Since the gradient is
+##' and optionally provide the exact derivatives w.r.t. the
+##' parameters: gradient and Hessian which can be used in optimization
+##' e.g., to maximize the log-likelihood. Since the gradient is
 ##' available for the distribution function, the exact gradient of the
 ##' log-likelihood function is available even when censored
 ##' observations are used.
