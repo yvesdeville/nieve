@@ -30,7 +30,7 @@
 \newcommand{\Gre}[1]{{\color{MonVertF}#1}}
 
 
-\title{\bf \Large The \textbf{nieve} package: Yet Another Extreme Value package?}
+\title{\bf \Large \textbf{nieve}: Yet Another Extreme Value package?}
 
 \author{Yves Deville \href{mailto:deville.yves@alpestat.com}%%
   {deville.yves@alpestat.com} }
@@ -178,7 +178,7 @@ functions on
 
 \section{Deriving the formulas}
 
-The reports provided with \textbf{nieve}:
+The technical reports provided with \textbf{nieve}:
 \href{https://github.com/yvesdeville/nieve/blob/main/inst/doc/GEV.pdf}{GEV.pdf},
 \href{https://github.com/yvesdeville/nieve/blob/main/inst/doc/GPD2.pdf}{GPD2.pdf},
 \href{https://github.com/yvesdeville/nieve/blob/main/inst/doc/PoisGP2PP.pdf}{PoisGP2PP.pdf}
@@ -186,11 +186,11 @@ and
 \href{https://github.com/yvesdeville/nieve/blob/main/inst/doc/PP2PoisGP.pdf}{PP2PoisGP.pdf}
 give the exact expressions for the first-order and the second-order
 derivatives of the probability functions w.r.t. the parameters and
-also provides workable approximations for the case $\xi \approx 0$. We
-used the \href{https://maxima.sourceforge.io/}{Maxima Computer Algebra
+also provide workable approximations for the case $\xi \approx 0$. We
+used the \href{https://maxima.sourceforge.io/}{\pkg{Maxima} Computer Algebra
   System}~\citep{Maxima} along with the
-\href{https://maxima.sourceforge.io/contrib/maxiplot/maxiplot.sty}{maxiplot}
-package for \LaTeX{}.
+\href{https://maxima.sourceforge.io/contrib/maxiplot/maxiplot.sty}{\pkg{maxiplot}}
+package for \LaTeX{}. The technical reports follow the following rules.
 
 \begin{itemize}
 \item The {\color{MonVertF} \bf raw expressions given by Maxima are

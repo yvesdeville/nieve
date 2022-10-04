@@ -29,8 +29,13 @@ The package
 
 Although several R packages devoted EVA compute the exact derivatives
 w.r.t. the parameters (**extRemes**, **mev**, …), to our best knowledge,
-none of these packages make the derivatives usable via exported
-functions.
+none of these packages make the derivatives available via exported
+functions. See the vignette [**nieve**: Yet Another Extreme Value
+Package?](https://github.com/yvesdeville/nieve/blob/main/vignettes/nieve.pdf)
+for more details.
+
+Note that **nieve** has no special relation with the famous package
+**snow**:)
 
 Install release version from GitHub
 ===================================
