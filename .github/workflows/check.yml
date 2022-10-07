@@ -18,12 +18,17 @@ permissions:
   contents: read
 
 jobs:
-  build:
-    runs-on: ubuntu-20.04
+  R-cmd-check:
+    runs-on: {{ matrix.config.os }}
+    
     strategy:
+      fail-fast: false
       matrix:
-        r-version: ['4.2.0']
-
+        config:
+          - {os: macOS-latest, r: 'release'}
+          - {os: windows-latest, r: 'release'}
+          - {os: ubuntu-latest, r: 'release'}
+	  
     steps:
       - uses: actions/checkout@v3
 
