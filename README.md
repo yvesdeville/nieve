@@ -1,3 +1,5 @@
+![R-CMD-check](https://github.com/yvesdeville/nieve/workflows/actions/R-cmd-check/badge.svg)
+
 Goals and scope
 ===============
 

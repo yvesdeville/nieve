@@ -1,9 +1,13 @@
 ---
 author: "Yves Deville <deville.yves@alpestat.com>"
-title: "nieve: Yet Another Extreme Value package?"
+title: "nieve README"
 linkcolor: blue
 output: github_document
 ---
+
+
+![R-CMD-check](https://github.com/yvesdeville/nieve/workflows/actions/R-cmd-check/badge.svg)
+
 
 # Goals and scope
 
