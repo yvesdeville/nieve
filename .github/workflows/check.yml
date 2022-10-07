@@ -32,9 +32,10 @@ jobs:
           r-version: ${{ matrix.r-version }}
       - name: Install dependencies
         run: |
+	  install.packages(pkgs = c("curl"), dependencies = TRUE)
           install.packages(pkgs = c("remotes", "rcmdcheck"), dependencies = TRUE)
           remotes::install_deps(dependencies = TRUE)
         shell: Rscript {0}
       - name: Check 
-        run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran", "--ignore-vignettes"), build_args = c("--no-build-vignettes"), error_on = "warning", check_dir = "check")
+        run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--ignore-vignettes"), build_args = c("--no-build-vignettes"), error_on = "warning", check_dir = "check")
         shell: Rscript {0}
