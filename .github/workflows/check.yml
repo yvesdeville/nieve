@@ -32,7 +32,6 @@ jobs:
           r-version: ${{ matrix.r-version }}
       - name: Install dependencies
         run: |
-	  install.packages(pkgs = c("curl"), dependencies = TRUE)
           install.packages(pkgs = c("remotes", "rcmdcheck"), dependencies = TRUE)
           remotes::install_deps(dependencies = TRUE)
         shell: Rscript {0}
