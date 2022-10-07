@@ -36,13 +36,13 @@ jobs:
         uses: r-lib/actions/setup-r@f57f1301a053485946083d7a45022b278929a78a
         with:
           r-version: ${{ matrix.r-version }}
-	  
+
       - name: Install dependencies
         run: |
           install.packages(pkgs = c("remotes", "rcmdcheck"), dependencies = TRUE)
           remotes::install_deps(dependencies = TRUE)
         shell: Rscript {0}
-	
+
       - name: Check 
         run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--ignore-vignettes"), build_args = c("--no-build-vignettes"), error_on = "warning", check_dir = "check")
         shell: Rscript {0}
