@@ -44,7 +44,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          install.packages(pkgs = c("remotes", "rcmdcheck"), dependencies = TRUE, type = ifelse(.Platform$OS.Type == "window", "binary", getOption("pkgType")))
+          install.packages(pkgs = c("remotes", "rcmdcheck"), dependencies = TRUE, type = ifelse(.Platform$OS.type == "windows", "binary", getOption("pkgType")))
           remotes::install_deps(dependencies = TRUE)
         shell: Rscript {0}
 
