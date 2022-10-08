@@ -1,4 +1,9 @@
+<!-- badges: start -->
+
 [![R-cmd-check](https://github.com/yvesdeville/nieve/actions/workflows/check.yml/badge.svg)](https://github.com/yvesdeville/nieve/actions/workflows/check.yml)
+[![Codecov test
+coverage](https://codecov.io/gh/yvesdeville/nieve/branch/main/graph/badge.svg)](https://app.codecov.io/gh/yvesdeville/nieve?branch=main)
+<!-- badges: end -->
 
 Goals and scope
 ===============

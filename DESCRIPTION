@@ -7,7 +7,12 @@ Maintainer: Yves Deville <deville.yves@alpestat.com>
 Description: Provides utility functions and objects for Extreme Value Analysis, 
     including some probability functions.
 License: GPL (>= 2)
-Suggests: testthat, numDeriv, Renext, knitr
+Suggests: 
+    testthat,
+    numDeriv,
+    Renext,
+    knitr,
+    covr
 Encoding: UTF-8
 URL: https://github.com/yvesdeville/nieve/
 RoxygenNote: 7.2.1
