@@ -40,7 +40,7 @@ jobs:
       - name: Prevent installation from source
         if: runner.os == 'Windows'
         run: |
-          options(install.packages.check.source = "no")
+          options(pkgType = "binary"))
         shell: Rscript {0}
 
       - name: Set up R ${{ matrix.r-version }}
