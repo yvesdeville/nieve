@@ -37,12 +37,6 @@ jobs:
         run: |
           sudo apt-get install libcurl4-openssl-dev
 
-      - name: Prevent installation from source
-        if: runner.os == 'Windows'
-        run: |
-          options(pkgType = "binary")
-        shell: Rscript {0}
-
       - name: Set up R ${{ matrix.r-version }}
         uses: r-lib/actions/setup-r@f57f1301a053485946083d7a45022b278929a78a
         with:
@@ -50,6 +44,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+	  if (.Platform$OS.type == "windows") options(pkgType = "binary")
           install.packages(pkgs = c("remotes", "rcmdcheck"), dependencies = TRUE)
           remotes::install_deps(dependencies = TRUE)
         shell: Rscript {0}
