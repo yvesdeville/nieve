@@ -84,3 +84,12 @@ support: zero or one.
 incorrect parameter is used (negative `scale`).
 
 \[ \] Test the functions related to the `Exp1`distribution.
+
+Github actions and more
+-----------------------
+
+\[x\] Add GitHub action to check on the three main platforms.
+
+\[ \] Add Github action to produce precompiled files as artifacts.
+
+\[ \] Add code coverage in a github action.

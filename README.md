@@ -1,4 +1,4 @@
-[![R-cmd-check](https://github.com/yvesdeville/nieve/workflows/check.yml/badge.svg)](https://github.com/yvesdeville/nieve/actions/workflows/check.yml)
+[![R-cmd-check](https://github.com/yvesdeville/nieve/actions/workflows/check.yml/badge.svg)](https://github.com/yvesdeville/nieve/actions/workflows/check.yml)
 
 Goals and scope
 ===============
