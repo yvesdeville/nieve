@@ -9,3 +9,4 @@
 vignettes/yaev.pdf
 ^\.github$
 ^codecov\.yml$
+^images

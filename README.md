@@ -5,6 +5,8 @@
 coverage](https://codecov.io/gh/yvesdeville/nieve/branch/main/graph/badge.svg)](https://app.codecov.io/gh/yvesdeville/nieve?branch=main)
 <!-- badges: end -->
 
+<img src="inst/images/nieve.png" height = "150" align="center"/>
+
 Goals and scope
 ===============
 
