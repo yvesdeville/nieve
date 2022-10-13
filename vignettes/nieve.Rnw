@@ -179,9 +179,9 @@ functions on
 \section{Deriving the formulas}
 
 The technical reports provided with \textbf{nieve}:
-\href{https://github.com/yvesdeville/nieve/blob/main/inst/doc/GEV.pdf}{GEV.pdf},
-\href{https://github.com/yvesdeville/nieve/blob/main/inst/doc/GPD2.pdf}{GPD2.pdf},
-\href{https://github.com/yvesdeville/nieve/blob/main/inst/doc/PoisGP2PP.pdf}{PoisGP2PP.pdf}
+\href{https://github.com/yvesdeville/nieve/blob/main/inst/computing/GEV.pdf}{GEV.pdf},
+\href{https://github.com/yvesdeville/nieve/blob/main/inst/computing/GPD2.pdf}{GPD2.pdf},
+\href{https://github.com/yvesdeville/nieve/blob/main/inst/computing/PoisGP2PP.pdf}{PoisGP2PP.pdf}
 and
 \href{https://github.com/yvesdeville/nieve/blob/main/inst/doc/PP2PoisGP.pdf}{PP2PoisGP.pdf}
 give the exact expressions for the first-order and the second-order

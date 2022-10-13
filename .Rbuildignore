@@ -1,12 +1,14 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^.*TODO\.*$
 ^README.Rmd
 ^README.md
 ^TODO.Rmd
 ^TODO.md
+^TODO.pdf
 ^doc/.*\.tex$
-vignettes/yaev.pdf
+^vignettes/yaev.pdf
+^vignettes/Computing.*$
 ^\.github$
 ^codecov\.yml$
 ^images
+^computing
