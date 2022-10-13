@@ -44,15 +44,11 @@ jobs:
 
       - name: Install dependencies
         run: |
-          install.packages(pkgs = c("remotes", "rcmdcheck"), dependencies = TRUE,
-	                   type = ifelse(.Platform$OS.type == "windows",
-			                 "binary", getOption("pkgType")))
+          install.packages(pkgs = c("remotes", "rcmdcheck"), dependencies = TRUE, type = ifelse(.Platform$OS.type == "windows", "binary", getOption("pkgType")))
           remotes::install_deps(dependencies = TRUE)
         shell: Rscript {0}
 
       - name: Check 
         run: |
-	  rcmdcheck::rcmdcheck(args = c("--no-manual", "--ignore-vignettes"),
-	                       build_args = c("--no-build-vignettes"),
-			       error_on = "warning", check_dir = "check")
+	  rcmdcheck::rcmdcheck(args = c("--no-manual", "--ignore-vignettes"), build_args = c("--no-build-vignettes"), error_on = "warning", check_dir = "check")
         shell: Rscript {0}
