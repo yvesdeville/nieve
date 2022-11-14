@@ -6,9 +6,10 @@
 ^TODO.md
 ^TODO.pdf
 ^doc/.*\.tex$
-^vignettes/yaev.pdf
+^vignettes/nieve.pdf
 ^vignettes/Computing.*$
 ^\.github$
 ^codecov\.yml$
 ^images
 ^computing
+^inst/computing

@@ -2,7 +2,12 @@ Package: nieve
 Type: Package
 Title: Miscellaneous Utils for Extreme Value Analysis
 Version: 0.1.0
-Author: Yves Deville <deville.yves@alpestat.com>
+Authors@R:
+    c(person(given = "Yves",
+             family = "Deville",
+             role = c("cre", "aut"),
+             email = "deville.yves@alpestat.com",
+	     comment = c(ORCID = "0000-0002-1233-488X")))
 Maintainer: Yves Deville <deville.yves@alpestat.com>
 Description: Provides utility functions and objects for Extreme Value Analysis, 
     including some probability functions.
