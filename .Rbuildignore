@@ -13,3 +13,5 @@
 ^images
 ^computing
 ^inst/computing
+^\.github
+^\.git

@@ -36,7 +36,7 @@
 \author{Yves Deville \href{mailto:deville.yves@alpestat.com}%%
   {deville.yves@alpestat.com} }
 
-\date{September 23, 2022}
+%% \date{}
 
 \begin{document}
 \maketitle{}
@@ -403,7 +403,7 @@ describe these strategies and provide for each of them a ``code''
 columns $\xi = 0$. Each strategy is briefly discussed.
 
 \begin{enumerate}
-
+  
 \item \fbox{NT} Use only the formula for $\xi \neq 0$ i.e., {``do
     nothing''}.  In practice, an optimisation or sampling algorithm
   will never come to the case $\xi = 0$ \textit{exactly} and this can
@@ -454,56 +454,61 @@ derivatives are coded (in R) only for internal use in optimisation
 tasks.
 
 \begin{table}
-    \centering \small
-    \begin{tabular}{| l || c | c | c | c | c || c | c | c | c | c |}
-      \hline
-      \multicolumn{1}{|c||}{\raisebox{-0.3em}{Package}}
-      & \multicolumn{5}{c||}{GEV}
-      & \multicolumn{5}{c|}{GPD}\\ \cline{2-6} \cline{7-11}
-      \multicolumn{1}{|c||}{}
-      & \multicolumn{1}{c|}{Lang.}
-      & \multicolumn{1}{c|}{Vec. $\bs{\theta}$}
-      & \multicolumn{1}{c|}{Grad.}
-      & \multicolumn{1}{c|}{Hess.}
-      & \multicolumn{1}{c||}{$\xi=0$}
-      & \multicolumn{1}{c|}{Lang.}
-      & \multicolumn{1}{c|}{Vec. $\bs{\theta}$}
-      & \multicolumn{1}{c|}{Grad.}
-      & \multicolumn{1}{c|}{Hess.}
-      & \multicolumn{1}{c|}{$\xi=0$} \\ \hline\hline
-      \textbf{evir}
-      & R & no & no & no & NT & R & no & no & no & NT\\ \hline
-      \textbf{evd}
-      & R & no & no & no & 0.0 & R & no & no & no & 0.0\\ \hline
-      \textbf{ismev}
-      & R$^\star$ & no & no & no & NT & R$^\star$ & no & no & no & NT\\ \hline
-      \textbf{Renext}
-      &  &  &  &  &  & R & no & yes & yes & $\epsilon$/S \\ \hline
-      \textbf{POT}
-      &  &  &  &  &  & R$^\star$ & yes & no & no & 0.0 \\ \hline
-      \textbf{SpatialExtremes}
-      & R  & yes & no & no & $0.0$ & R & yes & no & no & $0.0$ \\ \hline   
-      \textbf{revdbayes}
-      & R  & yes & no & no & $\epsilon$/AI & R & yes & no & no & $\epsilon$/AI \\ \hline
-      \textbf{mev}
-      & R  & yes & yes$^\star$ & yes$^\star$& NT & R & yes & yes$^\star$
-      & yes$^\star$ & NT \\ \hline
-      \Gre{\textbf{nieve}}
-      & \Gre{C} & \Gre{yes} & \Gre{yes} & \Gre{yes} & \Gre{$\epsilon$/AI}   
-      & \Gre{C} & \Gre{yes} & \Gre{yes} & \Gre{yes} & \Gre{$\epsilon$/AI} \\
-      \hline
-    \end{tabular}
-    \caption{\label{TabXi}\small \sf Features of some CRAN
-      packages. \textit{Lang.}: the implementation language,
-      \textit{Vec.}  $\bs{\theta}$: vectorised w.r.t. the
-      parameters. The columns \textit{Grad.} and the \textit{Hess.}
-      indicate if the gradient and Hessian are provided, and the
-      columns $\epsilon = 0$ indicate the strategy used to cope with a
-      zero or small shape, as described in the text. A star $\star$
-      means that the functions are not exported.}
-  \end{table}
+  \centering \small
+  \begin{tabular}{| l || c | c | c | c | c || c | c | c | c | c |}
+    \hline
+    \multicolumn{1}{|c||}{\raisebox{-0.3em}{Package}}
+    & \multicolumn{5}{c||}{GEV}
+    & \multicolumn{5}{c|}{GPD}\\ \cline{2-6} \cline{7-11}
+    \multicolumn{1}{|c||}{}
+    & \multicolumn{1}{c|}{Lang.}
+    & \multicolumn{1}{c|}{Vec. $\bs{\theta}$}
+    & \multicolumn{1}{c|}{Grad.}
+    & \multicolumn{1}{c|}{Hess.}
+    & \multicolumn{1}{c||}{$\xi=0$}
+    & \multicolumn{1}{c|}{Lang.}
+    & \multicolumn{1}{c|}{Vec. $\bs{\theta}$}
+    & \multicolumn{1}{c|}{Grad.}
+    & \multicolumn{1}{c|}{Hess.}
+    & \multicolumn{1}{c|}{$\xi=0$} \\ \hline\hline
+    \textbf{evir}
+    & R & no & no & no & NT & R & no & no & no & NT\\ \hline
+    \textbf{evd}
+    & R & no & no & no & 0.0 & R & no & no & no & 0.0\\ \hline
+    \textbf{ismev}
+    & R$^\star$ & no & no & no & NT & R$^\star$ & no & no & no & NT\\ \hline
+    \textbf{Renext}
+    &  &  &  &  &  & R & no & yes & yes & $\epsilon$/S \\ \hline
+    \textbf{POT}
+    &  &  &  &  &  & R$^\star$ & yes & no & no & 0.0 \\ \hline
+    \textbf{SpatialExtremes}
+    & R  & yes & no & no & $0.0$ & R & yes & no & no & $0.0$ \\ \hline   
+    \textbf{revdbayes}
+    & R  & yes & no & no & $\epsilon$/AI & R & yes & no & no & $\epsilon$/AI \\ \hline
+    \textbf{mev}
+    & R  & yes & yes$^\star$ & yes$^\star$& NT & R & yes & yes$^\star$
+    & yes$^\star$ & NT \\ \hline
+    \Gre{\textbf{nieve}}
+    & \Gre{C} & \Gre{yes} & \Gre{yes} & \Gre{yes} & \Gre{$\epsilon$/AI}   
+    & \Gre{C} & \Gre{yes} & \Gre{yes} & \Gre{yes} & \Gre{$\epsilon$/AI} \\
+    \hline
+  \end{tabular}
+  \caption{\label{TabXi}\small \sf Features of some CRAN
+    packages. \textit{Lang.}: the implementation language,
+    \textit{Vec.}  $\bs{\theta}$: vectorised w.r.t. the
+    parameters. The columns \textit{Grad.} and the \textit{Hess.}
+    indicate if the gradient and Hessian are provided, and the
+    columns $\epsilon = 0$ indicate the strategy used to cope with a
+    zero or small shape, as described in the text. A star $\star$
+    means that the functions are not exported.}
+\end{table}
 
 \section*{Acknowledgments}
+
+The \pkg{nieve} package was partly funded by the French
+\href{https://www.irsn.fr/}{Institut de Radioprotection et Sûreté
+  Nucléaire (IRSN)} and some of the code formerly was part of R
+packages owned by IRSN/Behrig.
 
 We are grateful to the authors and contributors of \textbf{Maxima} and
 to the authors of the \textbf{maxiplot} \LaTeX{} package (J.M. Planas
