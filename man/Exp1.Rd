@@ -63,6 +63,13 @@ generation for the one-parameter Exponential Distribution
 distribution with scale parameter \code{scale}.
 }
 \details{
+The survival and density functions are given by
+\deqn{S(x) = \exp\{-x / \sigma\} \qquad
+      f(x) = \frac{1}{\sigma} \exp\{-x / \sigma\} \qquad (x > 0)}{
+      S(x) = exp(-x / sigma)  f(x) = exp(-x / sigma) / sigma (x > 0)}
+where \eqn{\sigma} is the scale parameter. This distribution is
+the Generalized Pareto Distribution for a shape \eqn{\xi = 0}.
+
 The probability functions \code{d}, \code{p} and \code{q}
     all allow the parameter \code{scale} to be a vector. Then the
     recycling rule is used to get two vectors of the same length,
@@ -90,4 +97,9 @@ pexp1(1:4, scale = 1:4, lower.tail = FALSE) - exp(-1.0)
 
 ## With gradient and Hessian.
 pexp1(c(1.1, 1.7), scale = 1, deriv = TRUE, hessian = TRUE)
+}
+\seealso{
+The exponential distribution
+    \code{\link[stats]{Exponential}} with \eqn{rate} being the
+    inverse scale.
 }

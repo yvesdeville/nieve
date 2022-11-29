@@ -1,8 +1,16 @@
 
 ## ***********************************************************************
-##' Density, distribution function, quantile function and random
+##
+##' @description Density, distribution function, quantile function and random
 ##' generation for the one-parameter Exponential Distribution
 ##' distribution with scale parameter \code{scale}.
+##'
+##' @details The survival and density functions are given by
+##' \deqn{S(x) = \exp\{-x / \sigma\} \qquad
+##'       f(x) = \frac{1}{\sigma} \exp\{-x / \sigma\} \qquad (x > 0)}{
+##'       S(x) = exp(-x / sigma)  f(x) = exp(-x / sigma) / sigma (x > 0)}
+##' where \eqn{\sigma} is the scale parameter. This distribution is
+##' the Generalized Pareto Distribution for a shape \eqn{\xi = 0}.
 ##'
 ##' @name Exp1
 ##' @rdname Exp1
@@ -70,6 +78,10 @@
 ##'     objects to drop the extra dimension if wanted i.e. to get a
 ##'     gradient vector and a Hessian matrix.
 ##'
+##' @seealso The exponential distribution
+##'     \code{\link[stats]{Exponential}} with \eqn{rate} being the
+##'     inverse scale.
+##' 
 ##' @examples
 ##' ## Illustrate the effect of recycling rule.
 ##' pexp1(1.0, scale = 1:4, lower.tail = FALSE) - exp(-1.0 / (1:4))

@@ -44,8 +44,8 @@
 
 \section{Probability functions of Extreme-Value distributions}
   
-The probability functions for the Generalised Pareto (GP) and
-Generalised Extreme Value (GEV) distributions \cite{Coles_ISMEV} are
+The probability functions for the Generalized Pareto (GP) and
+Generalized Extreme Value (GEV) distributions \cite{Coles_ISMEV} are
 of ubiquitous use in Extreme Value (EV) analysis. These functions
 depend smoothly on the parameters: they are infinitely differentiable
 functions of the parameters. However, these functions are not
@@ -56,7 +56,7 @@ whether the shape parameter~$\xi$ is zero or not; the formulas for
 $\xi = 0$ relate to the exponential and Gumbel distributions and
 correspond to the limit for $\xi \to 0$ of the functions given by the
 formulas for $\xi \neq 0$.  As an example, consider the quantile
-function of the Generalised Pareto distribution with shape $\xi$ and
+function of the Generalized Pareto distribution with shape $\xi$ and
 unit scale
 \begin{equation}
 \label{eq:Quant}
@@ -107,7 +107,7 @@ evaluate numerically, since they involve more complex expressions.
 Note that using a shape $\xi$ with $|\xi| \leqslant \text{1e-6}$ is
 quite common in EV analysis because the values of $\xi$ used in
 practice are often quite small, and moreover very small values of
-$\xi$ are often used in the initialisation of the Maximum-Likelihood
+$\xi$ are often used in the initialization of the Maximum-Likelihood
 (ML) optimisation.
 
 Let us now see what \pkg{nieve} tells about the derivatives. These can
@@ -261,7 +261,7 @@ more details.
 \item The \textit{Poisson-GP} framework involves a given threshold $u$
   having the same physical dimension as the marks $Y_i$. It assumes
   that the $T_i$ form an homogeneous Poisson Process with rate
-  $\lambda_u$, and that $Y_i$ are i.i.d. with a Generalised Pareto
+  $\lambda_u$, and that $Y_i$ are i.i.d. with a Generalized Pareto
   distribution $\text{GPD}(u, \, \sigma_u, \,\xi)$ or equivalently
   that the so-called \textit{excesses} over the threshold $Y_i -u$
   follow the two-parameter GP distribution with scale $\sigma >0$ and
@@ -380,7 +380,7 @@ for all these tasks --~along with their Jacobian, under the names
 functions, the singularity for $\xi = 0$ or $\xi^\star = 0$ is coped
 with by using a second-order Taylor approximation. As often required
 when coping with non-stationary POT models, the functions
-\verb@poisGP2PP@ and \verb@PP2poisGP@ are vectorised w.r.t. their
+\verb@poisGP2PP@ and \verb@PP2poisGP@ are vectorized w.r.t. their
 arguments including \verb@threshold@ for the \verb@PP2poisGP@
 transformation. Each element $i$ in the provided vector arguments
 (such as \verb@lambda@) correspond to a value $\m{x}_i$ of the
@@ -495,7 +495,7 @@ tasks.
   \end{tabular}
   \caption{\label{TabXi}\small \sf Features of some CRAN
     packages. \textit{Lang.}: the implementation language,
-    \textit{Vec.}  $\bs{\theta}$: vectorised w.r.t. the
+    \textit{Vec.}  $\bs{\theta}$: vectorized w.r.t. the
     parameters. The columns \textit{Grad.} and the \textit{Hess.}
     indicate if the gradient and Hessian are provided, and the
     columns $\epsilon = 0$ indicate the strategy used to cope with a

@@ -26,7 +26,7 @@ output: github_document
   
 [ ] Remove any kind of dependence to **Renext**?
 
-[ ] Should we keep the R implementation for the GEV distribution?  
+[x] Should we keep the R implementation for the GEV distribution? **no**.
   
   
 ## Documentation

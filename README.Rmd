@@ -35,7 +35,7 @@ The package
    function. The 2-nd order derivative (Hessian) is available in most
    cases.
  
- - Provides probability functions which are *vectorised w.r.t. the
+ - Provides probability functions which are *vectorized w.r.t. the
    parameters*, as required in non-stationary EV models or in Bayesian
    inference.
 
@@ -86,7 +86,7 @@ git clone https://github.com/yvesdeville/nieve
 
 This will create a `nieve` sub-directory of the current directory,
 i.e. the directory from which the git command was issued. Of course
-this can work only if you have the authorisation to clone.
+this can work only if you are autorised to clone.
 
 ### Installation on Unix and MacOs systems
 

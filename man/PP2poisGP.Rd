@@ -30,36 +30,46 @@ A matrix with three columns representing the Poisson-GP
 parameters \code{lambda}, \code{scale} and \code{shape}.
 }
 \description{
-Transform Point Process (PP) parameters into Poisson-GP
-parameters.
+Transform Point Process (PP) parameters into
+    Poisson-GP parameters. The provided parameters are GEV
+    parameters: location \eqn{\mu^\star}{muStar_w}, scale
+    \eqn{\sigma^\star_w}{sigmaStar} and shape
+    \eqn{\xi^\star}{xiStar}. They are assumed to describe (the
+    tail of) the distribution for a maximum on a time-interval
+    with given duration \eqn{w}. For a given threshold \eqn{u}
+    chosen to be in the interior of the support of the GEV
+    distribution, there exists a unique vector of three Poisson-GP
+    parameters such that the maximum \eqn{M} of the marks on an
+    interval with duration \code{w} has the prescribed GEV
+    tail. Remind that the three Poisson-GP parameters are the rate
+    of the Poisson process in time: \eqn{\lambda_u}, and the two
+    GP parameters: \code{scale} \eqn{\sigma_u} and \code{shape}
+    \eqn{\xi}. The shape parameters \eqn{\xi^\star}{xiStar} and
+    \eqn{\xi} are identical.
 }
 \details{
-The provided parameters are GEV parameters: location
-\eqn{\mu^\star}{\mu*}, scale \eqn{\sigma^\star}{\sigma*} and shape
-\eqn{\xi^\star}{\xi*}. They are assumed to describe (the tail of) the
-distribution for a maximum on a time-interval with given duration
-\eqn{w}. For a given threshold chosen to be in the interior of the
-support of the GEV distribution, there exists a unique vector of
-three Poisson-GP parameters such that the maximum \eqn{M} of the
-marks on an interval with duration \code{w} has the prescribed GEV
-tail. Remind that the three Poisson-GP parameters are the rate of
-the Poisson process in time: \eqn{\lambda}, and the two GP
-parameters: \code{scale} \eqn{\sigma} and \code{shape} \eqn{\xi}.
-The shape parameters \eqn{\xi^\star}{\si*} and \eqn{\xi} are identical.
+The Poisson-GP parameters are obtained by 
+    \deqn{\left\{
+         \begin{array}{c c l}
+             \sigma_u &=& \sigma_w^\star + \xi^\star \left[ u - \mu_w^\star \right],\\
+             \lambda_u &=& w^{-1} \, \left[\sigma_u / \sigma_w^\star \right]^{-1/ \xi^\star},\\
+             \xi &=& \xi^\star, 
+          \end{array}\right.}{
+             sigma_u = sigmaStar_w + xiStar * [ u - muStar_x ]
+             lambda_u = w^{-1} * [sigma_u / sigmaStar_w ]^(-1 / xiStar)
+             xi = \xiStar}
+    the second equation becomes \eqn{\lambda_u = w^{-1}} for
+    \eqn{\xi^\star = 0}{xiStar = 0}.
 }
 \note{
 This function is essentially a re-implementation in C of the
 function \code{\link[Renext]{gev2Ren}} of \bold{Renext}.  As a
-major improvement, this function is "vectorised" w.r.t. the
+major improvement, this function is "vectorized" w.r.t. the
 parameters so it can transform efficiently a large number of PP
 parameter vectors as it can be required e.g. in a MCMC Bayesian
 inference. Note also that this function copes with values near
 zero for the shape parameter: it suitably computes then both the
 function value and its derivatives.
-}
-\references{
-Yves Deville (2020). \emph{Renext Computing Details}. Technical
-Report. (Chap. 3 and Appendix A)
 }
 \seealso{
 \code{\link{poisGP2PP}} for the reciprocal

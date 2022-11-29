@@ -1,5 +1,8 @@
-Package scope and management
-----------------------------
+TODO list for the **nieve** package
+================
+Yves Deville <deville.yves@alpestat.com>
+
+## Package scope and management
 
 \[x\] Use the
 [rchk](https://developer.r-project.org/Blog/public/2019/04/18/common-protect-errors/)
@@ -19,10 +22,10 @@ few examples?
 
 \[ \] Remove any kind of dependence to **Renext**?
 
-\[ \] Should we keep the R implementation for the GEV distribution?
+\[x\] Should we keep the R implementation for the GEV distribution?
+**no**.
 
-Documentation
--------------
+## Documentation
 
 \[x\] Inquire about the **extRemes** package and report it in the table
 of the vignette `nieve.Rnw`. The package does not aim at exporting
@@ -32,12 +35,11 @@ probability functions which are rather seen as being for internal use.
 packages in the vignette.
 
 \[ \] In `GPD2.tex`, recall how can the derivatives of the distribution
-function *F* are related to those of the cumulated hazard *H*.
+function $F$ are related to those of the cumulated hazard $H$.
 
-Computing
----------
+## Computing
 
-\[x\] Implement the Taylor approximation for *ξ* ≈ 0 in the
+\[x\] Implement the Taylor approximation for $\xi \approx 0$ in the
 `PP2poisGP`and `poisGP2PP` (C) functions.
 
 \[ \] Add the *Extended GPD distributions* of Papastathopoulos & Tawn.
@@ -49,11 +51,10 @@ of functions, the derivatives should come by chain rule.
 \[ \] Use a global variable for `eps` in order to share a value across
 functions? Or add a new argument for each function?
 
-Testing and polishing
----------------------
+## Testing and polishing
 
-\[x\] Add tests for the specific case *ξ* ≈ 0 (more precisely,
-*ξ* &lt; *ϵ*) in the transformations `PP2poisGP`and `poisGP2PP`.
+\[x\] Add tests for the specific case $\xi \approx 0$ (more precisely,
+$\xi < \epsilon$) in the transformations `PP2poisGP`and `poisGP2PP`.
 
 \[ \] Add a test checking that the transformation `PP2poisGP`and
 `poisGP2PP` are reciprocal to each other (in both directions).
@@ -85,8 +86,7 @@ incorrect parameter is used (negative `scale`).
 
 \[ \] Test the functions related to the `Exp1`distribution.
 
-Github actions and more
------------------------
+## Github actions and more
 
 \[x\] Add GitHub action to check on the three main platforms.
 

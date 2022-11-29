@@ -17,19 +17,10 @@ dGEV(
   shape = 0,
   log = FALSE,
   deriv = FALSE,
-  hessian = FALSE,
-  impl = c("C", "R")
+  hessian = FALSE
 )
 
-pGEV(
-  q,
-  loc = 0,
-  scale = 1,
-  shape = 0,
-  lower.tail = TRUE,
-  deriv = FALSE,
-  impl = c("C", "R")
-)
+pGEV(q, loc = 0, scale = 1, shape = 0, lower.tail = TRUE, deriv = FALSE)
 
 qGEV(
   p,
@@ -38,8 +29,7 @@ qGEV(
   shape = 0,
   lower.tail = TRUE,
   deriv = FALSE,
-  hessian = FALSE,
-  impl = c("C", "R")
+  hessian = FALSE
 )
 
 rGEV(n, loc = 0, scale = 1, shape = 0)
@@ -72,10 +62,6 @@ returned as a \code{"hessian"} attribute of the result. This is a
 numeric array with dimension \code{c(n, 3, 3)} where \code{n} is
 the length of the first argument, i.e. \code{x}, \code{p} or
 depending on the function.}
-
-\item{impl}{Character. Choose between a R and a C
-implementation. The second one should be faster but less checks
-have been done on it for now.}
 
 \item{lower.tail}{Logical; if \code{TRUE} (default), probabilities
 are \eqn{\textrm{Pr}[X \leq x]}{Pr[X <= x]}, otherwise,
@@ -112,13 +98,13 @@ Each of the probability function normally requires two
     != 0} and one for the zero-shape case \eqn{\xi = 0}. However
     the non-zero shape formulas lead to numerical instabilities
     near \eqn{\xi = 0}, especially for the derivatives
-    w.r.t. \eqn{\xi}. This can create problem in optimisation
-    tasks. To avoid this, in the C implementation a Taylor
-    expansion w.r.t. \eqn{\xi} is used for \eqn{|\xi| < \epsilon}
-    for a small positive \eqn{\epsilon}.  The expansion has order
-    \eqn{2} for the functions (log-density, distribution and
-    quantile), order \eqn{1} for their first-order derivatives and
-    order \eqn{0} for the second-order derivatives.
+    w.r.t. \eqn{\xi}. This can create problem in optimization
+    tasks. To avoid this, a Taylor expansion w.r.t. \eqn{\xi} is
+    used for \eqn{|\xi| < \epsilon} for a small positive
+    \eqn{\epsilon}.  The expansion has order \eqn{2} for the
+    functions (log-density, distribution and quantile), order
+    \eqn{1} for their first-order derivatives and order \eqn{0}
+    for the second-order derivatives.
 
     For the \code{d}, \code{p} and \code{q} functions, the GEV
     parameter arguments \code{loc}, \code{scale} and \code{shape}
@@ -129,18 +115,9 @@ Each of the probability function normally requires two
     \code{x} \code{q} or \code{p} and the GEV parameter arguments,
     then the four provided vectors are recycled in order to have
     length \code{n}. The returned vector has length \code{n} and
-    the attributes \code{"gradient"} and \code{"hessian"}, whn
+    the attributes \code{"gradient"} and \code{"hessian"}, when
     computed, are arrays wich dimension: \code{c(1, 3)} and
     \code{c(1, 3, 3)}.
-}
-\note{
-With the R implementation, the gradient and Hessian of the
-    (log) density can be \code{NaN} in the Gumbel case, i.e. when
-    \code{shape} has a small absolute value. This occurs when
-    \eqn{z := (x - \mu) / \sigma} is strongly negative, say \eqn{z
-    < -20} and is due to numeric difficulties in operations
-    involving very small and very large values. This is fixed in
-    the C implementation which should be preferred.
 }
 \examples{
 ti <- 1:10; names(ti) <- 2000 + ti
