@@ -1,6 +1,6 @@
 nieve README
 ================
-Yves Deville <deville.yves@alpestat.com>
+Yves Deville
 
 <!-- badges: start -->
 

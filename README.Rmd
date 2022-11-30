@@ -1,5 +1,5 @@
 ---
-author: "Yves Deville <deville.yves@alpestat.com>"
+author: "Yves Deville"
 title: "nieve README"
 linkcolor: blue
 output: github_document
@@ -12,7 +12,6 @@ output: github_document
 
 
 <img src="inst/images/nieve.png" height = "150" align="center"/>
-
 
 
 # Goals and scope
