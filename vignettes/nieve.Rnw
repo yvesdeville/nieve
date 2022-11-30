@@ -108,7 +108,7 @@ Note that using a shape $\xi$ with $|\xi| \leqslant \text{1e-6}$ is
 quite common in EV analysis because the values of $\xi$ used in
 practice are often quite small, and moreover very small values of
 $\xi$ are often used in the initialization of the Maximum-Likelihood
-(ML) optimisation.
+(ML) optimization.
 
 Let us now see what \pkg{nieve} tells about the derivatives. These can
 be found as attributes of the result returned by the \verb@qGPD2@ function,
@@ -137,7 +137,7 @@ So, no more major departures from the theory can be seen.
 
 Although not yet widespread, the use of the exact formulas for the
 derivatives w.r.t. the parameters can be of great help in the
-optimisation tasks required in EV analysis. These tasks of course
+optimization tasks required in EV analysis. These tasks of course
 involve the ML estimation, but also profile-likelihood inference for
 models with covariates. Differential equations methods can be also
 used to derive confidence intervals. Note that the use of formulas for
@@ -145,7 +145,7 @@ the derivatives is called \textit{symbolic} differentiation and
 differs from \textit{automatic} differentiation as increasingly
 available. However, from the previous analysis it transpires that the
 cure might be worse than the disease.  Unless the derivatives are
-evaluated with great care, they can merely ruin an optimisation in
+evaluated with great care, they can merely ruin an optimization in
 which they are involved, instead of improving it.
 
 Our strategy consists in fixing a small $\epsilon >0$ and use the
@@ -184,7 +184,7 @@ The technical reports provided with \textbf{nieve}:
 \href{https://github.com/yvesdeville/nieve/blob/main/inst/computing/GPD2.pdf}{GPD2.pdf},
 \href{https://github.com/yvesdeville/nieve/blob/main/inst/computing/PoisGP2PP.pdf}{PoisGP2PP.pdf}
 and
-\href{https://github.com/yvesdeville/nieve/blob/main/inst/doc/PP2PoisGP.pdf}{PP2PoisGP.pdf}
+\href{https://github.com/yvesdeville/nieve/blob/main/inst/computing/PP2PoisGP.pdf}{PP2PoisGP.pdf}
 give the exact expressions for the first-order and the second-order
 derivatives of the probability functions w.r.t. the parameters and
 also provide workable approximations for the case $\xi \approx 0$. We
@@ -246,7 +246,7 @@ test is made \textit{elementwise}, meaning that the relative error is
 computed for each element of a gradient vector or Hessian matrix
 ignoring the other elements.
 
-\section{Parameterisations for Peaks Over Threshold models}
+\section{Parameterizations for Peaks Over Threshold models}
 
 Peaks Over Threshold (POT) models are very popular in EV
 analysis. These models relate to marked Poisson Process: at each time
@@ -303,7 +303,7 @@ product of the time interval $(0, \, t^\dag)$ by the $y$-interval
 $(u, \, \infty)$ where the threshold~$u$ is such that
 $\sigma_w^\star + \xi^\star [y - \mu_w^\star] > 0$, we get the same
 model as the Poisson-GP on $(0, \, t^\dag)$, up to a
-re-parameterisation. As an interesting feature of the PP parameter
+re-parameterization. As an interesting feature of the PP parameter
 $\bs{\theta}^\star_w$, it does not depend on the threshold~$u$. It
 relates to the distribution of the maximum $M$ of the marks $Y_i$
 corresponding to a time interval with duration~$w$, see
@@ -351,7 +351,7 @@ $\xi^\star = 0$.
 \begin{figure}
   \centering
   \includegraphics[width=0.8\textwidth]{images/TwoParameterisationsC.pdf}
-  \caption{\sf \small Two parameterisations for POT models.}
+  \caption{\sf \small Two parameterizations for POT models.}
 \end{figure}
 
 When a vector $\m{x}$ of covariates can be used, two different kinds
@@ -365,7 +365,7 @@ frameworks. Moreover, parametric Poisson-GP models relate to a
 specific threshold since the same form of link can not persist when
 the threshold is changed. Remind also that the threshold should in
 general depend on the covariates.  Anyway, for non-stationary models
-it is often useful to transform one of the two parameterisations into
+it is often useful to transform one of the two parameterizations into
 the other. If a Poisson-GP model is used, we may be interested in the
 GEV reference distribution conditional on a given value $\m{x}$. When
 instead a PP model is used, it may be useful to investigate the
@@ -405,7 +405,7 @@ columns $\xi = 0$. Each strategy is briefly discussed.
 \begin{enumerate}
   
 \item \fbox{NT} Use only the formula for $\xi \neq 0$ i.e., {``do
-    nothing''}.  In practice, an optimisation or sampling algorithm
+    nothing''}.  In practice, an optimization or sampling algorithm
   will never come to the case $\xi = 0$ \textit{exactly} and this can
   only happen when the user gives this value e.g., as an initial
   value.  There will be some numerical problems when $\xi$ is very
@@ -450,7 +450,7 @@ are more recent. See the CRAN Task View on Extreme Value Analysis
 EV. Also it is worth mentioning that the \pkg{extRemes}
 package~\citep{pack_extRemes} optionally uses the exact gradient of
 the log-likelihood for models with GEV and GP margins but the
-derivatives are coded (in R) only for internal use in optimisation
+derivatives are coded (in R) only for internal use in optimization
 tasks.
 
 \begin{table}
