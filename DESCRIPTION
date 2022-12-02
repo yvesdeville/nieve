@@ -9,9 +9,14 @@ Authors@R:
              email = "deville.yves@alpestat.com",
 	     comment = c(ORCID = "0000-0002-1233-488X")))
 Maintainer: Yves Deville <deville.yves@alpestat.com>
-Description: Provides utility functions and objects for Extreme Value Analysis,
-    including some probability functions.
-License: BSD_3_clause + file LICENSE
+Description: Provides utility functions and objects for Extreme Value
+    Analysis. These include probability functions with their exact
+    derivatives w.r.t. the parameters that can be used for estimation
+    and inference, even with censored observations. The
+    transformations exchanging the two parameterizations of Peaks Over
+    Threshold (POT) models: Poisson-GP and Point-Process are also
+    provided with their derivatives.
+License: GPL (>= 2)
 Suggests: 
     testthat,
     numDeriv,
