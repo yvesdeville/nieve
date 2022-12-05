@@ -115,8 +115,8 @@ for (i in 1:n) {
     
     g <- drop(attr(res, "gradient"))
     
-    cond <- (max(abs(g - jacTest)) < 1e-3) ||
-        (max(abs(g - jacTest) / (abs(g) + 1e-9)) < 1e-3)
+    cond <- (max(abs(g - jacTest)) < 1e-3 / PREC) ||
+        (max(abs(g - jacTest) / (abs(g) + 1e-9)) < 1e-3 / PREC)
     
     if (!cond) {
         cat("================= test failure details ================\n")

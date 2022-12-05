@@ -34,13 +34,13 @@ F <- pGEV(x, loc = mu, scale = sigma, shape = xi)
 e <- x - qGEV(p = F, loc = mu, scale = sigma, shape = xi)
 
 test_that(desc = "Consistency of the GEV cdf and quantile funs #1",
-          expect_lt(max(abs(e)), 1e-10))
+          expect_lt(max(abs(e)), 1e-10 / PREC))
 
 p <- runif(n)
 q <- qGEV(p, loc = mu, scale = sigma, shape = xi)
 e <- p - pGEV(q, loc = mu, scale = sigma, shape = xi)
 test_that(desc = "Consistency of the GEV cdf and quantile funs #2",
-          expect_lt(max(abs(e)), 1e-10))
+          expect_lt(max(abs(e)), 1e-10 / PREC))
 
 ## ==========================================================================
 ## check that the GEV density and distribution functions are
@@ -65,7 +65,7 @@ for (xi in c(-0.2, -0.1, -1e-4, -1e-7, 0.0, 1e-7, 1e-4, 0.1, 0.2)) {
     e <- fval - (F(x + eps) - F(x - eps)) / 2 / eps
     
     test_that(desc = "Consistency of the GEV cdf density funs",
-              expect_lt(max(abs(e)), 1e-6))
+              expect_lt(max(abs(e)), 1e-6 / PREC))
 }
 
 
@@ -128,8 +128,8 @@ for (nm in names(funs)) {
         Jnum <- jacobian(func = f, x = theta0)
         J <- attr(fval, "gradient")
         
-        cond <- (max(abs(J - Jnum)) < 4e-4) ||
-            (max(abs(J - Jnum) / (abs(J) + 1e-9)) < 4e-3)
+        cond <- (max(abs(J - Jnum)) < 4e-4 / PREC) ||
+            (max(abs(J - Jnum) / (abs(J) + 1e-9)) < 4e-3 / PREC)
         
         test_that(desc = sprintf("Gradient of the GEV %s", nm),
                   expect_true(cond))
@@ -142,8 +142,8 @@ for (nm in names(funs)) {
         if (hessian) {
             Hnum <- hessian(func = f, x = theta0)
             H <- drop(attr(fval, "hessian"))
-            cond <- (max(abs(H - Hnum)) < 4e-2) ||
-                (max(abs(H - Hnum) / (abs(H) + 1e-9)) < 4e-2)
+            cond <- (max(abs(H - Hnum)) < 4e-2 / PREC) ||
+                (max(abs(H - Hnum) / (abs(H) + 1e-9)) < 4e-2 / PREC)
             if (is.na(cond) || !cond) {
                 cat(sprintf("testing hessian xi = %6.3f\n", xi))
                 print(H)

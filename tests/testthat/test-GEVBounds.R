@@ -63,11 +63,11 @@ densOut <- dGEV(xout, loc = mu, scale = sigma, shape = xi,
                 deriv = deriv, hessian = hessian)
 
 test_that(desc = sprintf("density outside of the support"),
-          expect_true(all(densOut < 1e-16)))
+          expect_true(all(densOut < 1e-16 / PREC)))
 
 test_that(desc = sprintf("gradient of the density outside of the support"),                      
-          expect_true(all(abs(attr(densOut, "gradient")) < 1e-16)))
+          expect_true(all(abs(attr(densOut, "gradient")) < 1e-16 / PREC)))
 
 test_that(desc = sprintf("Hessian of the density outside of the support"),  
-          expect_true(all(abs(attr(densOut, "hessian")) < 1e-16)))
+          expect_true(all(abs(attr(densOut, "hessian")) < 1e-16 / PREC)))
           

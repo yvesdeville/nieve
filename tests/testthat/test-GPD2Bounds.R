@@ -22,10 +22,10 @@ hessian <- TRUE
 lowerEP <- 0.0
 if (xi > 0) {
     upperEP <- Inf
-    xout <- seq(from = lowerEP - 3 * sigma, to = lowerEP, length = 100)
+    xout <- seq(from = lowerEP - 3.0 * sigma, to = lowerEP, length.out = 100)
 } else if (xi < 0) {
     upperEP <- - sigma / xi
-    xout <- seq(from = upperEP, to =  upperEP + 3 * sigma, length = 100)    
+    xout <- seq(from = upperEP, to =  upperEP + 3.0 * sigma, length.out = 100)    
 }
 
 quant0 <-  qGPD2(0.0, scale = sigma, shape = xi,
@@ -60,11 +60,11 @@ densOut <- dGPD2(xout, scale = sigma, shape = xi,
                                      deriv = deriv, hessian = hessian)
 
 test_that(desc = sprintf("density outside of the support"),
-          expect_true(all(densOut < 1e-16)))
+          expect_true(all(densOut < 1e-12 / PREC)))
 
 test_that(desc = sprintf("gradient of the density outside of the support"),                      
-          expect_true(all(abs(attr(densOut, "gradient")) < 1e-16)))
+          expect_true(all(abs(attr(densOut, "gradient")) < 1e-12 / PREC)))
 
 test_that(desc = sprintf("Hessian of the density outside of the support"),  
-          expect_true(all(abs(attr(densOut, "hessian")) < 1e-16)))
+          expect_true(all(abs(attr(densOut, "hessian")) < 1e-12 / PREC)))
           

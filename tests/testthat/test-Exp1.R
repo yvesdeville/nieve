@@ -23,13 +23,13 @@ F <- pexp1(x, scale = sigma)
 e <- x - qexp1(p = F, scale = sigma)
 
 test_that(desc = "Consistency of the Exp1 cdf and quantile funs #1",
-          expect_lt(max(abs(e)), 1e-10))
+          expect_lt(max(abs(e)), 1e-10 / PREC))
 
 p <- runif(n)
 q <- qexp1(p, scale = sigma)
 e <- p - pexp1(q, scale = sigma)
 test_that(desc = "Consistency of the Exp1 cdf and quantile funs #2",
-          expect_lt(max(abs(e)), 1e-10))
+          expect_lt(max(abs(e)), 1e-10 / PREC))
 
 ## =============================================================================
 ## check that the Exp1 density and distribution functions are
@@ -48,10 +48,10 @@ F <- function(x) {
 
 fval <- dexp1(x, scale = sigma)
 eps <- 1e-6
-e <- fval - (F(x + eps) - F(x - eps)) / 2 / eps
+e <- fval - (F(x + eps) - F(x - eps)) / 2.0 / eps
 
 test_that(desc = "Consistency of the exp1 cdf density funs",
-          expect_lt(max(abs(e)), 1e-6))
+          expect_lt(max(abs(e)), 1e-6 / PREC))
 
 ## =============================================================================
 ## check the gradient and the Hessian of the log-density 
@@ -77,7 +77,7 @@ Hnum <- hessian(func = f, x = theta0)
 Jcomp <- attr(fval, "gradient")
 errGrad <- abs(Jcomp - Jnum)
 errGradRel <- abs(errGrad / Jnum) 
-test <- (errGrad <- 1e-5) | (errGradRel < 1e-4)
+test <- (errGrad <- 1e-5 / PREC) | (errGradRel < 1e-4 / PREC)
 
 test_that(desc = "Gradient of the exp1 log-density",
           expect_true(all(test)))
@@ -85,7 +85,7 @@ test_that(desc = "Gradient of the exp1 log-density",
 Hcomp <- drop(attr(fval, "gradient"))
 errHess <- abs(Hcomp - Hnum)
 errHessRel <- abs(errHess / Hnum) 
-test <- (errHess <- 1e-4) | (errHessRel < 1e-3)
+test <- (errHess <- 1e-4 / PREC) | (errHessRel < 1e-3 / PREC)
 
 test_that(desc = "Hessian of the exp1 log-density",
           expect_true(all(test)))
@@ -113,7 +113,7 @@ H2 <- apply(attr(fval, "hessian"), MARGIN = 2, FUN = sum)
 H2num <- hessian(func = f2, x = theta, y = y)
 
 test_that(desc = "Hessian of the exp1 log-lik",
-            expect_lt(max(abs(H2 - H2num)), 1e-3))
+            expect_lt(max(abs(H2 - H2num)), 1e-3 / PREC))
 
 
 ## ==========================================================================
@@ -138,7 +138,7 @@ Hnum <- hessian(func = f, x = theta0)
 Jcomp <- attr(fval, "gradient")
 errGrad <- abs(Jcomp - Jnum)
 errGradRel <- abs(errGrad / Jnum) 
-test <- (errGrad <- 1e-5) | (errGradRel < 1e-4)
+test <- (errGrad <- 1e-5 / PREC) | (errGradRel < 1e-4 / PREC)
 
 test_that(desc = "Gradient of the Exp1 quantile",
           expect_true(all(test)))
@@ -146,11 +146,10 @@ test_that(desc = "Gradient of the Exp1 quantile",
 Hcomp <- drop(attr(fval, "gradient"))
 errHess <- abs(Hcomp - Hnum)
 errHessRel <- abs(errHess / Hnum) 
-test <- (errHess <- 1e-4) | (errHessRel < 1e-3)
+test <- (errHess <- 1e-4 / PREC) | (errHessRel < 1e-3 / PREC)
 
 test_that(desc = "Hessian of the Exp1 quantile",
           expect_true(all(test)))
-
     
 ## ==========================================================================
 ## Check the gradient and the Hessian of the distribution function
@@ -173,7 +172,7 @@ Hnum <- hessian(func = f, x = theta0)
 
 errGrad <- abs(Jcomp - Jnum)
 errGradRel <- abs(errGrad / Jnum) 
-test <- (errGrad <- 1e-5) | (errGradRel < 1e-4)
+test <- (errGrad <- 1e-5 / PREC) | (errGradRel < 1e-4 / PREC)
 
 test_that(desc = "Gradient of the Exp1 dist function",
           expect_true(all(test)))
@@ -181,7 +180,7 @@ test_that(desc = "Gradient of the Exp1 dist function",
 Hcomp <- drop(attr(fval, "gradient"))
 errHess <- abs(Hcomp - Hnum)
 errHessRel <- abs(errHess / Hnum) 
-test <- (errHess <- 1e-4) | (errHessRel < 1e-3)
+test <- (errHess <- 1e-4 / PREC) | (errHessRel < 1e-3 / PREC)
 
 test_that(desc = "Hessian of the Exp1 dist function",
           expect_true(all(test)))

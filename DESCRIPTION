@@ -1,7 +1,7 @@
 Package: nieve
 Type: Package
 Title: Miscellaneous Utilities for Extreme Value Analysis
-Version: 0.1.0
+Version: 0.1.1
 Authors@R:
     c(person(given = "Yves",
              family = "Deville",

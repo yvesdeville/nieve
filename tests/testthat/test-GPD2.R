@@ -24,13 +24,13 @@ F <- pGPD2(x, scale = sigma, shape = xi)
 e <- x - qGPD2(p = F, scale = sigma, shape = xi)
 
 test_that(desc = "Consistency of the GPD2 cdf and quantile funs #1",
-          expect_lt(max(abs(e)), 1e-10))
+          expect_lt(max(abs(e)), 1e-10 / PREC))
 
 p <- runif(n)
 q <- qGPD2(p, scale = sigma, shape = xi)
 e <- p - pGPD2(q, scale = sigma, shape = xi)
 test_that(desc = "Consistency of the GPD2 cdf and quantile funs #2",
-          expect_lt(max(abs(e)), 1e-10))
+          expect_lt(max(abs(e)), 1e-10 / PREC))
 
 ## =============================================================================
 ## check that the GPD2 density and distribution functions are
@@ -54,7 +54,7 @@ for (xi in c(-0.1, -1e-4, 0.0, 1e-4, 0.1)) {
     e <- fval - (F(x + eps) - F(x - eps)) / 2 / eps
     
     test_that(desc = "Consistency of the GPD2 cdf density funs",
-              expect_lt(max(abs(e)), 1e-6))
+              expect_lt(max(abs(e)), 1e-6 / PREC))
 }
 
 
@@ -87,7 +87,7 @@ for (xi in c(-0.2, -0.1, -1e-3, -1e-4, 0.0, 1e-4, 0.1, 0.2)) {
     Jcomp <- attr(fval, "gradient")
     errGrad <- abs(Jcomp - Jnum)
     errGradRel <- abs(errGrad / Jnum) 
-    test <- (errGrad <- 1e-5) | (errGradRel < 1e-4)
+    test <- (errGrad <- 1e-5 / PREC) | (errGradRel < 1e-4 / PREC)
     
     test_that(desc = sprintf("Gradient of the GPD2 log-density for xi = %7.5f",
                              xi),
@@ -96,7 +96,7 @@ for (xi in c(-0.2, -0.1, -1e-3, -1e-4, 0.0, 1e-4, 0.1, 0.2)) {
     Hcomp <- drop(attr(fval, "gradient"))
     errHess <- abs(Hcomp - Hnum)
     errHessRel <- abs(errHess / Hnum) 
-    test <- (errHess <- 1e-4) | (errHessRel < 1e-3)
+    test <- (errHess <- 1e-4 / PREC) | (errHessRel < 3e-3 / PREC)
     
     test_that(desc = sprintf("Hessian of the GPD2 log-density for xi = %7.5f",
                              xi),
@@ -127,7 +127,7 @@ H2 <- apply(attr(fval, "hessian"), MARGIN = c(2, 3), FUN = sum)
 H2num <- hessian(func = f2, x = theta, y = y)
 
 test_that(desc = "Hessian of the GPD2 log-lik",
-            expect_lt(max(abs(H2 - H2num)), 1e-3))
+            expect_lt(max(abs(H2 - H2num)), 1e-2 / PREC))
 
 
 ## ==========================================================================
@@ -155,7 +155,7 @@ for (xi in c(-0.2, -0.1, -1e-3, -1e-4, 0.0, 1e-4, 0.1, 0.2)) {
     Jcomp <- attr(fval, "gradient")
     errGrad <- abs(Jcomp - Jnum)
     errGradRel <- abs(errGrad / Jnum) 
-    test <- (errGrad <- 1e-5) | (errGradRel < 1e-4)
+    test <- (errGrad <- 1e-5 / PREC) | (errGradRel < 1e-4 / PREC)
     
     test_that(desc = sprintf("Gradient of the GPD2 quantile for xi = %7.5f",
                              xi),
@@ -164,7 +164,7 @@ for (xi in c(-0.2, -0.1, -1e-3, -1e-4, 0.0, 1e-4, 0.1, 0.2)) {
     Hcomp <- drop(attr(fval, "gradient"))
     errHess <- abs(Hcomp - Hnum)
     errHessRel <- abs(errHess / Hnum) 
-    test <- (errHess <- 1e-4) | (errHessRel < 1e-3)
+    test <- (errHess <- 1e-4 / PREC) | (errHessRel < 1e-3 / PREC)
     
     test_that(desc = sprintf("Hessian of the GPD2 quantile for xi = %7.5f",
                              xi),
@@ -194,7 +194,7 @@ for (xi in c(-0.2, -0.1, -1e-3, -1e-4, 0.0, 1e-4, 0.1, 0.2)) {
 
     errGrad <- abs(Jcomp - Jnum)
     errGradRel <- abs(errGrad / Jnum) 
-    test <- (errGrad <- 1e-5) | (errGradRel < 1e-4)
+    test <- (errGrad <- 1e-5 / PREC) | (errGradRel < 1e-4 / PREC)
     
     test_that(desc = sprintf("Gradient of the GPD2 dist function for xi = %7.5f",
                              xi),
@@ -203,7 +203,7 @@ for (xi in c(-0.2, -0.1, -1e-3, -1e-4, 0.0, 1e-4, 0.1, 0.2)) {
     Hcomp <- drop(attr(fval, "gradient"))
     errHess <- abs(Hcomp - Hnum)
     errHessRel <- abs(errHess / Hnum) 
-    test <- (errHess <- 1e-4) | (errHessRel < 1e-3)
+    test <- (errHess <- 1e-3 / PREC) | (errHessRel < 1e-2 / PREC)
     
     test_that(desc = sprintf("Hessian of the GPD2 dist function for xi = %7.5f",
                              xi),
@@ -227,11 +227,11 @@ Hnum <- hessian(func = f, x = theta0)
 ## print(attr(fval, "hessian")[1, , ])
 
 test_that(desc = "Gradient of the GPD2 distribution function shape == 0",
-            expect_lt(max(abs(attr(fval, "gradient") - Jnum)), 1e-6))
+            expect_lt(max(abs(attr(fval, "gradient") - Jnum)), 1e-6 / PREC))
 
 test_that(desc = "Hessian of the GPD2 distribution function shape == 0",
             expect_lt(max(abs(drop(attr(fval, "hessian")) - Hnum)),
-                      1e-3))
+                      1e-3 / PREC))
 
 ## ==========================================================================
 ## Check that the quantile function works correcly when p = 0.0 and p
