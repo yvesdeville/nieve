@@ -4,4 +4,4 @@ library(testthat)
 ## prevent the problems met with CRAN checks running on some
 ## plaforms such as 'macos-arm64'.
 
-PREC <- 0.1
+PREC <- 0.05

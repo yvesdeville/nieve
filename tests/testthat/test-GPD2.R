@@ -99,10 +99,12 @@ for (xi in c(-0.2, -0.1, -1e-3, -1e-4, 0.0, 1e-4, 0.1, 0.2)) {
     test <- (errHess <- 1e-4 / PREC) | (errHessRel < 3e-3 / PREC)
     
     test_that(desc = sprintf("Hessian of the GPD2 log-density for xi = %7.5f",
-                             xi),
-              expect_true(all(test)))
+                             xi), {
+                                 testthat::skip_on_cran()
+                                 expect_true(all(test))
+                             })
 }
-    
+
 ## =============================================================================
 ## check that the Hessian of the log-likelihood is OK
 ## =============================================================================
@@ -126,9 +128,10 @@ fval <- dGPD2(x = y, scale = sigma, shape = xi, log = TRUE,
 H2 <- apply(attr(fval, "hessian"), MARGIN = c(2, 3), FUN = sum)
 H2num <- hessian(func = f2, x = theta, y = y)
 
-test_that(desc = "Hessian of the GPD2 log-lik",
-            expect_lt(max(abs(H2 - H2num)), 1e-2 / PREC))
-
+test_that(desc = "Hessian of the GPD2 log-lik", {
+    testthat::skip_on_cran()
+    expect_lt(max(abs(H2 - H2num)), 1e-2 / PREC)
+})
 
 ## ==========================================================================
 ## Check the gradient and the Hessian of the quantile function
@@ -319,4 +322,4 @@ for (logVal in c(TRUE, FALSE)) {
                   expect_equal(dval1[1:nt], rep(densVal, nt)))
     }
 }
-        
+   
