@@ -80,4 +80,4 @@ suitable syntax for `install_github`, see the **devtools** package
 documentation.
 
 Alternatively you can Clone the repository using `git clone`, and then
-build and install
+build and install.

@@ -38,7 +38,7 @@ jobs:
           sudo apt-get install libcurl4-openssl-dev
 
       - name: Set up R ${{ matrix.r-version }}
-        uses: r-lib/actions/setup-r@f57f1301a053485946083d7a45022b278929a78a
+        uses: r-lib/actions/setup-r@v3
         with:
           r-version: ${{ matrix.r-version }}
 
