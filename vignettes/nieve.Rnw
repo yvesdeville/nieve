@@ -301,7 +301,7 @@ more details.
 If we take the observation region for the PP model as being the
 product of the time interval $(0, \, t^\dag)$ by the $y$-interval
 $(u, \, \infty)$ where the threshold~$u$ is such that
-$\sigma_w^\star + \xi^\star [y - \mu_w^\star] > 0$, we get the same
+$\sigma_w^\star + \xi^\star [u - \mu_w^\star] > 0$, we get the same
 model as the Poisson-GP on $(0, \, t^\dag)$, up to a
 re-parameterization. As an interesting feature of the PP parameter
 $\bs{\theta}^\star_w$, it does not depend on the threshold~$u$. It
