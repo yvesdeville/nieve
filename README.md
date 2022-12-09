@@ -55,6 +55,12 @@ for more details.
 Note that **nieve** has no special relation with the famous package
 **snow**:)
 
+# News
+
+See the
+[NEWS.md](https://github.com/yvesdeville/nieve/blob/main/NEWs.md) file
+or (after install) use `news(package = "nieve")`.
+
 # Installation
 
 ### From CRAN

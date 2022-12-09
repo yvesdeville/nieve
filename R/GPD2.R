@@ -17,10 +17,10 @@
 ##' Distribution (GPD)
 ##' 
 ##' @param scale Scale parameter. Numeric vector with suitable length,
-##' see \bold{Details}.
+##' see \bold{Details}. Can not contain no-finite value.
 ##'
 ##' @param shape Shape parameter. Numeric vector with suitable length,
-##' see \bold{Details}.
+##' see \bold{Details}. Can not contain non-finite value.
 ##'
 ##' @param log Logical; if \code{TRUE}, densities \code{p} are
 ##' returned as \code{log(p)}.
@@ -94,7 +94,11 @@
 dGPD2 <- function(x, scale = 1.0, shape = 0.0,
                   log = FALSE,
                   deriv = FALSE, hessian = FALSE) {
-    
+
+    if (!all(is.finite(scale)) || !all(is.finite(shape))) {
+        stop("GPD2 parameters must be finite (non NA)")
+    }
+        
     if (hessian && !deriv) {
         stop("'hessian' can be TRUE only when 'gradient' is TRUE")
     }
@@ -107,19 +111,21 @@ dGPD2 <- function(x, scale = 1.0, shape = 0.0,
                  as.integer(deriv),
                  as.integer(hessian))
     
-    n <- length(res)
+    names(res) <- names(x)
+    
     if (deriv) {
+        n <- length(res)
         nm2 <- c("scale", "shape")
         attr(res, "gradient") <-
             array(attr(res, "gradient"),
                   dim = c(n, 2L),
-                  dimnames = list(rownames(x), nm2))
+                  dimnames = list(names(x), nm2))
         
         if (hessian) {
             attr(res, "hessian") <-
                 array(attr(res, "hessian"),
                       dim = c(n, 2L, 2L),
-                      dimnames = list(rownames(x), nm2, nm2))
+                      dimnames = list(names(x), nm2, nm2))
         }
         
     }
@@ -130,9 +136,12 @@ dGPD2 <- function(x, scale = 1.0, shape = 0.0,
 
 ##' @rdname GPD2
 ##' @export
-pGPD2 <- function (q, scale = 1.0, shape = 0.0, lower.tail = TRUE,
-                   deriv = FALSE, hessian = FALSE) {
-    
+pGPD2 <- function(q, scale = 1.0, shape = 0.0, lower.tail = TRUE,
+                  deriv = FALSE, hessian = FALSE) {
+
+    if (!all(is.finite(scale)) || !all(is.finite(shape))) {
+        stop("GPD2 parameters must be finite (non NA)")
+    }
     if (hessian && !deriv) {
         stop("'hessian' can be TRUE only when 'gradient' is TRUE")
     }
@@ -145,18 +154,20 @@ pGPD2 <- function (q, scale = 1.0, shape = 0.0, lower.tail = TRUE,
                  as.integer(deriv),
                  as.integer(hessian))
     
-    n <- length(res)
+    names(res) <- names(q)
+  
     if (deriv) {
+        n <- length(res)
         nm2 <- c("scale", "shape")
         attr(res, "gradient") <-
             array(attr(res, "gradient"),
                   dim = c(n, 2L),
-                  dimnames = list(rownames(q), c("scale", "shape")))
+                  dimnames = list(names(q), c("scale", "shape")))
         if (hessian) {
             attr(res, "hessian") <-
                 array(attr(res, "hessian"),
                       dim = c(n, 2L, 2L),
-                      dimnames = list(rownames(q), nm2, nm2))
+                      dimnames = list(names(q), nm2, nm2))
         }
     }
     return(res)
@@ -165,9 +176,13 @@ pGPD2 <- function (q, scale = 1.0, shape = 0.0, lower.tail = TRUE,
 
 ##' @rdname GPD2
 ##' @export
-qGPD2 <- function (p, scale = 1.0, shape = 0.0, lower.tail = TRUE,
-                   deriv = FALSE, hessian = FALSE) {
+qGPD2 <- function(p, scale = 1.0, shape = 0.0, lower.tail = TRUE,
+                  deriv = FALSE, hessian = FALSE) {
     
+    if (!all(is.finite(scale)) || !all(is.finite(shape))) {
+        stop("GPD2 parameters must be finite (non NA)")
+    }
+
     if (hessian && !deriv) {
         stop("'hessian' can be TRUE only when 'gradient' is TRUE")
     }
@@ -182,20 +197,22 @@ qGPD2 <- function (p, scale = 1.0, shape = 0.0, lower.tail = TRUE,
                  as.integer(lower.tail),
                  as.integer(deriv),
                  as.integer(hessian))
+
+    names(res) <- names(p)
     
-    n <- length(res)
     if (deriv) {
+        n <- length(res)
         nm2 <- c("scale", "shape")
         attr(res, "gradient") <-
             array(attr(res, "gradient"),
                   dim = c(n, 2L),
-                  dimnames = list(rownames(p), nm2))
+                  dimnames = list(names(p), nm2))
         
         if (hessian) {
             attr(res, "hessian") <-
                 array(attr(res, "hessian"),
                       dim = c(n, 2L, 2L),
-                      dimnames = list(rownames(p), nm2, nm2))
+                      dimnames = list(names(p), nm2, nm2))
         }
     }
     return(res)   
@@ -205,13 +222,10 @@ qGPD2 <- function (p, scale = 1.0, shape = 0.0, lower.tail = TRUE,
 ##' @rdname GPD2
 ##' @importFrom stats runif
 ##' @export
-rGPD2 <- function (n, scale = 1.0, shape = 0.0) {
-    
-    if (any(is.na(scale)) || any(scale <= 0) || !all(is.finite(scale))) {
-        stop("'scale' must contain non-NA finite and positive numeric values")  
-    }
-    if (any(is.na(shape)) || !all(is.finite(shape))) {
-        stop("'shape' must contain non-NA finite numeric values")  
+rGPD2 <- function(n, scale = 1.0, shape = 0.0) {
+
+    if (!all(is.finite(scale)) || !all(is.finite(shape))) {
+        stop("GPD2 parameters must be finite (non NA)")
     }
 
     pGPD2(runif(n), scale = scale, shape = shape)

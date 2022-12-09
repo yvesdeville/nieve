@@ -38,13 +38,13 @@ rGEV(n, loc = 0, scale = 1, shape = 0)
 \item{x, q}{Vector of quantiles.}
 
 \item{loc}{Location parameter. Numeric vector with suitable
-length, see \bold{Details}.}
+length, see \bold{Details}. Can not contain no-finite value.}
 
 \item{scale}{Scale parameter. Numeric vector with suitable length,
-see \bold{Details}.}
+see \bold{Details}. Can not contain no-finite value.}
 
 \item{shape}{Shape parameter. Numeric vector with suitable length,
-see \bold{Details}.}
+see \bold{Details}. Can not contain non-finite value.}
 
 \item{log}{Logical; if \code{TRUE}, densities \code{p} are
 returned as \code{log(p)}.}

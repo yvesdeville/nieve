@@ -22,7 +22,7 @@
 ##' Random Generation for the One-Parameter Exponential Distribution
 ##' 
 ##' @param scale Scale parameter. Numeric vector with suitable length,
-##' see \bold{Details}.
+##' see \bold{Details}. Can not contain non-finite value.
 ##'
 ##' @param log Logical; if \code{TRUE}, densities \code{p} are
 ##' returned as \code{log(p)}.
@@ -91,7 +91,10 @@
 ##' pexp1(c(1.1, 1.7), scale = 1, deriv = TRUE, hessian = TRUE)
 dexp1 <- function(x, scale = 1.0, log = FALSE,
                   deriv = FALSE, hessian = FALSE) {
-
+    
+    if (!all(is.finite(scale))) {
+        stop("exp1 parameter must be finite (non NA)")
+    }
     if (hessian && !deriv) {
         stop("'hessian' can be TRUE only when 'gradient' is TRUE")
     }
@@ -102,20 +105,22 @@ dexp1 <- function(x, scale = 1.0, log = FALSE,
                  as.integer(log),
                  as.integer(deriv),
                  as.integer(hessian))
-    
-    n <- length(res)
+
+    names(res) <- names(x)
+  
     if (deriv) {
+        n <- length(res)
         nm1 <- c("scale")
         attr(res, "gradient") <-
             array(attr(res, "gradient"),
                   dim = c(n, 1L),
-                  dimnames = list(rownames(x), nm1))
+                  dimnames = list(names(x), nm1))
         
         if (hessian) {
             attr(res, "hessian") <-
                 array(attr(res, "hessian"),
                       dim = c(n, 1L, 1L),
-                      dimnames = list(rownames(x), nm1, nm1))
+                      dimnames = list(names(x), nm1, nm1))
         }
         
     }
@@ -127,9 +132,12 @@ dexp1 <- function(x, scale = 1.0, log = FALSE,
 ##' @name Exp1
 ##' @rdname Exp1
 ##' @export
-pexp1 <- function (q, scale = 1.0, lower.tail = TRUE,
-                   deriv = FALSE, hessian = FALSE) {
-    
+pexp1 <- function(q, scale = 1.0, lower.tail = TRUE,
+                  deriv = FALSE, hessian = FALSE) {
+
+    if (!all(is.finite(scale))) {
+        stop("exp1 parameter must be finite (non NA)")
+    }
     if (hessian && !deriv) {
         stop("'hessian' can be TRUE only when 'gradient' is TRUE")
     }
@@ -141,18 +149,20 @@ pexp1 <- function (q, scale = 1.0, lower.tail = TRUE,
                  as.integer(deriv),
                  as.integer(hessian))
     
-    n <- length(res)
+    names(res) <- names(q)
+    
     if (deriv) {
+        n <- length(res)
         nm1 <- c("scale")
         attr(res, "gradient") <-
             array(attr(res, "gradient"),
                   dim = c(n, 1L),
-                  dimnames = list(rownames(q), c("scale")))
+                  dimnames = list(names(q), c("scale")))
         if (hessian) {
             attr(res, "hessian") <-
                 array(attr(res, "hessian"),
                       dim = c(n, 1L, 1L),
-                      dimnames = list(rownames(q), nm1, nm1))
+                      dimnames = list(names(q), nm1, nm1))
         }
     }
     return(res)
@@ -162,9 +172,12 @@ pexp1 <- function (q, scale = 1.0, lower.tail = TRUE,
 ##' @name Exp1
 ##' @rdname Exp1
 ##' @export
-qexp1 <- function (p, scale = 1.0, lower.tail = TRUE,
-                   deriv = FALSE, hessian = FALSE) {
-    
+qexp1 <- function(p, scale = 1.0, lower.tail = TRUE,
+                  deriv = FALSE, hessian = FALSE) {
+
+    if (!all(is.finite(scale))) {
+        stop("exp1 parameter must be finite (non NA)")
+    }
     if (hessian && !deriv) {
         stop("'hessian' can be TRUE only when 'gradient' is TRUE")
     }
@@ -179,19 +192,21 @@ qexp1 <- function (p, scale = 1.0, lower.tail = TRUE,
                  as.integer(deriv),
                  as.integer(hessian))
     
-    n <- length(res)
+    names(res) <- names(p)
+    
     if (deriv) {
+        n <- length(res)
         nm1 <- c("scale")
         attr(res, "gradient") <-
             array(attr(res, "gradient"),
                   dim = c(n, 1L),
-                  dimnames = list(rownames(p), nm1))
+                  dimnames = list(names(p), nm1))
         
         if (hessian) {
             attr(res, "hessian") <-
                 array(attr(res, "hessian"),
                       dim = c(n, 1L, 1L),
-                      dimnames = list(rownames(p), nm1, nm1))
+                      dimnames = list(names(p), nm1, nm1))
         }
     }
     return(res)   
@@ -201,12 +216,12 @@ qexp1 <- function (p, scale = 1.0, lower.tail = TRUE,
 ##' @name Exp1
 ##' @rdname Exp1
 ##' @export
-rexp1 <- function (n, scale = 1.0) {
+rexp1 <- function(n, scale = 1.0) {
     
-    if (any(is.na(scale)) || any(scale <= 0) || !all(is.finite(scale))) {
-        stop("'scale' must contain non-NA finite and positive numeric values")  
+    if (!all(is.finite(scale))) {
+        stop("exp1 parameter must be finite (non NA)")
     }
-
+    
     pexp1(runif(n), scale = scale)
     
 }

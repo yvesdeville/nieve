@@ -77,13 +77,13 @@
 ##' Distribution
 ##'
 ##' @param loc Location parameter. Numeric vector with suitable
-##' length, see \bold{Details}.
+##' length, see \bold{Details}. Can not contain no-finite value.
 ##'
 ##' @param scale Scale parameter. Numeric vector with suitable length,
-##' see \bold{Details}.
+##' see \bold{Details}. Can not contain no-finite value.
 ##'
 ##' @param shape Shape parameter. Numeric vector with suitable length,
-##' see \bold{Details}.
+##' see \bold{Details}. Can not contain non-finite value.
 ##'
 ##' @param log Logical; if \code{TRUE}, densities \code{p} are
 ##' returned as \code{log(p)}.
@@ -159,6 +159,10 @@ dGEV <- function(x, loc = 0.0, scale = 1.0, shape = 0.0, log = FALSE,
     if (hessian && !deriv) {
         stop("'hessian' can be TRUE only when 'deriv' is equal to TRUE")
     }
+
+    if (!all(is.finite(loc)) || !all(is.finite(scale)) || !all(is.finite(shape))) {
+        stop("GEV parameters must be finite (non NA)")
+    }
     
     res <- .Call(Call_dGEV,
                  as.double(x),
@@ -169,19 +173,21 @@ dGEV <- function(x, loc = 0.0, scale = 1.0, shape = 0.0, log = FALSE,
                  as.integer(deriv),
                  as.integer(hessian))
     
-    n <- length(res)
+    names(res) <- names(x)
+    
     if (deriv) {
         
+        n <- length(res)
         attr(res, "gradient") <-
             array(attr(res, "gradient"),
                   dim = c(n, 3L),
-                  dimnames = list(rownames(x), c("loc", "scale", "shape")))
+                  dimnames = list(names(x), c("loc", "scale", "shape")))
         
         if (hessian) {
             attr(res, "hessian") <-
                 array(attr(res, "hessian"),
                       dim = c(n, 3L, 3L),
-                      dimnames = list(rownames(x),
+                      dimnames = list(names(x),
                                       c("loc", "scale", "shape"),
                                       c("loc", "scale", "shape")))
         }
@@ -196,7 +202,11 @@ dGEV <- function(x, loc = 0.0, scale = 1.0, shape = 0.0, log = FALSE,
 ##' @export
 pGEV <- function(q, loc = 0, scale = 1, shape = 0, lower.tail = TRUE,
                  deriv = FALSE) {
-        
+
+    if (!all(is.finite(loc)) || !all(is.finite(scale)) || !all(is.finite(shape))) {
+        stop("GEV parameters must be finite (non NA)")
+    }
+
     res <- .Call(Call_pGEV,
                  as.double(q),
                  as.double(loc),
@@ -205,13 +215,14 @@ pGEV <- function(q, loc = 0, scale = 1, shape = 0, lower.tail = TRUE,
                  as.integer(lower.tail),
                  as.integer(deriv))
     
-    n <- length(res)
+    names(res) <- names(q)
     
     if (deriv) {
+        n <- length(res)
         attr(res, "gradient") <-
             array(attr(res, "gradient"),
                   dim = c(n, 3),
-                  dimnames = list(NULL, c("loc", "scale", "shape")))
+                  dimnames = list(names(q), c("loc", "scale", "shape")))
     }
     
     res
@@ -223,13 +234,15 @@ pGEV <- function(q, loc = 0, scale = 1, shape = 0, lower.tail = TRUE,
 qGEV <- function(p, loc = 0.0, scale = 1.0, shape = 0.0, lower.tail = TRUE,
                  deriv = FALSE, hessian = FALSE) {
 
+    if (!all(is.finite(loc)) || !all(is.finite(scale)) || !all(is.finite(shape))) {
+        stop("GEV parameters must be finite (non NA)")
+    }
     if (min(p, na.rm = TRUE) < 0.0 || max(p, na.rm = TRUE) > 1.0) 
         stop("`p' must contain probabilities in [0, 1]")
  
     if (hessian && !deriv) {
         stop("'hessian' can be TRUE only when 'deriv' is equal to TRUE")
     }
-    
     
     res <- .Call(Call_qGEV,
                  as.double(p),
@@ -240,18 +253,20 @@ qGEV <- function(p, loc = 0.0, scale = 1.0, shape = 0.0, lower.tail = TRUE,
                  as.integer(deriv),
                  as.integer(hessian))
     
-    n <- length(res)
+    names(res) <- names(p)
+    
     if (deriv) {
+        n <- length(res)
         attr(res, "gradient") <-
             array(attr(res, "gradient"),
                   dim = c(n, 3),
-                  dimnames = list(rownames(p), c("loc", "scale", "shape")))
+                  dimnames = list(names(p), c("loc", "scale", "shape")))
         
         if (hessian) {
             attr(res, "hessian") <-
                 array(attr(res, "hessian"),
                       dim = c(n, 3L, 3L),
-                      dimnames = list(rownames(p),
+                      dimnames = list(names(p),
                                       c("loc", "scale", "shape"),
                                       c("loc", "scale", "shape")))
         }
@@ -264,47 +279,11 @@ qGEV <- function(p, loc = 0.0, scale = 1.0, shape = 0.0, lower.tail = TRUE,
 ##' @rdname GEV
 ##' @export
 rGEV <- function(n, loc = 0.0, scale = 1.0, shape = 0.0) {
-    
-    if (any(is.na(loc)) || !all(is.finite(loc))) {
-        stop("'loc' must contain non-NA finite numeric values")  
-    }
-    if (any(is.na(scale)) || any(scale <= 0) || !all(is.finite(scale))) {
-        stop("'scale' must contain non-NA finite and positive numeric values")  
-    }
-    if (any(is.na(shape)) || !all(is.finite(shape))) {
-        stop("'shape' must contain non-NA finite numeric values")  
+
+    if (!all(is.finite(loc)) || !all(is.finite(scale)) || !all(is.finite(shape))) {
+        stop("GEV parameters must be finite (non NA)")
     }
     
-    L <- .reshapeGEV(x = 1.0, loc = loc, scale = scale, shape = shape)
-    
-    r <- array(NA, dim = c(L$n, n),
-               dimnames = list(L$nms, paste("sim", 1:n, sep = "")) )
-    
-    loc <- array(L$loc, dim = c(L$n, n))
-    scale <- array(L$scale, dim = c(L$n, n))
-    shape <- array(L$shape, dim = c(L$n, n))
-    
-    ## Gumbel xi = 0.0
-    ind <- (abs(L$shape) < 1e-6)
-    if (any(ind)) {
-        nl <- sum(ind)
-        n_ind <- nl * n
-        U <- array(runif(n_ind), dim = c(nl, n))
-        r[ind, ] <- loc[ind, drop = FALSE] - scale[ind, drop = FALSE] *
-            log(-log(U))
-    }
-    
-    ## non-Gumbel xi != 0.0
-    ind <- (abs(L$shape) >= 1e-6)
-    if (any(ind)) {
-        nl <- sum(ind)
-        n_ind <- nl * n
-        U <- array(runif(n_ind), dim = c(nl, n))
-        U <- -log(U)
-        r[ind, ] <- loc[ind, drop = FALSE] +
-            scale[ind, drop = FALSE] * (U^(-shape[ind, , drop = FALSE]) - 1.0) /
-                shape[ind, drop = FALSE]
-    }
-    r
+    pGEV(runif(n), loc = loc, scale = scale, shape = shape)
 }
 
