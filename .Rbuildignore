@@ -5,6 +5,7 @@
 ^TODO.Rmd
 ^TODO.md
 ^TODO.pdf
+^Install.*$
 ^doc/.*\.tex$
 ^vignettes/nieve.pdf
 ^vignettes/Computing.*$

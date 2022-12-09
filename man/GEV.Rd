@@ -32,7 +32,7 @@ qGEV(
   hessian = FALSE
 )
 
-rGEV(n, loc = 0, scale = 1, shape = 0)
+rGEV(n, loc = 0, scale = 1, shape = 0, array)
 }
 \arguments{
 \item{x, q}{Vector of quantiles.}
@@ -51,17 +51,17 @@ returned as \code{log(p)}.}
 
 \item{deriv}{Logical. If \code{TRUE}, the gradient of each
 computed value w.r.t. the parameter vector is computed, and
-returned as a \code{"gradient"} attribute of the result. This is a
-numeric array with dimension \code{c(n, 3)} where \code{n} is the
-length of the first argument, i.e. \code{x}, \code{p} or \code{q}
-depending on the function.}
+returned as a \code{"gradient"} attribute of the result. This
+is a numeric array with dimension \code{c(n, 3)} where
+\code{n} is the length of the first argument, i.e. \code{x},
+\code{p} or \code{q} depending on the function.}
 
 \item{hessian}{Logical. If \code{TRUE}, the Hessian of each
 computed value w.r.t. the parameter vector is computed, and
-returned as a \code{"hessian"} attribute of the result. This is a
-numeric array with dimension \code{c(n, 3, 3)} where \code{n} is
-the length of the first argument, i.e. \code{x}, \code{p} or
-depending on the function.}
+returned as a \code{"hessian"} attribute of the result. This
+is a numeric array with dimension \code{c(n, 3, 3)} where
+\code{n} is the length of the first argument, i.e. \code{x},
+\code{p} or depending on the function.}
 
 \item{lower.tail}{Logical; if \code{TRUE} (default), probabilities
 are \eqn{\textrm{Pr}[X \leq x]}{Pr[X <= x]}, otherwise,
@@ -70,6 +70,18 @@ are \eqn{\textrm{Pr}[X \leq x]}{Pr[X <= x]}, otherwise,
 \item{p}{Vector of probabilities.}
 
 \item{n}{Sample size.}
+
+\item{array}{Logical. If \code{TRUE}, the simulated values form a
+numeric matrix with \code{n} columns and \code{np} rows where
+\code{np} is the number of GEV parameter values. This number
+is obtained by recycling the three GEV parameters vectors to a
+common length, so \code{np} is the maximum of the lengths of
+the parameter vectors \code{loc}, \code{scale},
+\code{shape}. This option is useful to cope with so-called
+\emph{non-stationary} models with GEV margins. See
+\bold{Examples}. The default value is \code{TRUE} if any of
+the vectors \code{loc}, \code{scale} and \code{shape} has
+length \code{> 1} and \code{FALSE} otherwise.}
 }
 \value{
 A numeric vector with length \code{n} as described in the

@@ -7,7 +7,8 @@
 \alias{qexp1}
 \alias{rexp1}
 \title{Density, Distribution Function, Quantile Function and
-Random Generation for the One-Parameter Exponential Distribution}
+    Random Generation for the One-Parameter Exponential
+    Distribution}
 \usage{
 dexp1(x, scale = 1, log = FALSE, deriv = FALSE, hessian = FALSE)
 
@@ -15,7 +16,7 @@ pexp1(q, scale = 1, lower.tail = TRUE, deriv = FALSE, hessian = FALSE)
 
 qexp1(p, scale = 1, lower.tail = TRUE, deriv = FALSE, hessian = FALSE)
 
-rexp1(n, scale = 1)
+rexp1(n, scale = 1, array)
 }
 \arguments{
 \item{x, q}{Vector of quantiles.}
@@ -28,17 +29,17 @@ returned as \code{log(p)}.}
 
 \item{deriv}{Logical. If \code{TRUE}, the gradient of each
 computed value w.r.t. the parameter vector is computed, and
-returned as a \code{"gradient"} attribute of the result. This is a
-numeric array with dimension \code{c(n, 1)} where \code{n} is the
-length of the first argument, i.e. \code{x}, \code{p} or \code{q},
-depending on the function.}
+returned as a \code{"gradient"} attribute of the result. This
+is a numeric array with dimension \code{c(n, 1)} where
+\code{n} is the length of the first argument, i.e. \code{x},
+\code{p} or \code{q}, depending on the function.}
 
 \item{hessian}{Logical. If \code{TRUE}, the Hessian of each
 computed value w.r.t. the parameter vector is computed, and
-returned as a \code{"hessian"} attribute of the result. This is a
-numeric array with dimension \code{c(n, 1, 1)} where \code{n} is
-the length of the first argument, i.e. \code{x}, \code{p} or
-depending on the function.}
+returned as a \code{"hessian"} attribute of the result. This
+is a numeric array with dimension \code{c(n, 1, 1)} where
+\code{n} is the length of the first argument, i.e. \code{x},
+\code{p} or depending on the function.}
 
 \item{lower.tail}{Logical; if \code{TRUE} (default), probabilities
 are \eqn{\textrm{Pr}[X \leq x]}{Pr[X <= x]}, otherwise,
@@ -47,6 +48,14 @@ are \eqn{\textrm{Pr}[X \leq x]}{Pr[X <= x]}, otherwise,
 \item{p}{Vector of probabilities.}
 
 \item{n}{Sample size.}
+
+\item{array}{Logical. If \code{TRUE}, the simulated values form a
+numeric matrix with \code{n} columns and \code{np} rows where
+\code{np} is the number of exponential parameter values i.e.,
+the length of \code{scale}. This option is useful to cope with
+so-called \emph{non-stationary} models with exponential
+margins. See \bold{Examples}. The default value is
+\code{length(scale) > 1}.}
 }
 \value{
 A numeric vector with its length equal to the maximum of
@@ -97,6 +106,14 @@ pexp1(1:4, scale = 1:4, lower.tail = FALSE) - exp(-1.0)
 
 ## With gradient and Hessian.
 pexp1(c(1.1, 1.7), scale = 1, deriv = TRUE, hessian = TRUE)
+
+ti <- 1:60; names(ti) <- 2000 + ti
+sigma <- 1.0 + 0.7 * ti
+## simulate 40 paths
+y <- rexp1(n = 40, scale = sigma)
+matplot(ti, y, type = "l", col = "gray", main = "varying scale")
+lines(ti, apply(y, 1, mean))
+
 }
 \seealso{
 The exponential distribution

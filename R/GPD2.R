@@ -1,3 +1,54 @@
+.reshapeGPD2 <- function(x, scale, shape, matrix = FALSE) {
+   
+   n <- length(x)
+   
+   if (n > 1L) {
+       msg <- paste("when 'x' has length n > 1, 'scale' and 'shape'",
+                    " must have length 'n' or 1")
+       if (length(scale) != n) {
+           if (length(scale) != 1L) stop(msg)
+           scale <- rep(scale, n)
+       }
+       if (length(shape) != n) {
+           if (length(shape) != 1L) stop(msg)
+           shape <- rep(shape, n)
+       }
+       nms <- names(x)
+   } else {
+
+       n <- max(c(length(scale), length(shape)))
+       
+       if (n > 1L) {
+           
+           if (((length(scale) > 1L) && (length(scale) < n)) ||
+               ((length(shape) > 1L) && (length(shape) < n)) ) {
+               stop("when 'x' has length 1, the lengths of the non-scalar ",
+                    "elements among 'scale' and 'shape' must be ",
+                    "the same")
+          }
+           x <- rep(x, n)
+           scale <- rep(scale, length.out = n)
+           shape <- rep(shape, length.out = n) 
+      }
+       
+   }
+   
+   if (matrix)  {
+
+       return(cbind("x" = x, "scale" = scale, "shape" = shape))
+      
+   } else {
+
+       if (length(x) > 1L) nms <- names(x)
+       else if (length(scale) > 1L) nms <- names(scale)
+       else if (length(shape) > 1L) nms <- names(shape)
+       else nms <- ""
+       
+       return(list("n" = n, "x" = x,
+                   "scale" = scale, "shape" = shape,
+                   "nms" = nms))
+   }
+}
 
 ## ***********************************************************************
 
@@ -13,31 +64,42 @@
 ##' @aliases pGPD2 qGPD2 rGPD2
 ##' 
 ##' @title Density, Distribution Function, Quantile Function and
-##' Random Generation for the Two-Parameter Generalized Pareto
-##' Distribution (GPD)
+##'     Random Generation for the Two-Parameter Generalized Pareto
+##'     Distribution (GPD)
 ##' 
 ##' @param scale Scale parameter. Numeric vector with suitable length,
-##' see \bold{Details}. Can not contain no-finite value.
+##'     see \bold{Details}. Can not contain no-finite value.
 ##'
 ##' @param shape Shape parameter. Numeric vector with suitable length,
-##' see \bold{Details}. Can not contain non-finite value.
+##'     see \bold{Details}. Can not contain non-finite value.
 ##'
 ##' @param log Logical; if \code{TRUE}, densities \code{p} are
-##' returned as \code{log(p)}.
+##'     returned as \code{log(p)}.
 ##' 
 ##' @param deriv Logical. If \code{TRUE}, the gradient of each
-##' computed value w.r.t. the parameter vector is computed, and
-##' returned as a \code{"gradient"} attribute of the result. This is a
-##' numeric array with dimension \code{c(n, 2)} where \code{n} is the
-##' length of the first argument, i.e. \code{x}, \code{p} or \code{q},
-##' depending on the function.
+##'     computed value w.r.t. the parameter vector is computed, and
+##'     returned as a \code{"gradient"} attribute of the result. This
+##'     is a numeric array with dimension \code{c(n, 2)} where
+##'     \code{n} is the length of the first argument, i.e. \code{x},
+##'     \code{p} or \code{q}, depending on the function.
 ##'
 ##' @param hessian Logical. If \code{TRUE}, the Hessian of each
-##' computed value w.r.t. the parameter vector is computed, and
-##' returned as a \code{"hessian"} attribute of the result. This is a
-##' numeric array with dimension \code{c(n, 2, 2)} where \code{n} is
-##' the length of the first argument, i.e. \code{x}, \code{p} or
-##' depending on the function. 
+##'     computed value w.r.t. the parameter vector is computed, and
+##'     returned as a \code{"hessian"} attribute of the result. This
+##'     is a numeric array with dimension \code{c(n, 2, 2)} where
+##'     \code{n} is the length of the first argument, i.e. \code{x},
+##'     \code{p} or depending on the function.
+##' 
+##' @param array Logical. If \code{TRUE}, the simulated values form a
+##'     numeric matrix with \code{n} columns and \code{np} rows where
+##'     \code{np} is the number of GPD parameter values. This number
+##'     is obtained by recycling the two GPD parameters vectors to a
+##'     common length, so \code{np} is the maximum of the lengths of
+##'     the parameter vectors \code{scale} and \code{shape}. This
+##'     option is useful to cope with so-called \emph{non-stationary}
+##'     models with GPD margins. See \bold{Examples}. The default
+##'     value is \code{TRUE} if any of the vectors \code{scale} and
+##'     \code{shape} has length \code{> 1} and \code{FALSE} otherwise.
 ##'
 ##' @param x,q Vector of quantiles.
 ##'
@@ -91,6 +153,14 @@
 ##'
 ##' ## With gradient and Hessian.
 ##' pGPD2(c(1.1, 1.7), scale = 1, shape = 0, deriv = TRUE, hessian = TRUE)
+##'
+##' ## simulate 40 paths
+##' ti <- 1:20
+##' names(ti) <- 2000 + ti
+##' y <- rGPD2(n = 40, scale = ti, shape = 0.05)
+##' matplot(ti, y, type = "l", col = "gray", main = "varying scale")
+##' lines(ti, apply(y, 1, mean))
+##' 
 dGPD2 <- function(x, scale = 1.0, shape = 0.0,
                   log = FALSE,
                   deriv = FALSE, hessian = FALSE) {
@@ -222,13 +292,37 @@ qGPD2 <- function(p, scale = 1.0, shape = 0.0, lower.tail = TRUE,
 ##' @rdname GPD2
 ##' @importFrom stats runif
 ##' @export
-rGPD2 <- function(n, scale = 1.0, shape = 0.0) {
+rGPD2 <- function(n, scale = 1.0, shape = 0.0, array) {
 
     if (!all(is.finite(scale)) || !all(is.finite(shape))) {
         stop("GPD2 parameters must be finite (non NA)")
     }
 
-    pGPD2(runif(n), scale = scale, shape = shape)
+    if (missing(array)) {
+        array <- max(c(length(scale), length(shape))) > 1L
+    }
     
+    if (array) {
+        
+        ## If 'array' is TRUE we return a matrix having the simulated values
+        ## as its columns
+        L <- .reshapeGPD2(x = 1.0, scale = scale, shape = shape)
+        
+        res <- array(NA, dim = c(L$n, n),
+                     dimnames = list(L$nms, paste("sim", 1:n, sep = "")) )
+        
+        scale <- array(L$scale, dim = c(L$n, n))
+        shape <- array(L$shape, dim = c(L$n, n))
+        
+        nn <- L$n * n
+        res <- array(qGPD2(runif(nn), scale = scale, shape = shape),
+                     dim = c(L$n, n),
+                     dimnames = list(NULL, paste("sim", 1:n, sep = "")))
+        
+    } else {
+        res <- qGPD2(runif(n), scale = scale, shape = shape)
+    }
+
+    res 
 }
 

@@ -89,19 +89,32 @@
 ##' returned as \code{log(p)}.
 ##' 
 ##' @param deriv Logical. If \code{TRUE}, the gradient of each
-##' computed value w.r.t. the parameter vector is computed, and
-##' returned as a \code{"gradient"} attribute of the result. This is a
-##' numeric array with dimension \code{c(n, 3)} where \code{n} is the
-##' length of the first argument, i.e. \code{x}, \code{p} or \code{q}
-##' depending on the function.
+##'     computed value w.r.t. the parameter vector is computed, and
+##'     returned as a \code{"gradient"} attribute of the result. This
+##'     is a numeric array with dimension \code{c(n, 3)} where
+##'     \code{n} is the length of the first argument, i.e. \code{x},
+##'     \code{p} or \code{q} depending on the function.
 ##'
 ##' @param hessian Logical. If \code{TRUE}, the Hessian of each
-##' computed value w.r.t. the parameter vector is computed, and
-##' returned as a \code{"hessian"} attribute of the result. This is a
-##' numeric array with dimension \code{c(n, 3, 3)} where \code{n} is
-##' the length of the first argument, i.e. \code{x}, \code{p} or
-##' depending on the function.
+##'     computed value w.r.t. the parameter vector is computed, and
+##'     returned as a \code{"hessian"} attribute of the result. This
+##'     is a numeric array with dimension \code{c(n, 3, 3)} where
+##'     \code{n} is the length of the first argument, i.e. \code{x},
+##'     \code{p} or depending on the function.
 ##'
+##' @param array Logical. If \code{TRUE}, the simulated values form a
+##'     numeric matrix with \code{n} columns and \code{np} rows where
+##'     \code{np} is the number of GEV parameter values. This number
+##'     is obtained by recycling the three GEV parameters vectors to a
+##'     common length, so \code{np} is the maximum of the lengths of
+##'     the parameter vectors \code{loc}, \code{scale},
+##'     \code{shape}. This option is useful to cope with so-called
+##'     \emph{non-stationary} models with GEV margins. See
+##'     \bold{Examples}. The default value is \code{TRUE} if any of
+##'     the vectors \code{loc}, \code{scale} and \code{shape} has
+##'     length \code{> 1} and \code{FALSE} otherwise.
+##'
+##' 
 ##' @param x,q Vector of quantiles.
 ##'
 ##' @param p Vector of probabilities.
@@ -278,12 +291,39 @@ qGEV <- function(p, loc = 0.0, scale = 1.0, shape = 0.0, lower.tail = TRUE,
 
 ##' @rdname GEV
 ##' @export
-rGEV <- function(n, loc = 0.0, scale = 1.0, shape = 0.0) {
+rGEV <- function(n, loc = 0.0, scale = 1.0, shape = 0.0, array) {
 
     if (!all(is.finite(loc)) || !all(is.finite(scale)) || !all(is.finite(shape))) {
         stop("GEV parameters must be finite (non NA)")
     }
     
-    pGEV(runif(n), loc = loc, scale = scale, shape = shape)
+    if (missing(array)) {
+        array <- max(c(length(loc), length(scale), length(shape))) > 1L
+    }
+    
+    if (array) {
+
+        ## If 'array' is TRUE we return a matrix having the simulated values
+        ## as its columns
+        L <- .reshapeGEV(x = 1.0, loc = loc, scale = scale, shape = shape)
+        
+        res <- array(NA, dim = c(L$n, n),
+                   dimnames = list(L$nms, paste("sim", 1:n, sep = "")) )
+        
+        loc <- array(L$loc, dim = c(L$n, n))
+        scale <- array(L$scale, dim = c(L$n, n))
+        shape <- array(L$shape, dim = c(L$n, n))
+
+        nn <- L$n * n
+        res <- array(qGEV(runif(nn), loc = loc, scale = scale, shape = shape),
+                     dim = c(L$n, n),
+                     dimnames = list(NULL, paste("sim", 1:n, sep = "")))
+        
+    } else {
+        res <- qGEV(runif(n), loc = loc, scale = scale, shape = shape)
+    }
+
+    res 
+    
 }
 

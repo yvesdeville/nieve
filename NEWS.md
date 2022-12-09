@@ -12,6 +12,12 @@
   first argument to the result and the `"gradient"` and `"hessian"`
   attributes. This may be useful when working with non-stationary
   Extreme-Value models.
+  
+- The simulation functions `rGEV`, `rGPD2` and `rexp1` have an `array`
+  argument to use the vectors of parameters in a fashion that is
+  suitable for non-stationary models, then returning a matrix instead
+  of a vector.
+  
 	
 ## Bug fixes
 
