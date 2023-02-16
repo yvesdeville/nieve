@@ -45,7 +45,7 @@
 \section{Probability functions of Extreme-Value distributions}
   
 The probability functions for the Generalized Pareto (GP) and
-Generalized Extreme Value (GEV) distributions \cite{Coles_ISMEV} are
+Generalized Extreme Value (GEV) distributions \citep{Coles_ISMEV} are
 of ubiquitous use in Extreme Value (EV) analysis. These functions
 depend smoothly on the parameters: they are infinitely differentiable
 functions of the parameters. However, these functions are not
@@ -111,14 +111,14 @@ $\xi$ are often used in the initialization of the Maximum-Likelihood
 (ML) optimization.
 
 Let us now see what \pkg{nieve} tells about the derivatives. These can
-be found as attributes of the result returned by the \verb@qGPD2@ function,
-with names \verb@"gradient"@ and \verb@"hessian"@. If
-the formal argument \code{p} is a vector with length \code{n}, the
-attributes are arrays with dimension \code{c(n, p)} and \code{c(n, p, p)}
-where \code{p} stand for the number of parameters, here \code{p = 2}. The
-arrays of derivatives have suitable \verb@dimnames@ hence can be indexed
-which characters as in \verb@H[1 , "scale", "shape"]@ if \verb@H@ is the
-Hessian found in the corresponding attribute.
+be found as attributes of the result returned by the \verb@qGPD2@
+function, with names \verb@"gradient"@ and \verb@"hessian"@. If the
+formal argument \code{p} is a vector with length \code{n}, the
+attributes are arrays with dimension \code{c(n, p)} and \code{c(n, p,
+  p)} where \code{p} stand for the number of parameters, here \code{p
+  = 2}. The arrays of derivatives have suitable \verb@dimnames@ hence
+can be indexed with characters as in \verb@H[1 , "scale", "shape"]@ if
+\verb@H@ is the Hessian found in the corresponding attribute.
 
 <<deriv2, size= "footnotesize">>=
 library(nieve)
@@ -134,11 +134,10 @@ for (xi in xis) {
 \noindent
 So, no more major departures from the theory can be seen. 
 
-
 Although not yet widespread, the use of the exact formulas for the
 derivatives w.r.t. the parameters can be of great help in the
 optimization tasks required in EV analysis. These tasks of course
-involve the ML estimation, but also profile-likelihood inference for
+involve the ML estimation, but also profile likelihood inference for
 models with covariates. Differential equations methods can be also
 used to derive confidence intervals. Note that the use of formulas for
 the derivatives is called \textit{symbolic} differentiation and

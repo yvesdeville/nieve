@@ -63,6 +63,8 @@
 ##'     Bayesian inference. Note also that this function copes with
 ##'     values near zero for the shape parameter: it suitably computes
 ##'     then both the function value and its derivatives.
+##'
+##' @export
 ##' 
 ##' @seealso \code{\link{PP2poisGP}} for the reciprocal
 ##' transformation.

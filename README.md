@@ -58,7 +58,7 @@ Note that **nieve** has no special relation with the famous package
 # News
 
 See the
-[NEWS.md](https://github.com/yvesdeville/nieve/blob/main/NEWs.md) file
+[NEWS.md](https://github.com/yvesdeville/nieve/blob/main/NEWS.md) file
 or (after install) use `news(package = "nieve")`.
 
 # Installation
