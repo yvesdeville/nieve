@@ -115,7 +115,7 @@ be found as attributes of the result returned by the \verb@qGPD2@
 function, with names \verb@"gradient"@ and \verb@"hessian"@. If the
 formal argument \code{p} is a vector with length \code{n}, the
 attributes are arrays with dimension \code{c(n, p)} and \code{c(n, p,
-  p)} where \code{p} stand for the number of parameters, here \code{p
+  p)} where \code{p} stands for the number of parameters, here \code{p
   = 2}. The arrays of derivatives have suitable \verb@dimnames@ hence
 can be indexed with characters as in \verb@H[1 , "scale", "shape"]@ if
 \verb@H@ is the Hessian found in the corresponding attribute.
@@ -128,7 +128,7 @@ for (xi in xis) {
                "ord 1" =  c("lim" = log(pBar)^2 / 2, "der" = attr(x, "gradient")[1, "shape"]),
                "ord 2" = c("lim" = -log(pBar)^3 / 3, "der" = attr(x, "hessian")[1, "shape", "shape"]))
     cat("xi = ", xi, "\n")
-    print(r)
+    print(r) 
 }
 @
 \noindent
