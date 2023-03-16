@@ -30,7 +30,6 @@
 \newcommand{\code}[1]{\texttt{#1}}
 \newcommand{\Gre}[1]{{\color{MonVertF}#1}}
 
-
 \title{\bf \Large \textbf{nieve}: Yet Another Extreme Value package?}
 
 \author{Yves Deville \href{mailto:deville.yves@alpestat.com}%%
