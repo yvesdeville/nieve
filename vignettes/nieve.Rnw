@@ -1,6 +1,7 @@
 \documentclass[11pt]{article}
 
-%\VignetteEngine{knitr::knitr}
+
+% \VignetteEngine{knitr::knitr}
 %\VignetteIndexEntry{The nieve package: Yet Another Extreme Value package?}
 %\VignetteEncoding{UTF-8}
 
