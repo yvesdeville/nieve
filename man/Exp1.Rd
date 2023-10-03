@@ -22,7 +22,7 @@ rexp1(n, scale = 1, array)
 \item{x, q}{Vector of quantiles.}
 
 \item{scale}{Scale parameter. Numeric vector with suitable length,
-see \bold{Details}. Can not contain non-finite value.}
+see \bold{Details}.}
 
 \item{log}{Logical; if \code{TRUE}, densities \code{p} are
 returned as \code{log(p)}.}

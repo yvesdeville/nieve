@@ -103,9 +103,17 @@ SEXP Call_dGPD2(SEXP x,             /*  double                          */
 	   ishape = (++ishape == nshape) ? 0 : ishape,
 	   ++i) {
       
-      if (ISNA(rx[ix]) || (rscale[iscale] <= 0.0)) {
-	
-	rval[i] = NA_REAL;
+      if (!R_FINITE(rx[ix]) || !R_FINITE(rscale[iscale]) || !R_FINITE(rshape[ishape]) ||
+	  (rscale[iscale] <= 0.0)) {
+
+	if ((rx[ix] == R_NegInf) || (rx[ix] == R_PosInf)) {
+	  rval[i] = R_NegInf;
+	  if (!INTEGER(logFlag)[0]) {
+	    rval[i] = exp(rval[i]);
+	  }
+	} else {
+	  rval[i] = NA_REAL;
+	}
 	
 	rgrad[i] = NA_REAL;
 	rgrad[i + n] = NA_REAL;
@@ -279,10 +287,19 @@ SEXP Call_dGPD2(SEXP x,             /*  double                          */
 	   ishape = (++ishape == nshape) ? 0 : ishape,
 	   ++i) {
       
-      if (ISNA(rx[ix]) || (rscale[iscale] <= 0.0)) {
+      if (!R_FINITE(rx[ix]) || !R_FINITE(rscale[iscale]) || !R_FINITE(rshape[ishape]) ||
+	  (rscale[iscale] <= 0.0)) {
 	
-	rval[i] = NA_REAL;
-
+	if ((rx[ix] == R_NegInf) || (rx[ix] == R_PosInf)) {
+	  rval[i] = R_NegInf;
+	  if (!INTEGER(logFlag)[0]) {
+	    rval[i] = exp(rval[i]);
+	  }
+	  
+	} else {
+	  rval[i] = NA_REAL;
+	}
+	
       } else if (rx[ix] < 0.0) {
 	
 	rval[i] = R_NegInf;
@@ -416,9 +433,25 @@ SEXP Call_pGPD2(SEXP q,               /*  double                          */
 	rhess[i + 3 * n] = 0.0;
       }
       
-      if (ISNA(rq[iq]) || (rscale[iscale] <= 0.0)) {
-
-	rval[i] = NA_REAL;
+      if (!R_FINITE(rq[iq]) || !R_FINITE(rscale[iscale]) || !R_FINITE(rshape[ishape]) ||
+	  (rscale[iscale] <= 0.0)) {
+	
+	if (rq[iq] == R_NegInf) {
+	  if (INTEGER(lowerTailFlag)[0]) {
+	    rval[i] = 0.0;
+	  } else {
+	    rval[i] = 1.0;
+	  }
+	} else if (rq[iq] == R_PosInf) {
+	  if (INTEGER(lowerTailFlag)[0]) {
+	    rval[i] = 1.0;
+	  } else {
+	    rval[i] = 0.0;
+	  }
+	} else {
+	  rval[i] = NA_REAL;
+	}
+	
 	rgrad[i] = NA_REAL;
 	rgrad[i + n] = NA_REAL;
 
@@ -599,9 +632,24 @@ SEXP Call_pGPD2(SEXP q,               /*  double                          */
 	   ishape = (++ishape == nshape) ? 0 : ishape,
 	   ++i) {
       
-      if (ISNA(rq[iq]) || (rscale[iscale] <= 0.0)) {
-
-	rval[i] = NA_REAL;
+      if (!R_FINITE(rq[iq]) || !R_FINITE(rscale[iscale]) || !R_FINITE(rshape[ishape]) ||
+	  (rscale[iscale] <= 0.0)) {
+	
+	if (rq[iq] == R_NegInf) {
+	  if (INTEGER(lowerTailFlag)[0]) {
+	    rval[i] = 0.0;
+	  } else {
+	    rval[i] = 1.0;
+	  }
+	} else if (rq[iq] == R_PosInf) {
+	  if (INTEGER(lowerTailFlag)[0]) {
+	    rval[i] = 1.0;
+	  } else {
+	    rval[i] = 0.0;
+	  }
+	} else {
+	  rval[i] = NA_REAL;
+	}
 	
       } else if (((rq[iq] == R_NegInf) && lowerTail) ||
 		 ((rq[iq] == R_PosInf) && !lowerTail)) {
@@ -737,8 +785,10 @@ SEXP Call_qGPD2(SEXP p,               /*  double                          */
 	rhess[i + 3 * n] = 0.0;
 	
       }
-
-      if (ISNA(rp[ip]) || (rscale[iscale] <= 0.0)) {
+      
+      if (ISNA(rp[ip]) || !R_FINITE(rscale[iscale]) || !R_FINITE(rshape[ishape]) ||
+	  (rscale[iscale] <= 0.0)) {
+	
 	// Rprintf("NA case\n");
 
 	rval[i] = NA_REAL;
@@ -884,7 +934,8 @@ SEXP Call_qGPD2(SEXP p,               /*  double                          */
 	   ishape = (++ishape == nshape) ? 0 : ishape,
 	   ++i) {
       
-      if (ISNA(rp[ip]) || (rscale[iscale] <= 0.0)) {
+      if (ISNA(rp[ip]) || !R_FINITE(rscale[iscale]) || !R_FINITE(rshape[ishape]) ||
+	  (rscale[iscale] <= 0.0)) {
 	
 	rval[i] = NA_REAL;
 

@@ -61,7 +61,7 @@
 ##'     Distribution
 ##' 
 ##' @param scale Scale parameter. Numeric vector with suitable length,
-##'     see \bold{Details}. Can not contain non-finite value.
+##'     see \bold{Details}.
 ##'
 ##' @param log Logical; if \code{TRUE}, densities \code{p} are
 ##'     returned as \code{log(p)}.
@@ -147,9 +147,10 @@
 dexp1 <- function(x, scale = 1.0, log = FALSE,
                   deriv = FALSE, hessian = FALSE) {
     
-    if (!all(is.finite(scale))) {
-        stop("exp1 parameter must be finite (non NA)")
-    }
+    ## if (!all(is.finite(scale))) {
+    ##     stop("exp1 parameter must be finite (non NA)")
+    ## }
+    
     if (hessian && !deriv) {
         stop("'hessian' can be TRUE only when 'gradient' is TRUE")
     }
@@ -190,9 +191,10 @@ dexp1 <- function(x, scale = 1.0, log = FALSE,
 pexp1 <- function(q, scale = 1.0, lower.tail = TRUE,
                   deriv = FALSE, hessian = FALSE) {
 
-    if (!all(is.finite(scale))) {
-        stop("exp1 parameter must be finite (non NA)")
-    }
+    ## if (!all(is.finite(scale))) {
+    ##     stop("exp1 parameter must be finite (non NA)")
+    ## }
+    
     if (hessian && !deriv) {
         stop("'hessian' can be TRUE only when 'gradient' is TRUE")
     }
@@ -230,9 +232,10 @@ pexp1 <- function(q, scale = 1.0, lower.tail = TRUE,
 qexp1 <- function(p, scale = 1.0, lower.tail = TRUE,
                   deriv = FALSE, hessian = FALSE) {
 
-    if (!all(is.finite(scale))) {
-        stop("exp1 parameter must be finite (non NA)")
-    }
+    ## if (!all(is.finite(scale))) {
+    ##     stop("exp1 parameter must be finite (non NA)")
+    ## }
+    
     if (hessian && !deriv) {
         stop("'hessian' can be TRUE only when 'gradient' is TRUE")
     }

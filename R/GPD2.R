@@ -68,10 +68,10 @@
 ##'     Distribution (GPD)
 ##' 
 ##' @param scale Scale parameter. Numeric vector with suitable length,
-##'     see \bold{Details}. Can not contain no-finite value.
+##'     see \bold{Details}.
 ##'
 ##' @param shape Shape parameter. Numeric vector with suitable length,
-##'     see \bold{Details}. Can not contain non-finite value.
+##'     see \bold{Details}.
 ##'
 ##' @param log Logical; if \code{TRUE}, densities \code{p} are
 ##'     returned as \code{log(p)}.
@@ -165,9 +165,9 @@ dGPD2 <- function(x, scale = 1.0, shape = 0.0,
                   log = FALSE,
                   deriv = FALSE, hessian = FALSE) {
 
-    if (!all(is.finite(scale)) || !all(is.finite(shape))) {
-        stop("GPD2 parameters must be finite (non NA)")
-    }
+    ## if (!all(is.finite(scale)) || !all(is.finite(shape))) {
+    ##     stop("GPD2 parameters must be finite (non NA)")
+    ## }
         
     if (hessian && !deriv) {
         stop("'hessian' can be TRUE only when 'gradient' is TRUE")
@@ -209,9 +209,10 @@ dGPD2 <- function(x, scale = 1.0, shape = 0.0,
 pGPD2 <- function(q, scale = 1.0, shape = 0.0, lower.tail = TRUE,
                   deriv = FALSE, hessian = FALSE) {
 
-    if (!all(is.finite(scale)) || !all(is.finite(shape))) {
-        stop("GPD2 parameters must be finite (non NA)")
-    }
+    ## if (!all(is.finite(scale)) || !all(is.finite(shape))) {
+    ##     stop("GPD2 parameters must be finite (non NA)")
+    ## }
+    
     if (hessian && !deriv) {
         stop("'hessian' can be TRUE only when 'gradient' is TRUE")
     }
@@ -249,9 +250,9 @@ pGPD2 <- function(q, scale = 1.0, shape = 0.0, lower.tail = TRUE,
 qGPD2 <- function(p, scale = 1.0, shape = 0.0, lower.tail = TRUE,
                   deriv = FALSE, hessian = FALSE) {
     
-    if (!all(is.finite(scale)) || !all(is.finite(shape))) {
-        stop("GPD2 parameters must be finite (non NA)")
-    }
+    ## if (!all(is.finite(scale)) || !all(is.finite(shape))) {
+    ##     stop("GPD2 parameters must be finite (non NA)")
+    ## }
 
     if (hessian && !deriv) {
         stop("'hessian' can be TRUE only when 'gradient' is TRUE")
@@ -294,9 +295,9 @@ qGPD2 <- function(p, scale = 1.0, shape = 0.0, lower.tail = TRUE,
 ##' @export
 rGPD2 <- function(n, scale = 1.0, shape = 0.0, array) {
 
-    if (!all(is.finite(scale)) || !all(is.finite(shape))) {
-        stop("GPD2 parameters must be finite (non NA)")
-    }
+    ## if (!all(is.finite(scale)) || !all(is.finite(shape))) {
+    ##     stop("GPD2 parameters must be finite (non NA)")
+    ## }
 
     if (missing(array)) {
         array <- max(c(length(scale), length(shape))) > 1L

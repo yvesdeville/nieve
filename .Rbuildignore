@@ -7,7 +7,6 @@
 ^TODO.pdf
 ^Install.*$
 ^doc/.*\.tex$
-^vignettes/nieve.pdf
 ^vignettes/Computing.*$
 ^\.github$
 ^codecov\.yml$

@@ -1,4 +1,11 @@
+# Changes in version 0.1.3
 
+## Enhancements
+
+- Non-finite values (hence `NA`s) have been re-allowed in the
+  parameters after some checks.
+  
+  
 # Changes in version 0.1.2
 
 ## Enhancements

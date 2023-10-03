@@ -77,13 +77,13 @@
 ##' Distribution
 ##'
 ##' @param loc Location parameter. Numeric vector with suitable
-##' length, see \bold{Details}. Can not contain no-finite value.
+##' length, see \bold{Details}. 
 ##'
 ##' @param scale Scale parameter. Numeric vector with suitable length,
-##' see \bold{Details}. Can not contain no-finite value.
+##' see \bold{Details}.
 ##'
 ##' @param shape Shape parameter. Numeric vector with suitable length,
-##' see \bold{Details}. Can not contain non-finite value.
+##' see \bold{Details}.
 ##'
 ##' @param log Logical; if \code{TRUE}, densities \code{p} are
 ##' returned as \code{log(p)}.
@@ -173,9 +173,10 @@ dGEV <- function(x, loc = 0.0, scale = 1.0, shape = 0.0, log = FALSE,
         stop("'hessian' can be TRUE only when 'deriv' is equal to TRUE")
     }
 
-    if (!all(is.finite(loc)) || !all(is.finite(scale)) || !all(is.finite(shape))) {
-        stop("GEV parameters must be finite (non NA)")
-    }
+    ## if (!all(is.finite(loc)) || !all(is.finite(scale)) ||
+    ##     !all(is.finite(shape))) {
+    ##     stop("GEV parameters must be finite (non NA)")
+    ## }
     
     res <- .Call(Call_dGEV,
                  as.double(x),
@@ -216,10 +217,11 @@ dGEV <- function(x, loc = 0.0, scale = 1.0, shape = 0.0, log = FALSE,
 pGEV <- function(q, loc = 0, scale = 1, shape = 0, lower.tail = TRUE,
                  deriv = FALSE) {
 
-    if (!all(is.finite(loc)) || !all(is.finite(scale)) || !all(is.finite(shape))) {
-        stop("GEV parameters must be finite (non NA)")
-    }
-
+    ## if (!all(is.finite(loc)) || !all(is.finite(scale)) ||
+    ##     !all(is.finite(shape))) {
+    ##    stop("GEV parameters must be finite (non NA)")
+    ## }
+    
     res <- .Call(Call_pGEV,
                  as.double(q),
                  as.double(loc),
@@ -247,9 +249,10 @@ pGEV <- function(q, loc = 0, scale = 1, shape = 0, lower.tail = TRUE,
 qGEV <- function(p, loc = 0.0, scale = 1.0, shape = 0.0, lower.tail = TRUE,
                  deriv = FALSE, hessian = FALSE) {
 
-    if (!all(is.finite(loc)) || !all(is.finite(scale)) || !all(is.finite(shape))) {
-        stop("GEV parameters must be finite (non NA)")
-    }
+    ## if (!all(is.finite(loc)) || !all(is.finite(scale)) ||
+    ##     !all(is.finite(shape))) {
+    ##     stop("GEV parameters must be finite (non NA)")
+    ## }
     if (min(p, na.rm = TRUE) < 0.0 || max(p, na.rm = TRUE) > 1.0) 
         stop("`p' must contain probabilities in [0, 1]")
  
@@ -293,9 +296,10 @@ qGEV <- function(p, loc = 0.0, scale = 1.0, shape = 0.0, lower.tail = TRUE,
 ##' @export
 rGEV <- function(n, loc = 0.0, scale = 1.0, shape = 0.0, array) {
 
-    if (!all(is.finite(loc)) || !all(is.finite(scale)) || !all(is.finite(shape))) {
-        stop("GEV parameters must be finite (non NA)")
-    }
+    ## if (!all(is.finite(loc)) || !all(is.finite(scale)) ||
+    ##     !all(is.finite(shape))) {
+    ##     stop("GEV parameters must be finite (non NA)")
+    ## }
     
     if (missing(array)) {
         array <- max(c(length(loc), length(scale), length(shape))) > 1L
