@@ -13,10 +13,14 @@
    GOAL Compute the probability functions related to the Generalised
    Extreme Value (GEV) distribution, possibly including the gradient
    and the Hessian (for the density). The implementation in C is
-   faster than a pure R implementation. Unlike some other
-   implementations in existing R packages, NAs are returned when the
-   shape is negative, which can be a desirable behaviour for when
-   unconstrained optimisation is used to maximise the log-likelihood.
+   faster than a pure R implementation. 
+
+   Unlike some other implementations in existing R packages, NA or
+   NaNs are returned when the parameters are unsuitable (e.g. when the
+   scale is negative), which is a desirable behaviour in numerical
+   optimisation tasks such as the log-likelihood maximisation. This
+   behaviour is inspired from that of the classical distributions
+   provided by the stats package.
    =========================================================================== */  
 
 
@@ -106,13 +110,17 @@ SEXP Call_dGEV(SEXP x,             /*  double                          */
       if (!R_FINITE(rx[ix]) || !R_FINITE(rloc[iloc]) || !R_FINITE(rscale[iscale]) ||
 	  !R_FINITE(rshape[ishape]) || (rscale[iscale] <= 0.0)) {
 
+	// Special values. Note that for a NaN, 'ISNA' is true R_IsNA is false.
+	
 	if ((rx[ix] == R_NegInf) || (rx[ix] == R_PosInf)) {
 	  rval[i] = R_NegInf;
 	  if (!INTEGER(logFlag)[0]) {
 	    rval[i] = exp(rval[i]);
 	  }
+	} else if (R_IsNA(rx[ix])) {
+	  rval[i] = R_NaReal;
 	} else {
-	  rval[i] = NA_REAL;
+	  rval[i] = R_NaN;
 	}
 	
 	rgrad[i] = NA_REAL;
@@ -316,8 +324,10 @@ SEXP Call_dGEV(SEXP x,             /*  double                          */
 	  if (!INTEGER(logFlag)[0]) {
 	    rval[i] = exp(rval[i]);
 	  }
+	} else if (R_IsNA(rx[ix])) {
+	  rval[i] = R_NaReal;
 	} else {
-	  rval[i] = NA_REAL;
+	  rval[i] = R_NaN;
 	}
 	
       } else {
@@ -441,10 +451,12 @@ SEXP Call_pGEV(SEXP q,               /*  double                          */
 	  } else {
 	    rval[i] = 0.0;
 	  }
+	} else if (R_IsNA(rq[iq])) {
+	  rval[i] = R_NaReal;
 	} else {
-	  rval[i] = NA_REAL;
+	  rval[i] = R_NaN;
 	}
-	
+      
 	rgrad[i] = NA_REAL;
 	rgrad[i + n] = NA_REAL;
 	rgrad[i + 2 * n] = NA_REAL; 
@@ -549,8 +561,10 @@ SEXP Call_pGEV(SEXP q,               /*  double                          */
 	  } else {
 	    rval[i] = 0.0;
 	  }
+	} else if (R_IsNA(rq[iq])) {
+	  rval[i] = R_NaReal;
 	} else {
-	  rval[i] = NA_REAL;
+	  rval[i] = R_NaN;
 	}
 		
       } else {
@@ -608,7 +622,7 @@ SEXP Call_qGEV(SEXP p,               /*  double                          */
 	       SEXP scale,           /*  double                          */
 	       SEXP shape,           /*  double                          */
 	       SEXP lowerTailFlag,   /*  integer                         */
-	       SEXP derivFlag,        /* integer                          */
+	       SEXP derivFlag,        /* integer                         */
                SEXP hessianFlag) {   /*  integer                         */
  
   int n, np, nloc, nscale, nshape, i, ip, iloc, iscale, ishape, j,

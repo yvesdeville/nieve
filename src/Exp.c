@@ -14,9 +14,14 @@
    Exponential Distribution, possibly including the gradient and the
    Hessian for the density, the cumulative distribution and the
    quantile functions. The implementation in C is faster than a pure R
-   implementation. NAs are returned when the shape is negative, which
-   can be a desirable behaviour for when unconstrained optimization is
-   used to maximize the log-likelihood.
+   implementation. 
+
+   Unlike some other implementations in existing R packages, NA or
+   NaNs are returned when the parameters are unsuitable (e.g. when the
+   scale is negative), which is a desirable behaviour in numerical
+   optimisation tasks such as the log-likelihood maximisation. This
+   behaviour is inspired from that of the classical distributions
+   provided by the stats package.
    =========================================================================== */
 
 /* ==========================================================================
@@ -96,10 +101,12 @@ SEXP Call_dexp1(SEXP x, /*  double                          */
 	  if (!INTEGER(logFlag)[0]) {
 	    rval[i] = exp(rval[i]);
 	  }
+	} else if (R_IsNA(rx[ix])) {
+	  rval[i] = R_NaReal;
 	} else {
-	  rval[i] = NA_REAL;
+	  rval[i] = R_NaN;
 	}
-	
+
 	rgrad[i] = NA_REAL;
 	
 	if (hessian) {
@@ -175,8 +182,10 @@ SEXP Call_dexp1(SEXP x, /*  double                          */
 	  if (!INTEGER(logFlag)[0]) {
 	    rval[i] = exp(rval[i]);
 	  }
+	} else if (R_IsNA(rx[ix])) {
+	  rval[i] = R_NaReal;
 	} else {
-	  rval[i] = NA_REAL;
+	  rval[i] = R_NaN;
 	}
 	
       } else {
@@ -287,10 +296,12 @@ SEXP Call_pexp1(SEXP q,               /*  double                          */
 	  } else {
 	    rval[i] = 0.0;
 	  }
+	} else if (R_IsNA(rq[iq])) {
+	  rval[i] = R_NaReal;
 	} else {
-	  rval[i] = NA_REAL;
+	  rval[i] = R_NaN;
 	}
-
+	
 	rgrad[i] = NA_REAL;
 	
 	if (hessian) {
@@ -360,8 +371,10 @@ SEXP Call_pexp1(SEXP q,               /*  double                          */
 	  } else {
 	    rval[i] = 0.0;
 	  }
+	} else if (R_IsNA(rq[iq])) {
+	  rval[i] = R_NaReal;
 	} else {
-	  rval[i] = NA_REAL;
+	  rval[i] = R_NaN;
 	}
 	
       } else {
