@@ -1,0 +1,351 @@
+---
+   author: "Yves Deville"
+   date: "`r Sys.Date()`"
+   title: "Special Values in Extreme-Value Distributions" 
+   output: 
+      html_document:
+        toc: true
+---
+
+# Probability functions of Extreme-Value distributions
+
+Many R packages define the probability functions (density,
+distribution and quantile) of the Generalised Pareto (GP) and the
+Generalised Extreme Value distribution (GEV). While some packages use
+these functions internally, most of them also export them as well. As
+a result, the R user interested by using such a probability function
+has to choose between the different implementations. The present
+vignette inquires about quite subtle details in the way the functions
+work. In most cases, these details can not be anticipated by reading
+the package documentation.
+
+## Vectorisation
+
+While in most (if not all) of the packages the first argument of the
+probability function is vectorised, this is generally not the case for
+the other arguments representing the parameters (location, scale,
+shape). This constrasts with the classical probability functions
+implemented in the **stats** package, in which the parameter arguments
+are vectorised.
+
+```{r}
+dnorm(1:4, mean = 1:4)
+dnorm(1:4, sd = 1:4)
+```
+
+```{r}
+try(evd::dgev(x = c(1.4, 1.5), shape = c(-0.1, -0.1)))
+try(SpatialExtremes::dgev(x = c(1.4, 1.5), shape = c(-0.1, -0.1)))
+try(mev::dgev(x = c(1.2, 1.3), shape = c(0.2, -0.1)))
+```
+
+A vectorisation w.r.t. the parameter arguments is a plus at least in
+the Bayesian framework when the probability functions have to be
+evaluated using vectors of MCMC iterates for the parameters. Using
+loops coded in R language may then lead to slowly executing code.
+
+
+
+## Non-finite values 
+
+By non-finite values we mean the four special values for a `double`
+`-Inf`, ` Inf`, `NA` and `NaN`. Note that `NA` is used to show a
+missing value whatever be its type, but there are different classes of
+missing values. By default `NA` refers to the logical missing value
+while we will here be concerned by numeric missing values.
+
+```{r}
+x <- NA_real_
+class(x)
+y <- NA
+class(y)
+class(Inf)
+class(-Inf)
+class(NaN)
+``` 
+
+### Non-finite values in the first argument
+
+Most probability functions from EV packages accept non-finite values
+in their first arguments, with a few exceptions
+```{r, POT-dgpd-error}
+try(POT::dgpd(x = c(0, Inf, NA), scale = 1))
+```
+### Non-finite values in the parameter arguments
+
+As for non-finite values for the parameter arguments, only a few
+packages allow this possibility in a consistent way. Beside **nieve**,
+the **texmex** package seems to be the sole package both for the
+density and the distribution functions.
+
+For some uses, this feature can be important because the density and the
+distributions functions are often used to define a log-likelihood
+function that has to be maximised numerically. By experience we know
+that the optimisation may have to evaluate the objective at a vector
+of parameters embeding non-finite values, without compromising an
+eventual convergence. Moreover, it is a desirable feature of an
+optimisation routine to allow the evaluation of the objective or
+constraint at such vector.  The `stats::optim` routine allows this
+when used with `method = "BFGS"`, ant this is a very popular
+choice. Optimisation routines from the **nloptr** package allow the
+parameter to take non-finite values both in the objective and in the
+constraint function, if any. Of course the log-likelihood could catch
+non-finite values before calling the probability function(s), but this
+is an extra pain and may slow down the estimation
+
+### "Classical" behaviour for non-finite values
+
+Remind of how the probability function of the classical distribution
+in the **stats** package work.
+
+- The first argument of the density, distribution of quantile function
+  is a vector in which some elements can be non-finite without casting
+  any error or warning. In the corresponding returned vector, an input
+  value `NA` (resp. `NaN`) will produce an output value `NA`
+  (resp. `NaN`). An infinite value `-Inf` (resp. `Inf`) correspond to:
+  an output value `0` (resp. `0`) for the density function, an output
+  value `0` (resp. `1`) for the distribution function and `NaN`
+  (resp. `NaN`) for the quantile function.
+  
+- When the first argument `p` of the quantile function contains a
+  value `< 0.` or ` > 1.` a warning is cast and the corresponding
+  output value is `NaN`. When `p` is `0.` (resp.  `1.`), the
+  corresponding output value is the lower (resp. upper) end-point
+  of the distribution be it finite or not.
+  
+- The parameter arguments can be vectors and some elements in these be
+  non-finite without resulting in an error. An input value `NA`
+  (resp. `NaN`) will produce an output value `NA` (resp. `NaN`).  When
+  an input value is `-Inf` or `Inf` the corresponding value will
+  usually be `NaN`. Yet it can be a finite value in some cases
+  as in `dnorm(1.3, mean = Inf)` which returns `r  dnorm(1.3, mean = Inf)`.
+
+- When incorrect values are given in a parameter argument such as 
+  a negative value for a scale argument, the corresponding output value 
+  is `NaN`.
+
+# Extreme-Value packages
+
+For a number of Extreme-Values packages we evaluate the results given
+by the density function for their two-parameter GP and for their
+three-parameter GEV distributions if any. Note that each row in a
+table corresponds to a call using vectorised w.r.t. thte first
+argument (`x` for a density, `q` for a distribution and `p` for a
+quantile). So an error must be considered as holding for a full row.
+
+## Findings
+
+Our findings are as follows.
+
+- For all packages the quantile function `q` casts an error when the
+  vector given as probability argument contains non-finite
+  values. This behaviour differs from that of the quantile
+  function for classical probability functions.
+
+- In the packages **evd**, **`POT`** and **SpatialExtremes**, the GPD
+  density unduly casts an error when the shape is `0.0` and `x` is a
+  vector containing non-finite values. This may be considered as a
+  bug.
+
+- Most packages do not cope with non-finite values for the parameters
+  as the classical distribution functions do. For some packages the
+  behaviour is not consistent between the two distributions or between
+  the density and the distribution functions for a same distribution.
+
+
+```{r init, echo=FALSE} 
+library(nieve)
+library(data.table)
+
+Pars <- list("GEV" = c("loc", "scale", "shape"),
+             "GPD2"= c("scale", "shape"))
+
+ProbFuns <- list("d" = list(name = "density", arg = "x"),
+                 "p" = list(name = "distribution", arg = "q"),
+                 "q" = list(name = "quantile", arg = "p"))
+
+ArgValues <- list("GEV" = list(d = c(1.4, -Inf, Inf, NA, NaN),
+                               p = c(1.5, -Inf, Inf, NA, NaN),
+                               q = c(-0.1, 0.0, 0.5, 1.0, 1.1, -Inf, Inf, NA, NaN),
+                               loc = c(0.0, - Inf, Inf, NA, NaN)),
+                  "GPD2" = list(d = c(1.4, -Inf, Inf, NA, NaN),
+                                p = c(1.5, -Inf, Inf, NA, NaN),
+                                q = c(-0.1, 0.0, 0.5, 1.0, 1.1, -Inf, Inf, NA, NaN)))
+## Describe the values of the parameters to be used.
+ParValues <- list("GEV" = list(loc = c(0.0, - Inf, Inf, NA, NaN),
+                               scale = c(1.0, -1.0, 0.0, - Inf, Inf, NA, NaN),
+                               shape = c(-0.4, 0.0, 0.5, - Inf, Inf, NA, NaN)),
+                  "GPD2" = list(scale = c(1.0, -1.0, 0.0, - Inf, Inf, NA, NaN),
+                                shape = c(-0.4, 0.0, 0.5, - Inf, Inf, NA, NaN)))
+
+Altern <- list("nieve-GEV" = list(nieve = "GEV",
+                                  Suff = "GEV",
+                                  Pnm = c(loc = "loc",
+                                          scale = "scale",
+                                          shape = "shape")),
+               "nieve-GPD2" = list(nieve = "GPD2",
+                                   Suff = "GPD2",
+                                   Pnm = c(scale = "scale",
+                                           shape = "shape")),
+               "mev-GEV" = list(nieve = "GEV",
+                                Suff = "gev",
+                                Pnm = c(loc = "loc",
+                                        scale = "scale",
+                                        shape = "shape")),
+               "mev-GPD2" = list(nieve = "GPD2",
+                                 Suff = "gp",
+                                 Pnm = c(scale = "scale",
+                                         shape = "shape")),
+               "evd-GEV" = list(nieve = "GEV",
+                                Suff = "gev",
+                                Pnm = c(loc = "loc",
+                                        scale = "scale",
+                                        shape = "shape")),
+               "evd-GPD2" = list(nieve = "GPD2",
+                                 Suff = "gpd",
+                                 Pnm = c(scale = "scale",
+                                        shape = "shape")),
+               "POT-GPD2" = list(nieve = "GPD2",
+                                 Suff = "gpd",
+                                 Pnm = c(scale = "scale", shape = "shape")),
+               "SpatialExtremes-GPD2" = list(nieve = "GPD2",
+                                             Suff = "gpd",
+                                             Pnm = c(scale = "scale",
+                                                     shape = "shape")),
+               "SpatialExtremes-GEV" = list(nieve = "GEV",
+                                           Suff = "gev",
+                                           Pnm = c(loc = "loc",
+                                                   scale = "scale",
+                                                   shape = "shape")),
+               "tea-GPD2" = list(nieve = "GPD2",
+                                 Suff = "gpd",
+                                 Pnm = c(scale = "scale",
+                                         shape = "shape")),
+               "texmex-GEV" = list(nieve = "GEV",
+                                 Suff = "gev",
+                                 Pnm = c(loc = "mu",
+                                         scale = "sigma",
+                                         shape = "xi"),
+                                 Def = c(mu = 0.0, sigma = 1.0, xi = 0.0)),
+               "texmex-GPD2" = list(nieve = "GPD2",
+                                 Suff = "gpd",
+                                 Pnm = c(scale = "sigma", shape = "xi"),
+                                 Def = c(sigma = 1.0, xi = 0.0)),
+               "extRemes-GPD2" = list(nieve = "GPD2",
+                                      Suff = "evd",
+                                      Pnm = c(scale = "scale", shape = "shape"),
+                                      Extra = list(type = "GP")),
+               "extRemes-GEV" = list(nieve = "GEV",
+                                     Suff = "evd",
+                                     Pnm = c(loc = "loc",
+                                             scale = "scale",
+                                             shape = "shape"),
+                                     Extra = list(type = "GEV")),
+               "revdbayes-GPD2" = list(nieve = "GPD2",
+                                       Suff = "gp",
+                                       Pnm = c(scale = "scale", shape = "shape")),
+               "revdbayes-GEV" = list(nieve = "GEV",
+                                      Suff = "gev",
+                                      Pnm = c(loc = "loc",
+                                             scale = "scale",
+                                             shape = "shape"))
+)
+
+A <- list()
+for (i in seq_along(Altern)) {
+    A[[i]] <- data.frame(nieve = Altern[[i]]$nieve,
+                         Pkg = gsub("-.*$", "", names(Altern)[i]),
+                         Suff = Altern[[i]]$Suff,
+                         Pnm = Altern[[i]]$Pnm)
+}
+AlternDf <- rbindlist(A)
+AlternDf <- within(AlternDf, Pkg <- factor(Pkg))
+
+testNonFinite <- function(pkg, print = 0) {
+
+    LMat <- list()
+    
+    if (print) {
+        cat("\n======================\n")
+        cat("Package: ", pkg, "\n")
+        cat("======================\n")
+    }
+
+    dfi <- subset(AlternDf, Pkg == pkg)
+    dfi <- dfi[order(dfi$nieve), ]
+    
+    for (distName in unique(dfi$nieve)) {
+        ind <- (dfi$nieve == distName)
+        if (print) {
+            cat("\no Dist: ", distName, "\n")
+        }
+        pns <- Pars[[distName]]
+        for (pn in pns) {
+            if (print) {
+                cat("\n  - Parameter:   ", pn, "\n")
+            }
+            pv <- ParValues[[distName]][[pn]]
+            if (print) {
+                cat("    Par. values:   ", pv, "\n")
+            }
+            for (pf in c("d", "p", "q")) {
+                ev <- ArgValues[[distName]][[pf]]
+                if (print) {
+                    cat("\n      Probability function:   ", pf, "\n")
+                }
+                ## cat("         First argument:   ", format(ev), "\n")
+                funAlt <- get(paste0(pf, dfi[ind, ]$Suff[1]),
+                              mode = "function",
+                              envir = getNamespace(pkg))
+                ## cat("         Results:   \n")
+                mat <- matrix("", nrow = length(pv), ncol = length(ev))
+                rownames(mat) <- paste("       ", pn, "=", format(pv, trim = TRUE))
+                colnames(mat) <- paste(ProbFuns[[pf]]$arg, "=", format(ev, trim = TRUE))
+                
+                for (j in seq_along(pv)) {
+                    
+                    ## Do we need an ersatz for default values?
+                    LI <- Altern[[paste(pkg, distName, sep = "-")]]
+                    if (!is.null(LI$Def)) {
+                        argAlt <- as.list(LI$Def)
+                        argAlt[LI$Pnm[pn]] <- pv[j]
+                        add <- list(x = ev)
+                        names(add) <- ProbFuns[[pf]]$arg
+                        argAlt <- c(add, argAlt)
+                    } else {
+                        argAlt <- list(ev, pv[j])
+                        names(argAlt) <- c(ProbFuns[[pf]]$arg, pn)
+                    }
+                    
+                    if (!is.null(LI$Extra)) {
+                       argAlt <- c(argAlt, LI$Extra)
+                    }
+                    
+                    resAlt <- try(do.call(funAlt, argAlt), silent = TRUE)
+                    if (!inherits(resAlt, "try-error")) {
+                        res <- paste(format(resAlt))
+                        mat[j, ] <- format(resAlt)
+                    } else {
+                        res <- "ERROR"
+                        mat[j, ] <- "*****"
+                        mat[j, 1] <- "ERROR"
+                    }
+                }
+                LMat[[paste0(pf, distName)]] <- noquote(mat)
+                attr(LMat[[paste0(pf, distName)]], "name") <-
+                    paste0(pkg, "::", pf, dfi[ind, ]$Suff[1])
+            }
+        }
+    }
+    LMat
+}
+```
+
+
+```{r, echo=FALSE, results='asis'}
+src <- lapply(levels(AlternDf$Pkg), function(pkg) {
+    knitr::knit_expand('templates/nonFiniteResults.Rmd')
+})
+res <- knitr::knit_child(text = unlist(src), quiet = TRUE)
+cat(res, sep = '\n')
+```

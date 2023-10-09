@@ -1,0 +1,27 @@
+## Results for package {{pkg}}
+
+```{r res-{{pkg}}, echo=FALSE, message=FALSE, results="asis"}
+cat(sprintf("Package version used: %s\n\n", packageVersion("{{pkg}}")))
+L <- testNonFinite("{{pkg}}")
+nm <- paste0("{{pkg}}", "-dGPD2")
+## print(names(L))
+if (!is.null(L[["dGPD2"]])) {
+    for (fn in c("d", "p", "q")) {
+        nm <- paste0(fn, "GPD2")
+        cat(sprintf("o Equivalent of '%s': '%s'\n",
+                    nm, attr(L[[nm]], "name")))
+        print(knitr::kable(L[[nm]]))
+    }
+}
+if (!is.null(L[["dGEV"]])) {
+    for (fn in c("d", "p", "q")) {
+        nm <- paste0(fn, "GEV")
+        cat(sprintf("o Equivalent of '%s': '%s'\n",
+                    nm, attr(L[[nm]], "name")))
+        print(knitr::kable(L[[nm]]))
+    }
+}
+
+## lapply
+## lapply(L, function(mat) print(knitr::kable(mat)))
+```

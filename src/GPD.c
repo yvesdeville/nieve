@@ -111,9 +111,6 @@ SEXP Call_dGPD2(SEXP x,             /*  double                          */
 
 	if ((rx[ix] == R_NegInf) || (rx[ix] == R_PosInf)) {
 	  rval[i] = R_NegInf;
-	  if (!INTEGER(logFlag)[0]) {
-	    rval[i] = exp(rval[i]);
-	  }
 	} else if (R_IsNA(rx[ix])) {
 	  rval[i] = R_NaReal;
 	} else {
@@ -296,10 +293,7 @@ SEXP Call_dGPD2(SEXP x,             /*  double                          */
 	  (rscale[iscale] <= 0.0)) {
 	
 	if ((rx[ix] == R_NegInf) || (rx[ix] == R_PosInf)) {
-	  rval[i] = R_NegInf;
-	  if (!INTEGER(logFlag)[0]) {
-	    rval[i] = exp(rval[i]);
-	  }
+	    rval[i] = R_NegInf;
 	} else if (R_IsNA(rx[ix])) {
 	  rval[i] = R_NaReal;
 	} else {

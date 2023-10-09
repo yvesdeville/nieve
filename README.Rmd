@@ -51,7 +51,15 @@ knowledge, none of these packages make the derivatives available via
 exported functions. See the vignette [**nieve**: Yet Another Extreme Value Package?](https://github.com/yvesdeville/nieve/blob/main/vignettes/nieve.pdf)
 for more details.
 
+The vignette [Special Values in Extreme-Value
+Distributions](https://github.com/yvesdeville/nieve/blob/main/inst/noncranVignettes/nonFiniteValues.html)
+compares the treatment of non-finite values in the probability
+functions across Extreme-Value packages.
+
+
+
 Note that **nieve** has no special relation with the famous package **snow**:)
+
 
 # News 
 

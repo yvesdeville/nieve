@@ -114,9 +114,6 @@ SEXP Call_dGEV(SEXP x,             /*  double                          */
 	
 	if ((rx[ix] == R_NegInf) || (rx[ix] == R_PosInf)) {
 	  rval[i] = R_NegInf;
-	  if (!INTEGER(logFlag)[0]) {
-	    rval[i] = exp(rval[i]);
-	  }
 	} else if (R_IsNA(rx[ix])) {
 	  rval[i] = R_NaReal;
 	} else {
@@ -272,27 +269,26 @@ SEXP Call_dGEV(SEXP x,             /*  double                          */
 	  }
 
 	} /* non-Gumbel case */
+      }   /* non-NA case     */
+      
+      if (!INTEGER(logFlag)[0]) {
+	rval[i] = exp(rval[i]);
+	rgrad[i] *= rval[i];
+	rgrad[i + n] *= rval[i];
+	rgrad[i + 2 * n] *= rval[i];
 	
-	if (!INTEGER(logFlag)[0]) {
-	  rval[i] = exp(rval[i]);
-	  rgrad[i] *= rval[i];
-	  rgrad[i + n] *= rval[i];
-	  rgrad[i + 2 * n] *= rval[i];
-
-	  if (hessian) {
-	    // multiply the hessian by the density and add the
-	    // 'tcrossprod' of the gradient
-	    for (j = 0; j < 3; j++) {
-	      for (k = 0; k < 3; k++) {
-		rhess[i + (j + k * 3) * n] *= rval[i];
-		rhess[i + (j + k * 3) * n] += rgrad[i + j * n] * rgrad[i + k * n];
-	      }
+	if (hessian) {
+	  // multiply the hessian by the density and add the
+	  // 'tcrossprod' of the gradient
+	  for (j = 0; j < 3; j++) {
+	    for (k = 0; k < 3; k++) {
+	      rhess[i + (j + k * 3) * n] *= rval[i];
+	      rhess[i + (j + k * 3) * n] += rgrad[i + j * n] * rgrad[i + k * n];
 	    }
 	  }
-	  
 	}
 	
-      }   /* non-NA case     */
+      }
       
     }    /* loop */
 
@@ -321,9 +317,6 @@ SEXP Call_dGEV(SEXP x,             /*  double                          */
 	
 	if ((rx[ix] == R_NegInf) || (rx[ix] == R_PosInf)) {
 	  rval[i] = R_NegInf;
-	  if (!INTEGER(logFlag)[0]) {
-	    rval[i] = exp(rval[i]);
-	  }
 	} else if (R_IsNA(rx[ix])) {
 	  rval[i] = R_NaReal;
 	} else {
@@ -358,12 +351,12 @@ SEXP Call_dGEV(SEXP x,             /*  double                          */
 	  
 	  
 	} /* non-Gumbel case */
-	
-	if (!INTEGER(logFlag)[0]) {
-	  rval[i] = exp(rval[i]);
-	}
-	
+
       }   /* non-NA case     */
+
+      if (!INTEGER(logFlag)[0]) {
+	rval[i] = exp(rval[i]);
+      }
       
     }
   

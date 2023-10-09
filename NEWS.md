@@ -1,3 +1,11 @@
+# Changes in version 0.1.4
+
+## Bug fix
+
+- When the argument `x` contained non-finite values `dGEV` and `dexp1`
+  returned incorrect values for `x = -Inf` and `x = Inf`.
+
+
 # Changes in version 0.1.3
 
 ## Enhancements

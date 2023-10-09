@@ -98,9 +98,6 @@ SEXP Call_dexp1(SEXP x, /*  double                          */
 	
 	if ((rx[ix] == R_NegInf) || (rx[ix] == R_PosInf)) {
 	  rval[i] = R_NegInf;
-	  if (!INTEGER(logFlag)[0]) {
-	    rval[i] = exp(rval[i]);
-	  }
 	} else if (R_IsNA(rx[ix])) {
 	  rval[i] = R_NaReal;
 	} else {
@@ -179,9 +176,6 @@ SEXP Call_dexp1(SEXP x, /*  double                          */
 	
        	if ((rx[ix] == R_NegInf) || (rx[ix] == R_PosInf)) {
 	  rval[i] = R_NegInf;
-	  if (!INTEGER(logFlag)[0]) {
-	    rval[i] = exp(rval[i]);
-	  }
 	} else if (R_IsNA(rx[ix])) {
 	  rval[i] = R_NaReal;
 	} else {
@@ -327,16 +321,16 @@ SEXP Call_pexp1(SEXP q,               /*  double                          */
 	  z1 = 2.0 - z;
 	  rhess[i] = - z * z1 * S / sigma / sigma;
 	}
-
-	if (INTEGER(lowerTailFlag)[0]) {
-	  rval[i] = 1.0 - rval[i];
-	  rgrad[i] = -rgrad[i];
-	  if (hessian) {
-	    rhess[i] = -rhess[i];
-	  }
-	}
-
+	
       }   /* non-NA case     */
+
+      if (INTEGER(lowerTailFlag)[0]) {
+	rval[i] = 1.0 - rval[i];
+	rgrad[i] = -rgrad[i];
+	if (hessian) {
+	  rhess[i] = -rhess[i];
+	}
+      }
 
     }
 
@@ -385,13 +379,12 @@ SEXP Call_pexp1(SEXP q,               /*  double                          */
 	else {
 	  rval[i] = exp(-z);
 	}
-
-	if (INTEGER(lowerTailFlag)[0]) {
-	  rval[i] = 1.0 - rval[i];
-	}
-
       }   /* non-NA case     */
 
+      if (INTEGER(lowerTailFlag)[0]) {
+	rval[i] = 1.0 - rval[i];
+      }
+      
     }
 
     UNPROTECT(3);
