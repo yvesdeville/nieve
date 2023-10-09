@@ -3,7 +3,7 @@
    date: "`r Sys.Date()`"
    title: "Special Values in Extreme-Value Distributions" 
    output: 
-      html_document:
+      pdf_document:
         toc: true
 ---
 

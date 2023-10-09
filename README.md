@@ -53,7 +53,7 @@ Package?](https://github.com/yvesdeville/nieve/blob/main/vignettes/nieve.pdf)
 for more details.
 
 The vignette [Special Values in Extreme-Value
-Distributions](https://github.com/yvesdeville/nieve/blob/main/inst/noncranVignettes/nonFiniteValues.html)
+Distributions](https://github.com/yvesdeville/nieve/blob/main/inst/noncranVignettes/nonFiniteValues.pdf)
 compares the treatment of non-finite values in the probability functions
 across Extreme-Value packages.
 
