@@ -7,26 +7,65 @@
         toc: true
 ---
 
-# Probability functions of Extreme-Value distributions
+```{r, echo=FALSE, results="hide"} 
+Sys.setenv(LANGUAGE = "en")
+```
+
+# Note 
+
+This vignette has been compiled using **nieve** `r packageVersion("nieve")` 
+and `r R.Version()$version.string`. The version of the packages used
+is mentioned with the results. This is a preliminary version and a
+*References* section duly citing the packages used will be added soon.
+
+# Probability functions of Extreme-Value (EV) distributions
 
 Many R packages define the probability functions (density,
-distribution and quantile) of the Generalised Pareto (GP) and the
-Generalised Extreme Value distribution (GEV). While some packages use
+distribution and quantile) of the Generalized Pareto (GP) and the
+Generalized Extreme Value distribution (GEV). While some packages use
 these functions internally, most of them also export them as well. As
 a result, the R user interested by using such a probability function
 has to choose between the different implementations. The present
 vignette inquires about quite subtle details in the way the functions
 work. In most cases, these details can not be anticipated by reading
-the package documentation.
+the package documentation. 
 
-## Vectorisation
+In this vignette we focus on the two-parameter GP and the three
+parameter GEV distributions. The will be denoted as `GPD2` and `GEV`
+as in **nieve** although the name of these vary across packages. In
+all packages the three functions of interest for each of the
+distribution have their name obtained by pasting a prefix to the
+distribution name. These are
+
+- The density function with prefix `"d"` and its first argument 
+  named `x`.
+- The distribution function with prefix `"p"` and with its first 
+  argument named `q`.
+- The quantile function with prefix `"q"` and with its first argument
+  named `p`.
+
+The other arguments are the parameters corresponding to the location
+(GEV) and the scale and the shape. These arguments are often named
+`loc`, `scale` and `shape`, but not always. Also, default values for
+the parameter are most often provided as `loc = 0.0`, `scale = 1.0`,
+and `shape = 0.0`, but there are some exceptions.
+
+Note that **evd** was first released on CRAN in 2002, and has been a
+source of inspiration. In some packages the probability functions are
+nearly copies of those of **evd**. The package **ismev** is also one
+of the first released on CRAN. While some of the older packages have
+been re-factored (**extRemes**) only limited changes were made in the
+code of the package **evd**.
+
+
+## Vectorization
 
 While in most (if not all) of the packages the first argument of the
-probability function is vectorised, this is generally not the case for
+probability function is vectorized, this is generally not the case for
 the other arguments representing the parameters (location, scale,
-shape). This constrasts with the classical probability functions
+shape). This contrasts with the classical probability functions
 implemented in the **stats** package, in which the parameter arguments
-are vectorised.
+are vectorized.
 
 ```{r}
 dnorm(1:4, mean = 1:4)
@@ -34,17 +73,17 @@ dnorm(1:4, sd = 1:4)
 ```
 
 ```{r}
-try(evd::dgev(x = c(1.4, 1.5), shape = c(-0.1, -0.1)))
-try(SpatialExtremes::dgev(x = c(1.4, 1.5), shape = c(-0.1, -0.1)))
+try(evd::dgev(x = c(1.4, 1.5), shape = c(0.1, -0.1)))
+try(SpatialExtremes::dgev(x = c(1.4, 1.5), shape = c(0.1, -0.1)))
 try(mev::dgev(x = c(1.2, 1.3), shape = c(0.2, -0.1)))
 ```
 
-A vectorisation w.r.t. the parameter arguments is a plus at least in
+A vectorization w.r.t. the parameter arguments is a plus at least in
 the Bayesian framework when the probability functions have to be
 evaluated using vectors of MCMC iterates for the parameters. Using
-loops coded in R language may then lead to slowly executing code.
-
-
+loops coded in R language may then lead to slowly executing code.  In
+the **revdbayes** package the two distributions GPD2 and GEV are
+suitably vectorized w.r.t. the parameters.
 
 ## Non-finite values 
 
@@ -68,89 +107,120 @@ class(NaN)
 
 Most probability functions from EV packages accept non-finite values
 in their first arguments, with a few exceptions
-```{r, POT-dgpd-error}
+```{r, POT-dgpd-error, message=FALSE, warning=FALSE}
 try(POT::dgpd(x = c(0, Inf, NA), scale = 1))
 ```
 ### Non-finite values in the parameter arguments
 
-As for non-finite values for the parameter arguments, only a few
+As for non-finite values of the parameter arguments, only a few
 packages allow this possibility in a consistent way. Beside **nieve**,
-the **texmex** package seems to be the sole package both for the
-density and the distribution functions.
+the **texmex** package seems to be the sole package conforming to the
+classical behaviour as described below both for the density and the
+distribution functions.
 
-For some uses, this feature can be important because the density and the
-distributions functions are often used to define a log-likelihood
-function that has to be maximised numerically. By experience we know
-that the optimisation may have to evaluate the objective at a vector
-of parameters embeding non-finite values, without compromising an
-eventual convergence. Moreover, it is a desirable feature of an
-optimisation routine to allow the evaluation of the objective or
-constraint at such vector.  The `stats::optim` routine allows this
-when used with `method = "BFGS"`, ant this is a very popular
-choice. Optimisation routines from the **nloptr** package allow the
-parameter to take non-finite values both in the objective and in the
-constraint function, if any. Of course the log-likelihood could catch
-non-finite values before calling the probability function(s), but this
-is an extra pain and may slow down the estimation
+Accepting non-finite values of the parameter arguments can be
+important because the density and the distribution functions are often
+used to define a log-likelihood function that has to be maximised
+numerically. By experience we know that the optimisation may have to
+evaluate the objective at a vector of parameters embedding non-finite
+values, without compromising an eventual convergence. Moreover, it is
+a desirable feature of an optimisation routine to allow the evaluation
+of the objective or constraint at such vector.  The `stats::optim`
+routine allows this when used with `method = "BFGS"`, and this is a
+very popular choice. Optimisation routines from the **nloptr** package
+allow the parameter to take non-finite values both in the objective
+and in the constraint function, if any. Of course the log-likelihood
+function written by the user could catch non-finite values before
+calling the probability function(s), but this is an extra pain and may
+slow down the estimation.
 
 ### "Classical" behaviour for non-finite values
 
 Remind of how the probability function of the classical distribution
 in the **stats** package work.
 
-- The first argument of the density, distribution of quantile function
-  is a vector in which some elements can be non-finite without casting
-  any error or warning. In the corresponding returned vector, an input
-  value `NA` (resp. `NaN`) will produce an output value `NA`
-  (resp. `NaN`). An infinite value `-Inf` (resp. `Inf`) correspond to:
-  an output value `0` (resp. `0`) for the density function, an output
-  value `0` (resp. `1`) for the distribution function and `NaN`
-  (resp. `NaN`) for the quantile function.
+1. The first argument of the density, distribution of quantile
+   function is a vector in which some elements can be non-finite
+   without casting any error or warning. In the corresponding returned
+   vector, an input value `NA` (resp. `NaN`) will produce an output
+   value `NA` (resp. `NaN`). An infinite value `-Inf` (resp. `Inf`)
+   correspond to: an output value `0.0` (resp. `0.0`) for the density
+   function, an output value `0.0` (resp. `1.0`) for the distribution
+   function and `NaN` (resp. `NaN`) for the quantile function.
   
-- When the first argument `p` of the quantile function contains a
-  value `< 0.` or ` > 1.` a warning is cast and the corresponding
-  output value is `NaN`. When `p` is `0.` (resp.  `1.`), the
-  corresponding output value is the lower (resp. upper) end-point
-  of the distribution be it finite or not.
+2. When the first argument `p` of the quantile function contains a
+   value `< 0.0` or ` > 1.0` a warning is cast and the corresponding
+   output value is `NaN`. When `p` is `0.0` (resp.  `1.0`), the
+   corresponding output value is the lower (resp. upper) end-point of
+   the distribution, be it finite or not.
   
-- The parameter arguments can be vectors and some elements in these be
-  non-finite without resulting in an error. An input value `NA`
-  (resp. `NaN`) will produce an output value `NA` (resp. `NaN`).  When
-  an input value is `-Inf` or `Inf` the corresponding value will
-  usually be `NaN`. Yet it can be a finite value in some cases
-  as in `dnorm(1.3, mean = Inf)` which returns `r  dnorm(1.3, mean = Inf)`.
+3. The parameter arguments can be vectors and some elements in these
+   can be non-finite without resulting in an error. An input value
+   `NA` (resp. `NaN`) will produce an output value `NA` (resp. `NaN`).
+   When an input value is `-Inf` or `Inf` the corresponding value will
+   usually be `NaN`. Yet it can be a finite value in some cases as in
+   `dnorm(1.3, mean = Inf)` which returns `r dnorm(1.3, mean = Inf)`.
+   It does not seem wise to formulate a rule about the value
+   corresponding to an infinite value of a parameter.
 
-- When incorrect values are given in a parameter argument such as 
-  a negative value for a scale argument, the corresponding output value 
-  is `NaN`.
+4. When incorrect values are given in a parameter argument such as a
+   negative value for a scale argument, the corresponding output value
+   is `NaN`, not `NA`. This makes sense as long as `NA` is understood
+   as standing for a missing value while `NaN` result of an impossible 
+   of ambiguous math operation.
+
+It is worth noting that incorrect or unanticipated values given for
+the first argument or parameter arguments never lead to an error as long as
+the are numeric. Yet `dnorm("a")` will produce an error.  The property
+2. above matters for EV distributions because it allows the use of
+quantile function to find the end-points which depends on the
+parameters.
 
 # Extreme-Value packages
 
-For a number of Extreme-Values packages we evaluate the results given
-by the density function for their two-parameter GP and for their
-three-parameter GEV distributions if any. Note that each row in a
-table corresponds to a call using vectorised w.r.t. thte first
-argument (`x` for a density, `q` for a distribution and `p` for a
-quantile). So an error must be considered as holding for a full row.
+For a number of Extreme-Value packages we evaluate the results given
+by the probability functions for their two-parameter GP and for their
+three-parameter GEV distributions (if any) using non-finite values in
+the first argument and possibly for a chosen parameter. The results
+are displayed in tables. Each table corresponds to *an EV package*, *a
+distribution* (GPD2 or GEV), *a probability function* (`d`, `p` or `q`)
+and *a parameter* (`scale`, `shape`). For each table, the rows
+correspond to a value for the chosen parameter and the columns for the
+values of the first argument. Mind that the parameter value for a row
+can contain a correct value, an incorrect one (e.g., a negative shape)
+and a non-finite value.
+
+Note that each row in a table corresponds to a call that is
+*vectorized w.r.t. the first argument* (`x` for a density, `q` for a
+distribution and `p` for a quantile). So an error must be considered
+as holding for a full row. 
 
 ## Findings
 
 Our findings are as follows.
 
-- For all packages the quantile function `q` casts an error when the
-  vector given as probability argument contains non-finite
-  values. This behaviour differs from that of the quantile
-  function for classical probability functions.
+- For all packages tested the quantile function `q` casts an error
+  when the vector given as probability argument contains non-finite
+  values. This behaviour differs from the classical behaviour of the
+  quantile function.
 
 - In the packages **evd**, **`POT`** and **SpatialExtremes**, the GPD
-  density unduly casts an error when the shape is `0.0` and `x` is a
+  density can unduly cast an error when the shape is `0.0` and `x` is a
   vector containing non-finite values. This may be considered as a
   bug.
 
 - Most packages do not cope with non-finite values for the parameters
-  as the classical distribution functions do. For some packages the
-  behaviour is not consistent between the two distributions or between
+  as the classical distribution functions do. For some packages, the
+  behaviour is not consistent across the two distributions or across
   the density and the distribution functions for a same distribution.
+
+- For several packages a (meaningless) finite value can be returned by
+  the probability functions corresponding to a first argument `NA` or
+  `NaN`. This can lead to difficult-to-understand errors in the
+  evaluation of log-likelihood inasmuch applying the `sum` function on
+  the vector log-density values will not work as expected even when
+  `na.rm = TRUE` is used.
+	
 
 
 ```{r init, echo=FALSE} 
@@ -160,16 +230,19 @@ library(data.table)
 Pars <- list("GEV" = c("loc", "scale", "shape"),
              "GPD2"= c("scale", "shape"))
 
+## First arguments
 ProbFuns <- list("d" = list(name = "density", arg = "x"),
                  "p" = list(name = "distribution", arg = "q"),
                  "q" = list(name = "quantile", arg = "p"))
 
+## First argument values
 ArgValues <- list("GEV" = list(d = c(1.4, -Inf, Inf, NA, NaN),
                                p = c(1.5, -Inf, Inf, NA, NaN),
                                q = c(-0.1, 0.0, 0.5, 1.0, 1.1, -Inf, Inf, NA, NaN),
                                loc = c(0.0, - Inf, Inf, NA, NaN)),
                   "GPD2" = list(d = c(1.4, -Inf, Inf, NA, NaN),
                                 p = c(1.5, -Inf, Inf, NA, NaN),
+                                
                                 q = c(-0.1, 0.0, 0.5, 1.0, 1.1, -Inf, Inf, NA, NaN)))
 ## Describe the values of the parameters to be used.
 ParValues <- list("GEV" = list(loc = c(0.0, - Inf, Inf, NA, NaN),
@@ -178,6 +251,9 @@ ParValues <- list("GEV" = list(loc = c(0.0, - Inf, Inf, NA, NaN),
                   "GPD2" = list(scale = c(1.0, -1.0, 0.0, - Inf, Inf, NA, NaN),
                                 shape = c(-0.4, 0.0, 0.5, - Inf, Inf, NA, NaN)))
 
+## Describe the calls in the different packages, taking into
+## account the possibility of different parameter names as in
+## `texmex::dgev` and the need of extra parameters as in `extRemes::evd`.
 Altern <- list("nieve-GEV" = list(nieve = "GEV",
                                   Suff = "GEV",
                                   Pnm = c(loc = "loc",
@@ -249,8 +325,10 @@ Altern <- list("nieve-GEV" = list(nieve = "GEV",
                                       Pnm = c(loc = "loc",
                                              scale = "scale",
                                              shape = "shape"))
-)
+               )
 
+## Put the list in a data frame format using the powerful
+## `data.table::rbindlist` function
 A <- list()
 for (i in seq_along(Altern)) {
     A[[i]] <- data.frame(nieve = Altern[[i]]$nieve,
@@ -343,6 +421,7 @@ testNonFinite <- function(pkg, print = 0) {
 
 
 ```{r, echo=FALSE, results='asis'}
+## Many thanks to Yhui Xie for this amazing `knit_expand` function!
 src <- lapply(levels(AlternDf$Pkg), function(pkg) {
     knitr::knit_expand('templates/nonFiniteResults.Rmd')
 })

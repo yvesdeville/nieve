@@ -147,6 +147,10 @@
 dexp1 <- function(x, scale = 1.0, log = FALSE,
                   deriv = FALSE, hessian = FALSE) {
     
+    if (!is.numeric(x) || !is.numeric(scale)) {
+        stop("non-numeric argument")
+    }
+
     ## if (!all(is.finite(scale))) {
     ##     stop("exp1 parameter must be finite (non NA)")
     ## }
@@ -190,6 +194,10 @@ dexp1 <- function(x, scale = 1.0, log = FALSE,
 ##' @export
 pexp1 <- function(q, scale = 1.0, lower.tail = TRUE,
                   deriv = FALSE, hessian = FALSE) {
+    
+    if (!is.numeric(q) || !is.numeric(scale)) {
+        stop("non-numeric argument")
+    }
 
     ## if (!all(is.finite(scale))) {
     ##     stop("exp1 parameter must be finite (non NA)")
@@ -232,6 +240,10 @@ pexp1 <- function(q, scale = 1.0, lower.tail = TRUE,
 qexp1 <- function(p, scale = 1.0, lower.tail = TRUE,
                   deriv = FALSE, hessian = FALSE) {
 
+    if (!is.numeric(p) || !is.numeric(scale)) {
+        stop("non-numeric argument")
+    }
+    
     ## if (!all(is.finite(scale))) {
     ##     stop("exp1 parameter must be finite (non NA)")
     ## }
@@ -275,6 +287,10 @@ qexp1 <- function(p, scale = 1.0, lower.tail = TRUE,
 ##' @rdname Exp1
 ##' @export
 rexp1 <- function(n, scale = 1.0, array) {
+
+    if (!is.numeric(scale)) {
+        stop("non-numeric argument")
+    }
     
     if (!all(is.finite(scale))) {
         stop("exp1 parameter must be finite (non NA)")

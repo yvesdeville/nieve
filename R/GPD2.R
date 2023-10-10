@@ -165,6 +165,10 @@ dGPD2 <- function(x, scale = 1.0, shape = 0.0,
                   log = FALSE,
                   deriv = FALSE, hessian = FALSE) {
 
+    if (!is.numeric(x) || !is.numeric(scale) || !is.numeric(shape)) {
+        stop("non-numeric argument")
+    }
+    
     ## if (!all(is.finite(scale)) || !all(is.finite(shape))) {
     ##     stop("GPD2 parameters must be finite (non NA)")
     ## }
@@ -209,6 +213,10 @@ dGPD2 <- function(x, scale = 1.0, shape = 0.0,
 pGPD2 <- function(q, scale = 1.0, shape = 0.0, lower.tail = TRUE,
                   deriv = FALSE, hessian = FALSE) {
 
+    if (!is.numeric(q) || !is.numeric(scale) || !is.numeric(shape)) {
+        stop("non-numeric argument")
+    }
+    
     ## if (!all(is.finite(scale)) || !all(is.finite(shape))) {
     ##     stop("GPD2 parameters must be finite (non NA)")
     ## }
@@ -249,6 +257,10 @@ pGPD2 <- function(q, scale = 1.0, shape = 0.0, lower.tail = TRUE,
 ##' @export
 qGPD2 <- function(p, scale = 1.0, shape = 0.0, lower.tail = TRUE,
                   deriv = FALSE, hessian = FALSE) {
+
+    if (!is.numeric(p) || !is.numeric(scale) || !is.numeric(shape)) {
+        stop("non-numeric argument")
+    }
     
     ## if (!all(is.finite(scale)) || !all(is.finite(shape))) {
     ##     stop("GPD2 parameters must be finite (non NA)")
@@ -295,6 +307,10 @@ qGPD2 <- function(p, scale = 1.0, shape = 0.0, lower.tail = TRUE,
 ##' @export
 rGPD2 <- function(n, scale = 1.0, shape = 0.0, array) {
 
+    if (!is.numeric(scale) || !is.numeric(shape)) {
+        stop("non-numeric argument")
+    }
+    
     ## if (!all(is.finite(scale)) || !all(is.finite(shape))) {
     ##     stop("GPD2 parameters must be finite (non NA)")
     ## }

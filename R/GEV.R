@@ -168,6 +168,11 @@
 ##' lines(ti, apply(y, 1, mean))
 dGEV <- function(x, loc = 0.0, scale = 1.0, shape = 0.0, log = FALSE,
                  deriv = FALSE, hessian = FALSE) {
+
+    if (!is.numeric(x) || !is.numeric(loc) || !is.numeric(scale) ||
+        !is.numeric(shape)) {
+        stop("non-numeric argument")
+    }
     
     if (hessian && !deriv) {
         stop("'hessian' can be TRUE only when 'deriv' is equal to TRUE")
@@ -221,6 +226,10 @@ pGEV <- function(q, loc = 0, scale = 1, shape = 0, lower.tail = TRUE,
     ##     !all(is.finite(shape))) {
     ##    stop("GEV parameters must be finite (non NA)")
     ## }
+    if (!is.numeric(q) || !is.numeric(loc) || !is.numeric(scale) ||
+        !is.numeric(shape)) {
+        stop("non-numeric argument")
+    }
     
     res <- .Call(Call_pGEV,
                  as.double(q),
@@ -249,6 +258,11 @@ pGEV <- function(q, loc = 0, scale = 1, shape = 0, lower.tail = TRUE,
 qGEV <- function(p, loc = 0.0, scale = 1.0, shape = 0.0, lower.tail = TRUE,
                  deriv = FALSE, hessian = FALSE) {
 
+    if (!is.numeric(p) || !is.numeric(loc) || !is.numeric(scale) ||
+        !is.numeric(shape)) {
+        stop("non-numeric argument")
+    }
+    
     ## if (!all(is.finite(loc)) || !all(is.finite(scale)) ||
     ##     !all(is.finite(shape))) {
     ##     stop("GEV parameters must be finite (non NA)")
@@ -300,6 +314,10 @@ rGEV <- function(n, loc = 0.0, scale = 1.0, shape = 0.0, array) {
     ##     !all(is.finite(shape))) {
     ##     stop("GEV parameters must be finite (non NA)")
     ## }
+
+    if (!is.numeric(loc) || !is.numeric(scale) || !is.numeric(shape)) {
+        stop("non-numeric argument")
+    }
     
     if (missing(array)) {
         array <- max(c(length(loc), length(scale), length(shape))) > 1L
