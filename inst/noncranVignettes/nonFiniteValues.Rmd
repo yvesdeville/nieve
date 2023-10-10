@@ -166,7 +166,7 @@ in the **stats** package work.
 4. When incorrect values are given in a parameter argument such as a
    negative value for a scale argument, the corresponding output value
    is `NaN`, not `NA`. This makes sense as long as `NA` is understood
-   as standing for a missing value while `NaN` result of an impossible 
+   as standing for a missing value while `NaN` results from an impossible 
    of ambiguous math operation.
 
 It is worth noting that incorrect or unanticipated values given for
@@ -217,8 +217,8 @@ Our findings are as follows.
 - For several packages a (meaningless) finite value can be returned by
   the probability functions corresponding to a first argument `NA` or
   `NaN`. This can lead to difficult-to-understand errors in the
-  evaluation of log-likelihood inasmuch applying the `sum` function on
-  the vector log-density values will not work as expected even when
+  evaluation of log-likelihood inasmuch as applying the `sum` function
+  on the vector log-density values will not work as expected even when
   `na.rm = TRUE` is used.
 	
 
@@ -409,8 +409,9 @@ testNonFinite <- function(pkg, print = 0) {
                         mat[j, 1] <- "ERROR"
                     }
                 }
-                LMat[[paste0(pf, distName)]] <- noquote(mat)
-                attr(LMat[[paste0(pf, distName)]], "name") <-
+                nmm <- paste0(pf, distName, "-", pn)
+                LMat[[nmm]] <- noquote(mat)
+                attr(LMat[[nmm]], "name") <-
                     paste0(pkg, "::", pf, dfi[ind, ]$Suff[1])
             }
         }
