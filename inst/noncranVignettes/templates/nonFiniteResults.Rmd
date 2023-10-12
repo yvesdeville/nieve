@@ -5,20 +5,26 @@ cat(sprintf("Package version used: %s\n\n", packageVersion("{{pkg}}")))
 L <- testNonFinite("{{pkg}}")
 nm <- paste0("{{pkg}}", "-dGPD2")
 ## print(names(L))
-if (!is.null(L[["dGPD2"]])) {
+if (!is.null(L[["dGPD2-scale"]])) {
     for (fn in c("d", "p", "q")) {
         nm <- paste0(fn, "GPD2")
         cat(sprintf("o Equivalent of '%s': '%s'\n",
-                    nm, attr(L[[nm]], "name")))
-        print(knitr::kable(L[[nm]]))
+                    nm, attr(L[[paste0(nm, "-scale")]], "name")))
+        nm1 <- gsub("^.*-", "", names(L)[grepl(paste0(fn, "GPD2"), names(L))])
+        for (nm2 in nm1) {
+            print(knitr::kable(L[[paste0(fn, "GPD2", "-", nm2)]]))
+        }
     }
 }
-if (!is.null(L[["dGEV"]])) {
+if (!is.null(L[["dGEV-scale"]])) {
     for (fn in c("d", "p", "q")) {
         nm <- paste0(fn, "GEV")
         cat(sprintf("o Equivalent of '%s': '%s'\n",
-                    nm, attr(L[[nm]], "name")))
-        print(knitr::kable(L[[nm]]))
+                    nm, attr(L[[paste0(nm, "-scale")]], "name")))
+        nm1 <- gsub("^.*-", "", names(L)[grepl(paste0(fn, "GEV"), names(L))])
+        for (nm2 in nm1) {
+            print(knitr::kable(L[[paste0(fn, "GPD2", "-", nm2)]]))
+        }
     }
 }
 

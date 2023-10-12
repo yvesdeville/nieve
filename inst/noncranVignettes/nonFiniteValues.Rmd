@@ -22,17 +22,17 @@ is mentioned with the results. This is a preliminary version and a
 
 Many R packages define the probability functions (density,
 distribution and quantile) of the Generalized Pareto (GP) and the
-Generalized Extreme Value distribution (GEV). While some packages use
-these functions internally, most of them also export them as well. As
-a result, the R user interested by using such a probability function
-has to choose between the different implementations. The present
-vignette inquires about quite subtle details in the way the functions
-work. In most cases, these details can not be anticipated by reading
-the package documentation. 
+Generalized Extreme Value distribution (GEV). While these packages
+could have kept the probability functions as for internal use, they
+often instead export the functions. As a result, the R user interested
+by using such a probability function has to choose between the
+different implementations. The present vignette inquires about quite
+subtle details in the way the functions work. In most cases, these
+details can not be anticipated by reading the package documentation.
 
 In this vignette we focus on the two-parameter GP and the three
-parameter GEV distributions. The will be denoted as `GPD2` and `GEV`
-as in **nieve** although the name of these vary across packages. In
+parameter GEV distributions. These will be denoted as `GPD2` and `GEV`
+as in **nieve**, although the name of these vary across packages. In
 all packages the three functions of interest for each of the
 distribution have their name obtained by pasting a prefix to the
 distribution name. These are
@@ -48,14 +48,15 @@ The other arguments are the parameters corresponding to the location
 (GEV) and the scale and the shape. These arguments are often named
 `loc`, `scale` and `shape`, but not always. Also, default values for
 the parameter are most often provided as `loc = 0.0`, `scale = 1.0`,
-and `shape = 0.0`, but there are some exceptions.
+and `shape = 0.0`, but there are some exceptions. We may refer to
+these values as the "standard" default values.
 
 Note that **evd** was first released on CRAN in 2002, and has been a
-source of inspiration. In some packages the probability functions are
-nearly copies of those of **evd**. The package **ismev** is also one
-of the first released on CRAN. While some of the older packages have
-been re-factored (**extRemes**) only limited changes were made in the
-code of the package **evd**.
+source of inspiration for later packages, in which the probability
+functions can be nearly copies of those of **evd**. The package
+**ismev** is also one of the first released on CRAN. While some of the
+older packages have been re-factored (**extRemes**) only limited
+changes were made in the code of the package **evd**.
 
 
 ## Vectorization
@@ -106,10 +107,14 @@ class(NaN)
 ### Non-finite values in the first argument
 
 Most probability functions from EV packages accept non-finite values
-in their first arguments, with a few exceptions
+in their first arguments, with a few exceptions or problems
+
 ```{r, POT-dgpd-error, message=FALSE, warning=FALSE}
-try(POT::dgpd(x = c(0, Inf, NA), scale = 1))
+try(evd::dgpd(c(0.0, Inf)))
+try(evd::dgpd(c(0.0, 1.0, Inf)))
+
 ```
+
 ### Non-finite values in the parameter arguments
 
 As for non-finite values of the parameter arguments, only a few
@@ -136,8 +141,8 @@ slow down the estimation.
 
 ### "Classical" behaviour for non-finite values
 
-Remind of how the probability function of the classical distribution
-in the **stats** package work.
+Remind of how the probability functions of the classical continuous
+distributions in the **stats** package work.
 
 1. The first argument of the density, distribution of quantile
    function is a vector in which some elements can be non-finite
@@ -149,17 +154,17 @@ in the **stats** package work.
    function and `NaN` (resp. `NaN`) for the quantile function.
   
 2. When the first argument `p` of the quantile function contains a
-   value `< 0.0` or ` > 1.0` a warning is cast and the corresponding
+   value `< 0.0` or ` > 1.0`, a warning is cast and the corresponding
    output value is `NaN`. When `p` is `0.0` (resp.  `1.0`), the
    corresponding output value is the lower (resp. upper) end-point of
    the distribution, be it finite or not.
   
-3. The parameter arguments can be vectors and some elements in these
+3. The *parameter arguments* can be vectors and some elements in these
    can be non-finite without resulting in an error. An input value
    `NA` (resp. `NaN`) will produce an output value `NA` (resp. `NaN`).
    When an input value is `-Inf` or `Inf` the corresponding value will
-   usually be `NaN`. Yet it can be a finite value in some cases as in
-   `dnorm(1.3, mean = Inf)` which returns `r dnorm(1.3, mean = Inf)`.
+   usually be `NaN`. Yet it can be a finite value in some cases, as in
+   `dnorm(x = 1.3, mean = Inf)` which returns `r dnorm(1.3, mean = Inf)`.
    It does not seem wise to formulate a rule about the value
    corresponding to an infinite value of a parameter.
 
@@ -171,24 +176,40 @@ in the **stats** package work.
 
 It is worth noting that incorrect or unanticipated values given for
 the first argument or parameter arguments never lead to an error as long as
-the are numeric. Yet `dnorm("a")` will produce an error.  The property
-2. above matters for EV distributions because it allows the use of
-quantile function to find the end-points which depends on the
-parameters.
+the are numeric. Yet `dnorm("a")` will produce an error.
 
-# Extreme-Value packages
+When computing the log-likelihood of some EV model it is wise to
+assume that some observations can be `NA`. The log-likelihood function
+of such a model is usually the sum of terms involving the EV density
+and possibly the corresponding distribution function - in case of
+censoring. One must be sure that a `NA` value in the vector or list of
+observations will correspond to a contribution zero in the
+log-likelihood. Rule 1. above helps at preventing issues because if
+`NA` observations are not omitted as they should, the log-likelihood
+will be `NA`.
 
-For a number of Extreme-Value packages we evaluate the results given
-by the probability functions for their two-parameter GP and for their
-three-parameter GEV distributions (if any) using non-finite values in
-the first argument and possibly for a chosen parameter. The results
-are displayed in tables. Each table corresponds to *an EV package*, *a
-distribution* (GPD2 or GEV), *a probability function* (`d`, `p` or `q`)
-and *a parameter* (`scale`, `shape`). For each table, the rows
-correspond to a value for the chosen parameter and the columns for the
-values of the first argument. Mind that the parameter value for a row
-can contain a correct value, an incorrect one (e.g., a negative shape)
-and a non-finite value.
+Rule 2. above matters for EV distributions because it allows the use
+of the quantile function to find the end-points which depends on the
+parameters. By evaluating the distribution function at these
+end-points, one finds the anticipated results.
+
+# Experimentation with Extreme-Value packages
+
+For a number of CRAN Extreme-Value packages, we evaluate the results
+given by the probability functions for their two-parameter GP and for
+their three-parameter GEV distributions (if any) using non-finite
+values in the first argument and possibly for a chosen parameter. The
+results are displayed below in tables. Each table corresponds to *an
+EV package*, *a distribution* (GPD2 or GEV), *a probability function*
+(`d`, `p` or `q`) and *a parameter* (`scale`, `shape`). For each
+table, the rows correspond to a value for the chosen parameter and the
+columns for the values of the first argument. Mind that the parameter
+value for a row can contain a correct value, an incorrect one (e.g., a
+negative shape) and a non-finite value. Only one parameter is changed
+in each row, the other parameters being kept at their default
+value. If no such default value is defined (which turns out to be the
+case only for **texmex**) the other parameters are silently given
+their "standard" default value as described above.
 
 Note that each row in a table corresponds to a call that is
 *vectorized w.r.t. the first argument* (`x` for a density, `q` for a
@@ -200,14 +221,14 @@ as holding for a full row.
 Our findings are as follows.
 
 - For all packages tested the quantile function `q` casts an error
-  when the vector given as probability argument contains non-finite
-  values. This behaviour differs from the classical behaviour of the
-  quantile function.
+  when the vector given as probability argument `p` contains
+  non-finite values. This behaviour differs from the classical
+  behaviour of the quantile function.
 
 - In the packages **evd**, **`POT`** and **SpatialExtremes**, the GPD
-  density can unduly cast an error when the shape is `0.0` and `x` is a
-  vector containing non-finite values. This may be considered as a
-  bug.
+  density casts an error `x` is a vector containing non-finite values
+  and the shape is `0.0` (the scale being the default `1.0`), but
+  not when the shape is changed. This is a rather strange behaviour.
 
 - Most packages do not cope with non-finite values for the parameters
   as the classical distribution functions do. For some packages, the
@@ -216,10 +237,8 @@ Our findings are as follows.
 
 - For several packages a (meaningless) finite value can be returned by
   the probability functions corresponding to a first argument `NA` or
-  `NaN`. This can lead to difficult-to-understand errors in the
-  evaluation of log-likelihood inasmuch as applying the `sum` function
-  on the vector log-density values will not work as expected even when
-  `na.rm = TRUE` is used.
+  `NaN`. This can lead to difficult-to-understand errors when
+  evaluating log-likelihood functions.
 	
 
 
