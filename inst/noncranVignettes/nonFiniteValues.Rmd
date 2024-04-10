@@ -137,7 +137,15 @@ allow the parameter to take non-finite values both in the objective
 and in the constraint function, if any. Of course the log-likelihood
 function written by the user could catch non-finite values before
 calling the probability function(s), but this is an extra pain and may
-slow down the estimation.
+slow down the estimation. More importantly, it seems a good practice
+that the log-likelihood function of a "fitted model" object remains
+consistent with the exported distribution functions. For instance the
+log-likelihood of a model specifying i.i.d. observations should be
+equal to the sum of the log-density values at the observations as
+computed from the exported density function. In other words the
+function implementing the log-likelihood (be it coded in R or in a
+compiled language) should call the proability functions as exported by
+the package.
 
 ### "Classical" behaviour for non-finite values
 

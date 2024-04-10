@@ -51,6 +51,9 @@ of functions, the derivatives should come by chain rule.
 \[ \] Use a global variable for `eps` in order to share a value across
 functions? Or add a new argument for each function?
 
+\[ \] Compute the Hessian for the distribution functions `pGEV`, `pGPD2` 
+and `pExp1`
+
 ## Testing and polishing
 
 \[x\] Add tests for the specific case $\xi \approx 0$ (more precisely,
