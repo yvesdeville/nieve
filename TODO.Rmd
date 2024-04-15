@@ -42,11 +42,18 @@ output: github_document
 [ ] In `GPD2.tex`, recall how can the derivatives of the distribution
   function $F$ are related to those of the cumulated hazard $H$.
   
+[x] In `GEV.tex`, give the formula for the 2-nd order derivatives of
+   the distribution function.
+  
+[ ] In `GEV.tex`, the expressions related to the log-likelihood (and
+   especially those for the $2$-nd order devrivatives could be made 
+   much simpler by using the quantities $W$, $T$ as defined in the 
+   section devoted to the distribution function $F$.
   
 ## Computing 
 
-[x] Implement the Taylor approximation for $\xi \approx 0$ in
-   the `PP2poisGP`and `poisGP2PP` (C) functions.
+[x] Implement the Taylor approximation for $\xi \approx 0$ in the
+   `PP2poisGP`and `poisGP2PP` (C) functions.
 
 [ ] Add the *Extended GPD distributions* of Papastathopoulos &
   Tawn. Since the distribution functions or survival are obtained by

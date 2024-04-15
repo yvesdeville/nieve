@@ -1,8 +1,5 @@
-TODO list for the **nieve** package
-================
-Yves Deville <deville.yves@alpestat.com>
-
-## Package scope and management
+Package scope and management
+----------------------------
 
 \[x\] Use the
 [rchk](https://developer.r-project.org/Blog/public/2019/04/18/common-protect-errors/)
@@ -25,7 +22,8 @@ few examples?
 \[x\] Should we keep the R implementation for the GEV distribution?
 **no**.
 
-## Documentation
+Documentation
+-------------
 
 \[x\] Inquire about the **extRemes** package and report it in the table
 of the vignette `nieve.Rnw`. The package does not aim at exporting
@@ -35,11 +33,20 @@ probability functions which are rather seen as being for internal use.
 packages in the vignette.
 
 \[ \] In `GPD2.tex`, recall how can the derivatives of the distribution
-function $F$ are related to those of the cumulated hazard $H$.
+function *F* are related to those of the cumulated hazard *H*.
 
-## Computing
+\[x\] In `GEV.tex`, give the formula for the 2-nd order derivatives of
+the distribution function.
 
-\[x\] Implement the Taylor approximation for $\xi \approx 0$ in the
+\[ \] In `GEV.tex`, the expressions related to the log-likelihood (and
+especially those for the 2-nd order devrivatives could be made much
+simpler by using the quantities *W*, *T* as defined in the section
+devoted to the distribution function *F*.
+
+Computing
+---------
+
+\[x\] Implement the Taylor approximation for *ξ* ≈ 0 in the
 `PP2poisGP`and `poisGP2PP` (C) functions.
 
 \[ \] Add the *Extended GPD distributions* of Papastathopoulos & Tawn.
@@ -51,13 +58,11 @@ of functions, the derivatives should come by chain rule.
 \[ \] Use a global variable for `eps` in order to share a value across
 functions? Or add a new argument for each function?
 
-\[ \] Compute the Hessian for the distribution functions `pGEV`, `pGPD2` 
-and `pExp1`
+Testing and polishing
+---------------------
 
-## Testing and polishing
-
-\[x\] Add tests for the specific case $\xi \approx 0$ (more precisely,
-$\xi < \epsilon$) in the transformations `PP2poisGP`and `poisGP2PP`.
+\[x\] Add tests for the specific case *ξ* ≈ 0 (more precisely,
+*ξ* &lt; *ϵ*) in the transformations `PP2poisGP`and `poisGP2PP`.
 
 \[ \] Add a test checking that the transformation `PP2poisGP`and
 `poisGP2PP` are reciprocal to each other (in both directions).
@@ -89,7 +94,8 @@ incorrect parameter is used (negative `scale`).
 
 \[ \] Test the functions related to the `Exp1`distribution.
 
-## Github actions and more
+Github actions and more
+-----------------------
 
 \[x\] Add GitHub action to check on the three main platforms.
 

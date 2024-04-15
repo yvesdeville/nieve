@@ -1,4 +1,3 @@
-
 %% \chapter{GEV}
 
 %% ===========================================================================
@@ -379,14 +378,15 @@ Here are the limits for $\xi \to 0$
 
 Define
 $$
-W := V^{-1/\xi} = [1 + \xi z]^{-1/\xi}.
+W := V^{-1/\xi} = [1 + \xi z]^{-1/\xi}, \qquad T := \frac{\log V}{\xi^2}
+- \frac{z}{\xi V}
 $$
 Then
 $$
  F := \exp\{ - W \}.
 $$
-For the distribution function we will only consider the first-order derivatives
-since the second-order derivatives are not needed in most applications.
+For the distribution function the second-order derivatives has
+not yet been implemented.
 
 \begin{maxima}
   F: exp(-W)
@@ -453,13 +453,12 @@ $$}
   \frac{\partial F}{\partial z}
   &= F W \, \frac{1}{V} \\
   \frac{\partial F}{\partial \xi}
-  &= - F W  \left\{ \frac{\log V}{\xi^2} - \frac{z}{\xi V} \right\}\\
+  &= - F W T \\
 \end{align*}
 }
 
-
-
-\subsection{First-order derivatives: Taylor expansions for $\xi \approx 0$}
+\subsection{First-order derivatives: Taylor expansions
+  for $\xi \approx 0$}
 
 \subsubsection*{Raw  expressions}
 
@@ -484,73 +483,146 @@ $$}
 \end{align*}}
 
 \subsubsection*{Simplified expressions}
+With {\color{red}$F^\star := \exp\{-e^{-z} - z\}$} (Gumbel distribution value at $z$),
 
 {\color{red}
 \begin{align*}
   \frac{\partial F}{\partial z}
-  &= \exp\{ -z - e^{-z} \} \left\{ 1 + \frac{z}{2} \left[ -2 + (1 -e^{-z}) z \right] \xi \right\} + o(\xi) \\
+  &= F^\star \left\{ 1 + \frac{z}{2} \left[ -2 + (1 -e^{-z}) z \right] \xi \right\} + o(\xi) \\
   \frac{\partial F}{\partial \xi}
-  &= \exp\{ -z - e^{-z} \}
+  &= F^\star
     \left\{-\frac{z^2}{2}
-    + \frac{z^3}{12} \left[8 - 3 (1 -e^{-z}) z \right] \xi \right\}
+    + \frac{z^3}{12} \left[8 - 3 \, (1 -e^{-z}) z \right] \xi \right\}
     + o(\xi)
 \end{align*}
 }
 
-% \subsection{Second-order derivatives}
-% \begin{maxima}
-%   Fzz: diff(F, z, 2)
-% \end{maxima}%
-% \begin{maxima}
-%   Fzxi: diff(F, z, 1, xi, 1)
-% \end{maxima}%
+\subsection{Second-order derivatives}
 
-% \begin{maxima}
-%   Fxixi: diff(F, xi, 2) 
-% \end{maxima}%
+\textbf{CAUTION} The second-order derivatives has not yet been implemented and
+the formula have not yet been fully checked.
 
-% %% \begin{landscape}
-% \begin{align*}
-%   \frac{\partial^2 F}{\partial z^2}
-%   &=
-%     \begin{maxima}
-%        tex(Fzz)
-%      \end{maxima} \\
-%   \frac{\partial^2 F}{\partial z \partial \xi}
-%   &=
-%     \begin{maxima}
-%       tex(Fzxi)
-%     \end{maxima} \\
-%   \frac{\partial^2 F}{\partial \xi^2}
-%   &=
-%     \begin{maxima}
-%        tex(Fxixi)
-%     \end{maxima} \\
-% \end{align*}
-% %% \end{landscape}
+\subsubsection*{Scaling}
 
-% \subsubsection{Limits for $\xi \to 0$}
-% %%========================================================
-% Here are the limits for $\xi \to 0$
-% \begin{align*}
-%   \lim_{\xi \to 0} \frac{\partial^2 F}{\partial z^2}
-%   &=
-%     \begin{maxima}
-%       tex(limit (Fzz, xi, 0))
-%     \end{maxima}
-%   \\
-%   \lim_{\xi \to 0} \frac{\partial^2 F}{\partial z \partial \xi}
-%   &=
-%     \begin{maxima}
-%       tex(limit (Fzxi, xi, 0))
-%     \end{maxima}
-%   \\
-%   % \lim_{\xi \to 0} \frac{\partial^2 F}{\partial^2 \xi^2}
-%   %  &=
-%   %   \begin{maxima}
-%   %     tex(limit (Fxixi, xi, 0))
-%   %   \end{maxima}
-% \end{align*}
+{\color{red}
+\begin{align*}
+  \frac{\partial^2 F}{\partial \mu^2}
+  &= \frac{1}{\sigma^2} \,
+    \frac{\partial^2 F}{\partial z^2} \\
+  \frac{\partial^2 F}{\partial \mu \partial \sigma}
+  &= \frac{z}{\sigma^2} \,
+    \frac{\partial^2 F}{\partial z^2} \\
+  \frac{\partial^2 F}{\partial \mu \partial \xi}
+  &= \frac{-1}{\sigma} \,
+    \frac{\partial^2 F}{\partial z \partial \xi}\\
+  \frac{\partial^2 F}{\partial \sigma^2}
+  &= 
+    \frac{z^2}{\sigma^2} \,\frac{\partial F}{\partial z}  -
+    \frac{z}{\sigma} \,
+    \frac{\partial^2 F}{\partial z^2}  \\
+  \frac{\partial^2 F}{\partial \sigma \partial \xi}
+  &= \frac{-z}{\sigma} \,
+    \frac{\partial^2 F}{\partial z \partial \xi} 
+\end{align*}
+}
+
+
+\begin{maxima}
+ Fzz: diff(F, z, 2)
+\end{maxima}%
+
+\begin{maxima}
+  Fzxi: diff(F, z, 1, xi, 1)
+\end{maxima}%
+
+\begin{maxima}
+  Fxixi: diff(F, xi, 2) 
+\end{maxima}
+
+\begin{landscape}
+\subsubsection*{Raw expressions}
+  \color{MonVertF}
+\begin{align*}
+  \frac{\partial^2 F}{\partial z^2}
+  &=
+    \begin{maxima}
+       tex(Fzz)
+     \end{maxima} \\
+  \frac{\partial^2 F}{\partial z \partial \xi}
+  &=
+    \begin{maxima}
+      tex(Fzxi)
+    \end{maxima} \\
+  \frac{\partial^2 F}{\partial \xi^2}
+  &=
+    \begin{maxima}
+       tex(Fxixi)
+    \end{maxima} \\
+\end{align*}
+\end{landscape}
+
+
+\subsubsection*{Simplified expressions}
+
+{\color{red}
+\begin{align*}
+  \frac{\partial^2 F}{\partial z^2}
+  &= F W^{1+2\xi} \,\left\{-[1 + \xi]  + W \right\} \\
+  \frac{\partial^2 F}{\partial z \partial \xi}
+  &= F W^{1 + \xi}  \left\{ T \left[1 - W \right]
+    - \frac{z}{V} \right\}\\
+  \frac{\partial^2 F}{\partial \xi^2}
+  &= F W \left\{ - T^2 \left[1 - W \right] + \frac{2}{\xi}\, T - \frac{z^2}{\xi V^2} \right\}
+\end{align*}
+}
+Note that $W^{1+ 2\xi}= W/V^2$ and  $W^{1+ \xi}= W/V$, which may be faster to
+evaluate.
+
+\subsection{Second-order derivatives: limits for $\xi \to 0$}
+%%========================================================
+
+Here are the limits for $\xi \to 0$
+
+\begin{align*}
+  \lim_{\xi \to 0} \frac{\partial^2 F}{\partial z^2}
+  &=
+    \begin{maxima}
+      tex(limit (Fzz, xi, 0))
+    \end{maxima}
+  \\
+  \lim_{\xi \to 0} \frac{\partial^2 F}{\partial z \partial \xi}
+  &=
+    \begin{maxima}
+      tex(limit (Fzxi, xi, 0))
+    \end{maxima}
+  \\
+  \lim_{\xi \to 0} \frac{\partial^2 F}{\partial^2 \xi^2}
+  &= -{{\left(z^4\,\left(3\,e^{e^ {- z }\,\left(2\,z\,e^{z}+1\right)}-3
+ \,e^{e^ {- z }\,\left(z\,e^{z}+1\right)}\right)-8\,z^3\,e^{e^ {- z }
+ \,\left(2\,z\,e^{z}+1\right)}\right)\,e^{-e^ {- z }\,\left(2\,z\,e^{
+ z}+1\right)-e^ {- z }\,\left(z\,e^{z}+1\right)}}\over{12}}
+\end{align*}
+It seems that Maxima can not find the limit of
+$\partial^2 F/\partial \xi^2$ in a non interactive mode so the value
+above was obtained by a paste-and-copy of the result obtained in an
+interactive session.
+
+\subsubsection*{Simplified expressions}
+
+With $F^\star := \exp\{-e^{-z} - z\}$ (Gumbel distribution value at $z$), 
+
+{\color{red}
+\begin{align*}
+  \frac{\partial^2 F}{\partial z^2} 
+  &= F^\star \left[ e^{-z} - 1  \right] + o(1) \\
+  \frac{\partial^2 F}{\partial z \partial \xi}
+  &= \frac{1}{2} \, F^\star \left[ z^2 \left(1 - e^{-z} \right) - 2 z  \right] +
+  o(1)\\
+  \frac{\partial^2 F}{\partial \xi^2}
+  &= \frac{1}{12} \, F^\star z^3 \left[ 8 - 3 \left(1 - e^{-z}\right) z \right]+ o(1)
+\end{align*}
+}
+
 
 \section{Quantile or return level}
 
