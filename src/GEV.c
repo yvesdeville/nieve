@@ -228,17 +228,20 @@ SEXP Call_dGEV(SEXP x,             /*  double                          */
 	    rgrad[i + 2 * n] = (1.0 - W) * L - z * U * sigma / xi;
 	    
 	    if (hessian) {
-	      // row 'mu'
+	      // H["mu", "mu"]
 	      rhess[i] =  - (xi + 1.0) * (W - xi) / sigmaV / sigmaV;
-	      rhess[i + n] = ((1.0 - (xi + 1.0) * zVm1) * (W - xi) - 1.0) / V / sigma2;
+	      // H["mu", "sigma"] and  H["sigma", "mu"]
+ 	      rhess[i + n] = ((1.0 - (xi + 1.0) * zVm1) * (W - xi) - 1.0) / V / sigma2;
 	      rhess[i + 3 * n] = rhess[i + n];
+	      // H["mu", "xi"] and  H["xi", "mu"]
 	      rhess[i + 2 * n] = (W * (- L2 + zVm1) + 1.0 - (xi + 1.0) * zVm1) / sigmaV;
 	      rhess[i + 6 * n] = rhess[i + 2 * n];
-	      // row 'sigma'
+	      // H["sigma", "sigma"]
 	      rhess[i + 4 * n] = (((W - xi) * (2.0 - (xi + 1.0) * zVm1) - 2.0) *  zVm1 + 1.0) / sigma2;
+	      // H["sigma", "xi"] and  H["xi", "sigma"]
 	      rhess[i + 5 * n] = (z * W * (-L2 + zVm1) / V  + zVm1 - (xi + 1.0) * zVm2) / sigma;
 	      rhess[i + 7 * n] = rhess[i + 5 * n];
-	      // row 'xi'
+	      // H["xi", "xi"]
 	      rhess[i + 8 * n] = - (L2 * L2  + (-2.0 * L2 + zVm2) / xi) * W +
 		(- 2.0 * L2 + (xi + 1.0) * zVm2) / xi;
 
@@ -376,12 +379,14 @@ SEXP Call_pGEV(SEXP q,               /*  double                          */
 	       SEXP scale,           /*  double                          */
 	       SEXP shape,           /*  double                          */
 	       SEXP lowerTailFlag,   /*  integer                         */
-	       SEXP derivFlag) {     /*  integer                         */
+	       SEXP derivFlag,       /*  integer                         */
+	       SEXP hessianFlag) {   /*  integer                         */
  
   int n, nq, nloc, nscale, nshape, i, iq, iloc, iscale, ishape,
-    deriv = INTEGER(derivFlag)[0];
+    deriv = INTEGER(derivFlag)[0], hessian = INTEGER(hessianFlag)[0];
   
-  double eps = 2e-4, z, emz, V, Z, W, xi, ee, eemz = 1.0, dFdz = 0.0;
+  double eps = 2e-4, z, emz, V, FW, W, xi, ee, eemz = 1.0,
+    dFdz = 0.0, dFdxi = 0;
   
   SEXP val;
   
@@ -410,7 +415,6 @@ SEXP Call_pGEV(SEXP q,               /*  double                          */
   
   PROTECT(val = allocVector(REALSXP, n));
   double *rval = REAL(val);
- 
 
   if (deriv) {
 
@@ -418,7 +422,15 @@ SEXP Call_pGEV(SEXP q,               /*  double                          */
 
     PROTECT(grad = allocVector(REALSXP, n * 3));
     double *rgrad = REAL(grad);
-
+ 
+    SEXP hess;
+    
+    PROTECT(hess = allocVector(REALSXP, n * 3 * 3));
+    double *rhess = REAL(hess);
+    
+    // specific auxiliary variables for gradient of for the Hessian
+    double d2Fdz2, d2Fdzdxi, d2Fdxi2, T;
+    
     PROTECT(attrNm = NEW_CHARACTER(1)); 
     SET_STRING_ELT(attrNm, 0, mkChar("gradient"));
 
@@ -449,23 +461,54 @@ SEXP Call_pGEV(SEXP q,               /*  double                          */
 	} else {
 	  rval[i] = R_NaN;
 	}
-      
+	
 	rgrad[i] = NA_REAL;
 	rgrad[i + n] = NA_REAL;
-	rgrad[i + 2 * n] = NA_REAL; 
+	rgrad[i + 2 * n] = NA_REAL;
 	
-      } else {
+	if (hessian) {
+	  // row 'mu'
+	  rhess[i] = NA_REAL;
+	  rhess[i + n] = NA_REAL;
+	  rhess[i + 3 * n] = NA_REAL;
+	  rhess[i + 2 * n] = NA_REAL;
+	  rhess[i + 6 * n] = NA_REAL;
+	  // row 'sigma'
+	  rhess[i + 4 * n] = NA_REAL;
+	  rhess[i + 5 * n] = NA_REAL;
+	  rhess[i + 7 * n] = NA_REAL;
+	  // row 'xi'
+	  rhess[i + 8 * n] = NA_REAL;
+	}
+	
+      } else {   // non-NA case
 	
 	z = (rq[iq] - rloc[iloc]) / rscale[iscale];
 	xi = rshape[ishape];
-
+	
 	if (fabs(xi) < eps) {
-   
+	  
 	  if (z < -30.0) {
 	    rval[i] = 0.0;
 	    rgrad[i] = 0.0;
 	    rgrad[i + n] = 0.0;
 	    rgrad[i + 2 * n] = 0.0;
+
+	    if (hessian) {
+	      // row 'mu'
+	      rhess[i] = 0.0;
+	      rhess[i + n] = 0.0;
+	      rhess[i + 3 * n] = 0.0;
+	      rhess[i + 2 * n] = 0.0;
+	      rhess[i + 6 * n] = 0.0;
+	      // row 'sigma'
+	      rhess[i + 4 * n] = 0.0;
+	      rhess[i + 5 * n] = 0.0;
+	      rhess[i + 7 * n] = 0.0;
+	      // row 'xi'
+	      rhess[i + 8 * n] = 0.0;
+	    }
+	    
 	  } else {
 	    
 	    // improved approximation
@@ -475,50 +518,129 @@ SEXP Call_pGEV(SEXP q,               /*  double                          */
 			    (-0.5 + (8.0 - 3.0 * (1.0 - emz) * z) * xi * z / 24.0));
 	    eemz = ee * emz;
 	    dFdz = eemz * (1.0 +  0.5 * z * ( -2.0  + (1.0 - emz) * z) * xi);
+	    
 	    rgrad[i] = - dFdz / rscale[iscale];
 	    rgrad[i + n] =  -z * dFdz / rscale[iscale];
 	    rgrad[i + 2 * n] = eemz * (z * z * (-0.5  + z * (8.0 - 3.0 * (1.0 - emz) * z) * xi / 12.0));
-	  }
-
-	  // Rprintf("%4d, %4d, %6.3f, %7.2f, %6.3f, %6.3f", i, ishape, xi, z, Z, rscale[iscale]);
+   
+	  // Rprintf("%4d, %4d, %6.3f, %7.2f, %6.3f, %6.3f", i, ishape, xi, z, FW, rscale[iscale]);
 	  // Rprintf(" grad: %6.3f, %6.3f, %6.3f\n", rgrad[i], rgrad[i + n], rgrad[i + 2 * n]);
-
+	  
+	    if (hessian) {
+	      // See the sub-section "scaling"
+	      d2Fdz2 = eemz * (emz - 1.0);
+	      d2Fdzdxi = 0.5 * eemz * z * (z * (1.0 - emz) - 2.0) ;
+	      d2Fdxi2 = eemz * z * z * z * (8.0 - 3.0 * (1.0 - emz) * z) / 12.0 ;
+	      
+	      // same thing as for the small xi case above.
+	      // H["mu", "mu"]
+	      rhess[i] = d2Fdz2 / rscale[iscale] / rscale[iscale];
+	      // H["mu", "sigma"] and H["sigma" ,"mu"]
+	      rhess[i + n] = (dFdz + z * d2Fdz2) / rscale[iscale] / rscale[iscale];
+	      rhess[i + 3 * n] = rhess[i + n];
+	      // H["mu", "xi"] and H["xi" ,"mu"]
+	      rhess[i + 2 * n] = - d2Fdzdxi / rscale[iscale];
+	      rhess[i + 6 * n] = rhess[i + 2 * n];
+	      // H["sigma", "sigma"]
+	      rhess[i + 4 * n] =  z * (2.0 * dFdz + z * d2Fdz2 ) / rscale[iscale] / rscale[iscale];
+	      // H["sigma", "xi"] and H["xi", "sigma"]
+	      rhess[i + 5 * n] = -d2Fdzdxi * z / rscale[iscale];
+	      rhess[i + 7 * n] = rhess[i + 5 * n];
+	      // H["xi", "xi"]
+	      rhess[i + 8 * n ] = d2Fdxi2; 
+	    }
+	    
+	  }
+	  
 	} else {
 	  
 	  V = 1.0 + xi * z;
 	  // Rprintf("%d, %d, %6.3f, %6.3f\n", i, ishape, xi, V);
-
-	  if (V > 0.0) {
-
-	    W = pow(V, - 1.0 / xi);
-	    Z = exp(-W);
-
-	    rval[i] = Z;
-	    Z *= W;
-	   
-	    rgrad[i] = -Z / V / rscale[iscale];
-	    rgrad[i + n] = z * rgrad[i];
-	    rgrad[i + 2 * n] = -Z * (log(V) / xi - z / V) / xi;
 	  
+	  if (V > 0.0) {
+	    
+	    W = pow(V, - 1.0 / xi);
+	    FW = exp(-W);
+	    T = (log(V) / xi - z / V) / xi;
+	    rval[i] = FW;
+	    FW *= W;
+	    
+	    dFdz = FW / V;
+	    dFdxi = - FW * T;
+	    
+	    rgrad[i] = -dFdz / rscale[iscale];
+	    rgrad[i + n] = z * rgrad[i];
+	    rgrad[i + 2 * n] = dFdxi;
+	    
+	    if (hessian) {
+	      // See the sub-section "scaling"
+	      d2Fdz2 = FW * (-1.0 - xi + W) / V / V;
+	      d2Fdzdxi = FW * (T * (1.0 - W) - z / V) / V;
+	      d2Fdxi2 = FW * (-T * T * (1.0 - W) + (2.0 * T - z * z / V / V) / xi);
+	      
+	      // same thing as for the small xi case above.
+	      // H["mu", "mu"]
+	      rhess[i] = d2Fdz2 / rscale[iscale] / rscale[iscale];
+	      // H["mu", "sigma"] and H["sigma" ,"mu"]
+	      rhess[i + n] = (dFdz + z * d2Fdz2 ) / rscale[iscale] / rscale[iscale];
+	      rhess[i + 3 * n] = rhess[i + n];
+	      // H["mu", "xi"] and H["xi" ,"mu"]
+	      rhess[i + 2 * n] = - d2Fdzdxi / rscale[iscale];
+	      rhess[i + 6 * n] = rhess[i + 2 * n];
+	      // H["sigma", "sigma"]
+	      rhess[i + 4 * n] =  z * (2.0 * dFdz + z * d2Fdz2 ) / rscale[iscale] / rscale[iscale];
+	      // H["sigma", "xi"] and H["xi", "sigma"]
+	      rhess[i + 5 * n] = -d2Fdzdxi * z / rscale[iscale];
+	      rhess[i + 7 * n] = rhess[i + 5 * n];
+	      // H["xi", "xi"]
+	      rhess[i + 8 * n ] = d2Fdxi2;
+	    }
+	    
 	  } else {
+	    
 	    if (xi > 0.0) {
 	      rval[i] = 0.0;
 	    } else {
 	      rval[i] = 1.0;
 	    }
+	    
 	    rgrad[i] = 0.0;
 	    rgrad[i + n] = 0.0;
 	    rgrad[i + 2 * n] = 0.0;
-
+	    
+	    if (hessian) {
+	      // row 'mu'
+	      rhess[i] = 0.0;
+	      rhess[i + n] = 0.0;
+	      rhess[i + 3 * n] = 0.0;
+	      rhess[i + 2 * n] = 0.0;
+	      rhess[i + 6 * n] = 0.0;
+	      // row 'sigma'
+	      rhess[i + 4 * n] = 0.0;
+	      rhess[i + 5 * n] = 0.0;
+	      rhess[i + 7 * n] = 0.0;
+	      // row 'xi'
+	      rhess[i + 8 * n] = 0.0;
+	    }
+	    
 	  }
-
+	  
 	} /* non-Gumbel case */
 	
 	if (!INTEGER(lowerTailFlag)[0]) {
+	  
 	  rval[i] = 1.0 - rval[i];
 	  rgrad[i] = -rval[i];
 	  rgrad[i + n] = -rgrad[i + n];
 	  rgrad[i + 2 * n] = -rgrad[i + 2 * n];
+	  
+	  if (hessian) {
+	    rhess[i] = -rhess[i];
+	    rhess[i + n] = -rhess[i + n];
+	    rhess[i + 2 * n] = -rhess[i + 2 * n];
+	    rhess[i + 3 * n] = - rhess[i + 3 * n];
+	  }
+	  
 	}
 	
       }   /* non-NA case     */
@@ -526,11 +648,16 @@ SEXP Call_pGEV(SEXP q,               /*  double                          */
     }
   
     SET_ATTR(val, attrNm, grad);
-    UNPROTECT(7);
+    if (hessian) {
+      SET_STRING_ELT(attrNm, 0, mkChar("hessian"));
+      SET_ATTR(val, attrNm, hess);
+    } 
+
+    UNPROTECT(8);
     return(val);
     
   } else {
-
+    
     for (i = iq = iloc = iscale = ishape = 0;  i < n; 
 	 iq = (++iq == nq) ? 0 : iq, 	       
 	 iloc = (++iloc == nloc) ? 0 : iloc, 

@@ -61,7 +61,7 @@ for (xi in c(-0.2, -0.1, -1e-4, -1e-7, 0.0, 1e-7, 1e-4, 0.1, 0.2)) {
     }
     
     fval <- dGEV(x, loc = mu, scale = sigma, shape = xi)
-    eps <- 1e-6
+    eps <- 1e-8
     e <- fval - (F(x + eps) - F(x - eps)) / 2 / eps
     
     test_that(desc = "Consistency of the GEV cdf density funs",
@@ -135,8 +135,10 @@ for (nm in names(funs)) {
                   expect_true(cond))
 
         ## =====================================================================
-        ## Note that for the Hessian we do not expect a precision
-        ## as high as for the gradient
+        ## Note that for the Hessian we do not expect a precision as
+        ## high as for the gradient. Note also that there can be a
+        ## 'false negative' result because the numerical evaluation of
+        ## the Hessian mayx fail. This has to be fixed in the future.
         ## =====================================================================
         
         if (hessian) {
@@ -145,9 +147,11 @@ for (nm in names(funs)) {
             cond <- (max(abs(H - Hnum)) < 4e-2 / PREC) ||
                 (max(abs(H - Hnum) / (abs(H) + 1e-9)) < 4e-2 / PREC)
             if (is.na(cond) || !cond) {
+                print(theta0)
                 cat(sprintf("testing hessian xi = %6.3f\n", xi))
                 print(H)
                 print(Hnum)
+                print(J)
             }
             test_that(desc = sprintf("Hessian of the GEV %s", nm),
                       expect_true(cond))

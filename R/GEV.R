@@ -220,7 +220,7 @@ dGEV <- function(x, loc = 0.0, scale = 1.0, shape = 0.0, log = FALSE,
 ##' @rdname GEV
 ##' @export
 pGEV <- function(q, loc = 0, scale = 1, shape = 0, lower.tail = TRUE,
-                 deriv = FALSE) {
+                 deriv = FALSE, hessian = FALSE) {
 
     ## if (!all(is.finite(loc)) || !all(is.finite(scale)) ||
     ##     !all(is.finite(shape))) {
@@ -230,6 +230,10 @@ pGEV <- function(q, loc = 0, scale = 1, shape = 0, lower.tail = TRUE,
         !is.numeric(shape)) {
         stop("non-numeric argument")
     }
+
+    if (hessian && !deriv) {
+        stop("'hessian' can be TRUE only when 'gradient' is TRUE")
+    }
     
     res <- .Call(Call_pGEV,
                  as.double(q),
@@ -237,16 +241,24 @@ pGEV <- function(q, loc = 0, scale = 1, shape = 0, lower.tail = TRUE,
                  as.double(scale),
                  as.double(shape),
                  as.integer(lower.tail),
-                 as.integer(deriv))
+                 as.integer(deriv),
+                 as.integer(hessian))
     
     names(res) <- names(q)
     
     if (deriv) {
+        nm3<- c("loc", "scale", "shape")
         n <- length(res)
         attr(res, "gradient") <-
             array(attr(res, "gradient"),
-                  dim = c(n, 3),
-                  dimnames = list(names(q), c("loc", "scale", "shape")))
+                  dim = c(n, 3L),
+                  dimnames = list(names(q), nm3))
+        if (hessian) {
+            attr(res, "hessian") <-
+                array(attr(res, "hessian"),
+                      dim = c(n, 3L, 3L),
+                      dimnames = list(names(q), nm3, nm3))
+        }
     }
     
     res

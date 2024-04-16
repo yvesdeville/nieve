@@ -20,7 +20,15 @@ dGEV(
   hessian = FALSE
 )
 
-pGEV(q, loc = 0, scale = 1, shape = 0, lower.tail = TRUE, deriv = FALSE)
+pGEV(
+  q,
+  loc = 0,
+  scale = 1,
+  shape = 0,
+  lower.tail = TRUE,
+  deriv = FALSE,
+  hessian = FALSE
+)
 
 qGEV(
   p,

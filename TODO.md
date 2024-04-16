@@ -94,6 +94,11 @@ incorrect parameter is used (negative `scale`).
 
 \[ \] Test the functions related to the `Exp1`distribution.
 
+\[ \] When checking a Hessian , one can geta false negative ressult
+because the numerical Hessian is wrong (typically, contains NA). Find
+something to do then: change the options `numDeriv::hessian`, discard
+the test, …
+
 Github actions and more
 -----------------------
 

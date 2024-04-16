@@ -1,3 +1,10 @@
+# Changes in version 0.1.5
+
+## Enhancements
+
+- The `pGEV` function now computes the Hessian, and the result is
+  tested.
+
 # Changes in version 0.1.4
 
 ## Bug fix

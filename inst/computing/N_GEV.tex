@@ -7,6 +7,16 @@
 %% copied without citing the source.
 %% ===========================================================================
 
+\section*{Note}
+
+The expressions computed by \textbf{Maxima} are reported
+{\color{MonVertF}in green}.  The expressions involving some manual
+calculations are reported {\color{red}in red}. These are intended to
+be easier to implement as they make use of ``auxiliary quantities''
+that may be reused in several expressions. Although they have been
+carfully checked, the expressions {\color{red}in red} could still
+contain some errors.
+
 \section{Log-density $\log f$}
 
 \subsection{Expression}
@@ -243,16 +253,20 @@ that is
   &= \frac{1}{\sigma^2} \,
     \frac{\partial^2 \log f}{\partial z^2} \\
   \frac{\partial^2 \log f}{\partial \mu \partial \sigma}
-  &= \frac{z}{\sigma^2} \,
-    \frac{\partial^2 \log f}{\partial z^2} \\
+  &= \frac{1}{\sigma^2} \left\{
+    \frac{\partial \log f}{\partial z} + z
+    \frac{\partial^2 \log f}{\partial z^2}
+   \right\}\\
   \frac{\partial^2 \log f}{\partial \mu \partial \xi}
   &= \frac{-1}{\sigma} \,
     \frac{\partial^2 \log f}{\partial z \partial \xi}\\
   \frac{\partial^2 \log f}{\partial \sigma^2}
   &= \frac{1}{\sigma^2} +
-    \frac{z^2}{\sigma^2} \,\frac{\partial \log f}{\partial z}  -
-    \frac{z}{\sigma} \,
-    \frac{\partial^2 \log f}{\partial z^2}  \\
+    \frac{z}{\sigma^2} \left\{
+    2 \, \frac{\partial \log f}{\partial z}  +
+    z \,
+    \frac{\partial^2 \log f}{\partial z^2}
+    \right\}\\
   \frac{\partial^2 \log f}{\partial \sigma \partial \xi}
   &= \frac{-z}{\sigma} \,
     \frac{\partial^2 \log f}{\partial z \partial \xi} 
@@ -420,8 +434,10 @@ $$}
 \subsubsection*{Scaling}
 
 \begin{align*}
-\frac{\partial F}{\partial \mu} &= \frac{-1}{\sigma} \,\frac{\partial F}{\partial z}\\
-\frac{\partial F}{\partial \sigma} &= \frac{z}{\sigma} \,\frac{\partial F}{\partial z}\\
+  \frac{\partial F}{\partial \mu}
+  &= \frac{-1}{\sigma} \,\frac{\partial F}{\partial z}\\
+  \frac{\partial F}{\partial \sigma}
+  &= \frac{-z}{\sigma} \,\frac{\partial F}{\partial z}\\
 \end{align*}
 
 \subsubsection*{Raw expressions}
@@ -510,16 +526,18 @@ the formula have not yet been fully checked.
   &= \frac{1}{\sigma^2} \,
     \frac{\partial^2 F}{\partial z^2} \\
   \frac{\partial^2 F}{\partial \mu \partial \sigma}
-  &= \frac{z}{\sigma^2} \,
-    \frac{\partial^2 F}{\partial z^2} \\
+  &= \frac{1}{\sigma^2} \,
+    \left\{
+    \frac{\partial F}{\partial z} +
+    z \frac{\partial^2 F}{\partial z^2}
+    \right\} \\
   \frac{\partial^2 F}{\partial \mu \partial \xi}
   &= \frac{-1}{\sigma} \,
     \frac{\partial^2 F}{\partial z \partial \xi}\\
   \frac{\partial^2 F}{\partial \sigma^2}
-  &= 
-    \frac{z^2}{\sigma^2} \,\frac{\partial F}{\partial z}  -
-    \frac{z}{\sigma} \,
-    \frac{\partial^2 F}{\partial z^2}  \\
+  &= \frac{z}{\sigma^2} \,
+    \left\{2 \, \frac{\partial F}{\partial z} + z
+    \frac{\partial^2 F}{\partial z^2} \right\} \\
   \frac{\partial^2 F}{\partial \sigma \partial \xi}
   &= \frac{-z}{\sigma} \,
     \frac{\partial^2 F}{\partial z \partial \xi} 
