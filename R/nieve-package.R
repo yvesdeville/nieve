@@ -14,17 +14,20 @@
 ##' distribution. These functions are vectorized w.r.t. the parameters
 ##' and optionally provide the exact derivatives w.r.t. the
 ##' parameters: gradient and Hessian which can be used in optimization
-##' e.g., to maximize the log-likelihood. Since the gradient is
-##' available for the distribution function, the exact gradient of the
-##' log-likelihood function is available even when censored
+##' e.g., to maximize the log-likelihood. Since the gradient and the
+##' Hessian are available for the log-density \emph{and for the
+##' distribution function}, the exact gradient and the exact Hessian
+##' of the log-likelihood function is available even when censored
 ##' observations are used.
 ##'
 ##' These functions should behave like the probability functions of
-##' the \pkg{stats} package: when a probability \code{p = 0.0} or
-##' \code{p = 1.0} is given, the quantile functions should return the
-##' lower and the upper end-point, be they finite or not. Also when
-##' evaluated at \code{-Inf} and \code{Inf} the probability functions
-##' should return \code{0.0} and \code{1.0}.
+##' the \pkg{stats} package. For instance, when a probability \code{p
+##' = 0.0} or \code{p = 1.0} is given, the quantile functions should
+##' return the lower and the upper end-point, be they finite or
+##' not. Also when evaluated at \code{-Inf} and \code{Inf} the
+##' probability functions should return \code{0.0} and
+##' \code{1.0}. Mind however that the gradient and the Hessian of the
+##' upper-end point are not to be trusted for now.
 ##'
 ##' The \pkg{nieve} package was partly funded by the French
 ##' \emph{Institut de Radioprotection et Sûreté

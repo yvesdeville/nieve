@@ -1,7 +1,3 @@
-nieve README
-================
-Yves Deville
-
 <!-- badges: start -->
 
 [![R-cmd-check](https://github.com/yvesdeville/nieve/actions/workflows/check.yml/badge.svg)](https://github.com/yvesdeville/nieve/actions/workflows/check.yml)
@@ -17,7 +13,8 @@ status](https://www.r-pkg.org/badges/version/nieve)](https://cran.r-project.org/
 
 <img src="inst/images/nieve.png" height = "150" align="center"/>
 
-# Goals and scope
+Goals and scope
+===============
 
 The **nieve** package was partly funded by the French [*Institut de
 Radioprotection et Sûreté Nucléaire* (IRSN)](https://www.irsn.fr/) and
@@ -30,20 +27,20 @@ found or be implemented in other packages.
 
 The package
 
-- Provides the *derivatives w.r.t. the parameters* for the probability
-  functions related to the Generalized Pareto (GP) and the Generalized
-  Extreme Value (GEV) distributions. This involves: the log-density, the
-  distribution function or survival and the quantile function. The 2-nd
-  order derivative (Hessian) is available in most cases.
+-   Provides the *derivatives w.r.t. the parameters* for the probability
+    functions related to the Generalized Pareto (GP) and the Generalized
+    Extreme Value (GEV) distributions. This involves: the log-density,
+    the distribution function or survival and the quantile function. The
+    2-nd order derivative (Hessian) is available in most cases.
 
-- Provides probability functions which are *vectorized w.r.t. the
-  parameters*, as required in non-stationary EV models or in Bayesian
-  inference.
+-   Provides probability functions which are *vectorized w.r.t. the
+    parameters*, as required in non-stationary EV models or in Bayesian
+    inference.
 
-- Provides the *transformations for the two usual parameterizations* of
-  Peaks Over Threshold (POT) models: *Poisson-GP* and *Point Process*
-  (PP). The two transformations come with their derivatives, as needed
-  to compute the covariance matrices.
+-   Provides the *transformations for the two usual parameterizations*
+    of Peaks Over Threshold (POT) models: *Poisson-GP* and *Point
+    Process* (PP). The two transformations come with their derivatives,
+    as needed to compute the covariance matrices.
 
 Although several R packages devoted EVA compute the exact derivatives
 w.r.t. the parameters (**extRemes**, **mev**, …), to our best knowledge,
@@ -60,13 +57,15 @@ across Extreme-Value packages.
 Note that **nieve** has no special relation with the famous package
 **snow**:)
 
-# News
+News
+====
 
 See the
 [NEWS.md](https://github.com/yvesdeville/nieve/blob/main/NEWS.md) file
 or (after install) use `news(package = "nieve")`.
 
-# Installation
+Installation
+============
 
 ### From CRAN
 
@@ -82,9 +81,7 @@ written in C. If you are using Windows, you need to have the
 Provided that the **devtools** package is installed you can then in an R
 session use
 
-``` r
-devtools::install_github("yvesdeville/nieve", dependencies = TRUE)
-```
+    devtools::install_github("yvesdeville/nieve", dependencies = TRUE)
 
 You can also select a specific branch or a specific commit by using the
 suitable syntax for `install_github`, see the **devtools** package

@@ -38,10 +38,10 @@ function *F* are related to those of the cumulated hazard *H*.
 \[x\] In `GEV.tex`, give the formula for the 2-nd order derivatives of
 the distribution function.
 
-\[ \] In `GEV.tex`, the expressions related to the log-likelihood (and
-especially those for the 2-nd order devrivatives could be made much
-simpler by using the quantities *W*, *T* as defined in the section
-devoted to the distribution function *F*.
+\[ \] In `GEV.tex`, the expressions related to the log-likelihood
+log *f* (and especially those for the 2-nd order devrivatives) could be
+made much simpler by using the quantities *W*, *T* as defined in the
+section devoted to the distribution function *F*.
 
 Computing
 ---------
@@ -94,16 +94,16 @@ incorrect parameter is used (negative `scale`).
 
 \[ \] Test the functions related to the `Exp1`distribution.
 
-\[ \] When checking a Hessian , one can geta false negative ressult
-because the numerical Hessian is wrong (typically, contains NA). Find
-something to do then: change the options `numDeriv::hessian`, discard
-the test, …
+\[ \] When checking a Hessian , one can get a “false negative” ressult
+because the numerical Hessian is wrong. Typically, it contains some
+`NA`. Find something to do then: change the options `numDeriv::hessian`,
+discard the test, …
 
 Github actions and more
 -----------------------
 
 \[x\] Add GitHub action to check on the three main platforms.
 
-\[ \] Add Github action to produce precompiled files as artifacts.
+\[ \] Add Github action to produce precompiled files as artifacts?
 
 \[ \] Add code coverage in a github action.

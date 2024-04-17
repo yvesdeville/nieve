@@ -76,7 +76,7 @@ for (xi in c(-0.2, -0.1, -1e-4, -1e-7, 0.0, 1e-7, 1e-4, 0.1, 0.2)) {
 ## ==========================================================================
 
 funs <- list("log-density" = dGEV, "distribution" = pGEV, "quantile" = qGEV)
-Hessian <- c("log-density" = TRUE, "distribution" = FALSE, "quantile" = TRUE)
+## Hessian <- c("log-density" = TRUE, "distribution" = TRUE, "quantile" = TRUE)
 
 n <- 1
 mu <- rnorm(1)

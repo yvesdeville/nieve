@@ -1,6 +1,6 @@
 ---
 author: "Yves Deville"
-title: "nieve README"
+title: "nieve"
 linkcolor: blue
 output: github_document
 ---
@@ -55,7 +55,6 @@ The vignette [Special Values in Extreme-Value
 Distributions](https://github.com/yvesdeville/nieve/blob/main/inst/noncranVignettes/nonFiniteValues.pdf)
 compares the treatment of non-finite values in the probability
 functions across Extreme-Value packages.
-
 
 
 Note that **nieve** has no special relation with the famous package **snow**:)
