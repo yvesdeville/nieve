@@ -6,40 +6,86 @@
 %% Mind that this file required a serious amount of work and should not be
 %% copied without citing the source.
 %% ===========================================================================
+\newpage
 
 \section*{Note}
+In this report
 
-The expressions computed by \textbf{Maxima} are reported
-{\color{MonVertF}in green}.  The expressions involving some manual
-calculations are reported {\color{red}in red}. These are intended to
-be easier to implement as they make use of ``auxiliary quantities''
-that may be reused in several expressions. Although they have been
-carfully checked, the expressions {\color{red}in red} could still
-contain some errors.
+\begin{itemize}
+\item The expressions computed by \textbf{Maxima} are reported
+  {\color{MonVertF}in green}.
+  
+\item The expressions involving some manual calculations are reported
+  {\color{red}in red}.  These are intended to be easier to implement
+  as they make use of ``auxiliary quantities'' that may be reused in
+  several expressions.
+\end{itemize}
+
+The simplifications are not needed in the section devoted to the
+quantile but they help much for the log-density and the distribution.
+Although they have been carfully checked, the expressions
+{\color{red}in red} could still contain some errors.  Please report
+any error at \url{ https://github.com/yvesdeville/nieve/issues/}.
+
+\section{Auxiliary variables}
+
+\begin{maxima}
+  V: 1 + xi * z
+\end{maxima}
+\begin{maxima}
+  W: V^(-1/xi)
+\end{maxima}
+
+In order to evaluate the the log-density $\log f(y)$ or the
+distribution function $F(y)$ for some $y$,  the following auxiliary variables
+will be used
+\begin{equation}
+  \label{eq:AuxVar}
+  \left\{ \rule{0.5em}{0em}
+  \begin{aligned}
+    z &:= \frac{y - \mu}{\sigma}, \\
+    V &:= 1 + \xi z, \\
+    W &:= V^{-1/\xi},\\
+    T &:= \frac{\log V}{\xi^2} - \frac{z}{\xi V},\\
+    R &:= \frac{1}{\xi} \left[2T - \frac{z^2}{V^2} \right].
+  \end{aligned}
+  \right.
+\end{equation}
+In practice $z$ should take quite moderate value, say between $-30$
+and $30$ and if this is not the case, the wanted results can be
+anticipated.  It is worth noting that for fixed values of $y$, of the
+location $\mu$ and the scale $\sigma$ these quantities all have a
+finite limit and Taylor expansion for $\xi \approx 0$
+\begin{equation*}
+  \begin{aligned}
+    W
+    &= e^{-z} + \frac{z^2e^{-z}}{2} \, \xi - \frac{z^3e^{-z} [3z -8]}{24}  \, \xi^2  + o(\xi^2),\\
+    T
+    &= \frac{z^2}{2} - \frac{2z^3}{3} \xi + \frac{3z^4}{4}\xi^2 + o(\xi^2),\\
+    R
+    &= -\frac{z^3}{3} + \frac{z^4}{2} \, \xi - \frac{3z^5}{5}\,\xi^2 + o(\xi^2). 
+  \end{aligned}
+\end{equation*}
+So although their are not defined when $\xi = 0$, the quantities $W$,
+$T$ and $R$ can be prolongated by continuity at $\xi = 0$. The
+log-density, the distribution functions and their derivatives can be
+expressed with this auxiliary variables. Although $W$ and $T$ require
+the use of trancendental functions: non-fractional power and log, the
+functions are subsequently obtained multiplications and divisions of
+these quantities. So if the auxiliary variables of~(\ref{eq:AuxVar})
+are safely evaluated in the wanted range of values for $y$ and the GEV
+parameters, then all the results of interest will be evaluated safely
+and efficiently.
+
 
 \section{Log-density $\log f$}
 
 \subsection{Expression}
 
 \begin{maxima}
-  V: 1 + xi * z
-\end{maxima}
-\begin{maxima}
   U: (1 + \xi - V^(-1/xi)) / sigma / V
 \end{maxima}
 
-Define $z$ by
-$$
-z := \frac{y - \mu}{\sigma}
-$$
-%-----------------------------------------------------------------------
-and then $V$ and $U$ by 
-\[
-V := 
-\begin{maxima}
-tex(V)
-\end{maxima}, \qquad U:= \frac{1}{\sigma V}\,\left[ 1 + \xi - V^{-1/\xi}\right]. 
-\]
 %%-----------------------------------------------------------------------
 \begin{maxima}
   g: -log(sigma) - (1 / xi + 1) * log(V) - V^(-1 / xi)
@@ -66,6 +112,12 @@ The log-likelihood is defined by
 \begin{maxima}
   g: -log(sigma) - (1 / xi + 1) * log(V) - V^(-1 / xi)
 \end{maxima}
+
+{\color{red}
+  \begin{equation}
+    \log f  := - \log \sigma - (\xi + 1) \left[\xi T + \frac{z}{V}\right] - W
+  \end{equation}
+}
 
 % \subsection{Derivatives}
 % %%=======================================================
@@ -101,12 +153,13 @@ The log-likelihood is defined by
 }
 
 which can be simplified as
-{\color{red}
-$$
-\log f = -\left[ \log \sigma + z + e^{-z} \right] + \frac{1}{2}\,
-\left[ (1 -  e^{-z}) z -2  \right]\,z \xi - \frac{1}{24} \,
-\left[ 3 z^2 e^{-z} + 8 z (1 - e^{-z}) - 12 \right] z^2 \xi^2
-$$}
+\begin{equation}
+  \label{eq:TylorLogf}
+  \color{red}
+  \log f = -\left[ \log \sigma + z + e^{-z} \right] + \frac{1}{2}\,
+  \left[ (1 -  e^{-z}) z -2  \right]\,z \xi - \frac{1}{24} \,
+  \left[ 3 z^2 e^{-z} + 8 z (1 - e^{-z}) - 12 \right] z^2 \xi^2
+\end{equation}
 
 \subsection{First-order derivatives: expression}
 %%=======================================================
@@ -120,58 +173,57 @@ $$
    \dfrac{\partial z}{\partial \mu} = -\frac{1}{\sigma} \, \frac{\partial \log f}{\partial z}
 $$ 
 and up to the term $-\log \sigma$ in $\log f$, the same is true for
-$\sigma$ so
-$$
-\frac{\partial \log f}{\partial \sigma} =
--\frac{1}{\sigma} + \frac{\partial \log f}{\partial z} \, \dfrac{\partial z}{\partial \sigma} =
--\frac{1}{\sigma} -\frac{z}{\sigma} \, \frac{\partial \log f}{\partial z}.
-$$ 
-So it is simpler to compute the derivative w.r.t. $z$ and then find the
-derivatives w.r.t. $\mu$ and $\sigma$.
+$\sigma$ so it is simpler to compute the derivative w.r.t. $z$ and then find the
+derivatives w.r.t. $\mu$ and $\sigma$ using
+{\color{red}
+\begin{equation}
+  \begin{aligned}
+    \frac{\partial \log f}{\partial \mu}
+    &= -\frac{1}{\sigma} \, \frac{\partial \log f}{\partial z}\\
+    \frac{\partial \log f}{\partial \sigma}
+    %% = -\frac{1}{\sigma} + \frac{\partial \log f}{\partial z} \, \dfrac{\partial z}{\partial \sigma} =
+    &=-\frac{1}{\sigma} -\frac{z}{\sigma} \, \frac{\partial \log f}{\partial z}.
+  \end{aligned}
+\end{equation}
+}
 
 \subsubsection*{Raw expressions}
 %%-----------------------------------
 Here are the raw expressions found by Maxima
-{\color{MonVertF}
-  \begin{align*}
+\begin{equation*}
+\color{MonVertF}
+  \begin{aligned}
   \frac{\partial \log f}{\partial z}
   &=
     \begin{maxima}
       tex(gz)
     \end{maxima}
-  \\
-  \frac{\partial \log f}{\partial \xi}
+    \\
+    \frac{\partial \log f}{\partial \xi}
   &=
     \begin{maxima}
       tex(gxi)
     \end{maxima}
-  \end{align*}
-}
+  \end{aligned}
+\end{equation*}
 
 \subsubsection*{Simplified expressions}
 
 We use the following simplifications
-\begin{align*} 
-  \frac{\partial \log f}{\partial z}
-  &= - \sigma U, %% V^{-(\xi + 1)/\xi} - (\xi + 1) V^{-1},
-  \\
-  \frac{\partial \log f}{\partial \xi}
-  &= \frac{1}{\xi^2} \, [1 - V^{-1/\xi}]  \, \log V - z \, U \frac{\sigma}{\xi}.
-\end{align*}
-so eventually
-
 {\color{red}
-\begin{align*} 
-  \frac{\partial \log f}{\partial \mu}
-  &= U,
-  \\
-  \frac{\partial \log f}{\partial \sigma}
-  &= \frac{-1}{\sigma} + z U,
-  \\
-  \frac{\partial \log f}{\partial \xi}
-  &= \frac{1}{\xi^2} \, [1 - V^{-1/\xi}]  \, \log V - z \, U \frac{\sigma}{\xi}.
-\end{align*}
+  \begin{equation}
+    \begin{aligned} 
+      \frac{\partial \log f}{\partial z}
+      %% &= - \sigma U,
+      &= \frac{1}{V} \, \left[W - \xi - 1 \right]   
+      \\
+      \frac{\partial \log f}{\partial \xi}
+      %% &= \frac{1}{\xi^2} \, [1 - V^{-1/\xi}]  \, \log V - z \, U \frac{\sigma}{\xi}.
+      &= T \left[1 - W \right] - \frac{z}{V}
+    \end{aligned}
+  \end{equation}
 }
+
 
 \subsection{First-order derivatives: Taylor expansions for $\xi \approx 0$}
 \begin{maxima}
@@ -183,36 +235,47 @@ so eventually
 \begin{maxima}
   tgxi: taylor(gxi, xi, 0, 1)
 \end{maxima}
-{\color{MonVertF}
-$$
-U =
-\begin{maxima}
-  tex(tU)
-\end{maxima}
-$$
-}
 
-{\color{MonVertF}
-\begin{align*}
-  \frac{\partial \log f}{\partial z} &= 
-  \begin{maxima}
-    tex(tgz)
-  \end{maxima} \\
-  \frac{\partial \log f}{\partial \xi} &= 
-  \begin{maxima}
-    tex(tgxi)
-  \end{maxima}
-\end{align*}
-}
+% {\color{MonVertF}
+% $$
+% U =
+% \begin{maxima}
+%    tex(tU)
+% \end{maxima}
+% $$
+% }
 
-{\color{red}
-\begin{align*}
-\frac{\partial \log f}{\partial z} &= -\left[ 1 - e^{-z} \right]
-- \frac{1}{2}\, \left[2 -2 (1 - e^{-z}) z -  e^{-z} z^2 \right] \, \xi + o(\xi)  \\
-\frac{\partial \log f}{\partial \xi} &= -\frac{1}{2}\,\left[ 2 z - (1 - e^{-z}) z^2 \right]
-+  \frac{1}{12}\, \left[12 - 8 (1 - e^{-z}) z - 3z^2\right] \, z^2 \xi + o(\xi) 
-\end{align*}
-}
+\begin{equation*}
+  \color{MonVertF}
+  \begin{aligned}
+    \frac{\partial \log f}{\partial z}
+    &= 
+      \begin{maxima}
+        tex(tgz)
+      \end{maxima} \\
+    \frac{\partial \log f}{\partial \xi}
+    &= 
+      \begin{maxima}
+        tex(tgxi)
+      \end{maxima}
+  \end{aligned}
+\end{equation*}
+
+\begin{equation}
+  \color{red}
+  \label{eq:TaylorDer1Logf}
+  \begin{aligned}
+    \frac{\partial \log f}{\partial z}
+    &= -\left[ 1 - e^{-z} \right]
+      - \frac{1}{2}\, \left[2 -2 (1 - e^{-z}) z -  e^{-z} z^2 \right] \, \xi
+      + o(\xi)  \\
+    \frac{\partial \log f}{\partial \xi}
+    &= -\frac{1}{2}\,\left[ 2 z - (1 - e^{-z}) z^2 \right]
+      +  \frac{1}{12}\, \left[12 - 8 (1 - e^{-z}) z - 3z^2\right] \, z^2 \xi
+      + o(\xi) 
+  \end{aligned}
+\end{equation}
+
 
 \subsubsection*{Limits for $\xi \to 0$}
 %%========================================================
@@ -232,15 +295,16 @@ Here are the limits for $\xi \to 0$
     \end{maxima}
 \end{align*}}
 that is
-{\color{red}
-  \begin{align*}
-  \lim_{\xi \to 0} \frac{\partial \log f}{\partial z}
-  &= 1 - e^{-z}
-  \\
-  \lim_{\xi \to 0} \frac{\partial \log f}{\partial \xi}
-  &= -\frac{z}{2} \,\left[2 - (1 - e^{-z}) z \right] 
-\end{align*}}
-
+\begin{equation}
+  \label{eq:LimDer1Logf}
+  \color{red}
+  \begin{aligned}
+    \lim_{\xi \to 0} \frac{\partial \log f}{\partial z}
+    &= 1 - e^{-z} \\
+    \lim_{\xi \to 0} \frac{\partial \log f}{\partial \xi}
+    &= -\frac{z}{2} \,\left[2 - (1 - e^{-z}) z \right] 
+  \end{aligned}
+\end{equation}
 
 
 \subsection{Second-order derivatives: expressions}
@@ -248,29 +312,31 @@ that is
 \subsubsection*{Scaling}
 %% -----------------------------------
 {\color{red}
-\begin{align*}
-  \frac{\partial^2 \log f}{\partial \mu^2}
-  &= \frac{1}{\sigma^2} \,
-    \frac{\partial^2 \log f}{\partial z^2} \\
-  \frac{\partial^2 \log f}{\partial \mu \partial \sigma}
-  &= \frac{1}{\sigma^2} \left\{
-    \frac{\partial \log f}{\partial z} + z
-    \frac{\partial^2 \log f}{\partial z^2}
-   \right\}\\
-  \frac{\partial^2 \log f}{\partial \mu \partial \xi}
-  &= \frac{-1}{\sigma} \,
-    \frac{\partial^2 \log f}{\partial z \partial \xi}\\
-  \frac{\partial^2 \log f}{\partial \sigma^2}
-  &= \frac{1}{\sigma^2} +
-    \frac{z}{\sigma^2} \left\{
+  \begin{equation}
+    \begin{aligned}
+      \frac{\partial^2 \log f}{\partial \mu^2}
+      &= \frac{1}{\sigma^2} \,
+        \frac{\partial^2 \log f}{\partial z^2} \\
+      \frac{\partial^2 \log f}{\partial \mu \partial \sigma}
+      &= \frac{1}{\sigma^2} \left\{
+        \frac{\partial \log f}{\partial z} + z
+        \frac{\partial^2 \log f}{\partial z^2}
+        \right\}\\
+      \frac{\partial^2 \log f}{\partial \mu \partial \xi}
+      &= \frac{-1}{\sigma} \,
+        \frac{\partial^2 \log f}{\partial z \partial \xi}\\
+      \frac{\partial^2 \log f}{\partial \sigma^2}
+      &= \frac{1}{\sigma^2} +
+        \frac{z}{\sigma^2} \left\{
     2 \, \frac{\partial \log f}{\partial z}  +
-    z \,
-    \frac{\partial^2 \log f}{\partial z^2}
-    \right\}\\
-  \frac{\partial^2 \log f}{\partial \sigma \partial \xi}
-  &= \frac{-z}{\sigma} \,
-    \frac{\partial^2 \log f}{\partial z \partial \xi} 
-\end{align*}
+        z \,
+        \frac{\partial^2 \log f}{\partial z^2}
+        \right\}\\
+      \frac{\partial^2 \log f}{\partial \sigma \partial \xi}
+      &= \frac{-z}{\sigma} \,
+        \frac{\partial^2 \log f}{\partial z \partial \xi} 
+    \end{aligned}
+  \end{equation}
 }
 
 \subsubsection*{Raw expressions}
@@ -301,7 +367,7 @@ that is
 
 % %% \begin{landscape}
 % % %   -------------------------------------
-{\color{MonVertF}
+{\color{MonVertF} \small
 \begin{align*}
   \frac{\partial^2 \log f}{\partial z^2}
   &=
@@ -323,22 +389,20 @@ that is
 
 \subsubsection*{Simplified expressions}
 %%-----------------------------------
-{\color{red}
-\begin{align*}
-  \frac{\partial^2 \log f}{\partial z^2}
-  &= - (\xi + 1) \left[V^{-1/\xi} - \xi\right] \times \frac{1}{ V^2}\\
-  \frac{\partial^2 \log f}{\partial z \partial \xi}
-  &=  V^{-1/\xi -1}
-    \left[\frac{1}{\xi^2} \,\log V - \frac{(\xi + 1)}{\xi}\,\frac{z}{V} \right]
-    - \frac{1}{V} + (\xi +1) \frac{z}{V^2}   \\
-  \frac{\partial^2 \log f}{\partial \xi^2} 
-  &= - \left\{ \left[\frac{1}{\xi^2} \, \log V - \frac{1}{\xi}\,\frac{z}{V} \right]^2 +
-    \left[ - \frac{2}{\xi^2}\,\log V + \frac{2}{\xi}\,\frac{z}{V}
-    + \frac{z^2}{V^2}\right] \times
-    \frac{1}{\xi} \right\} \times V^{-1/\xi} - \frac{2}{\xi^3}\,\log V +
-    \frac{2}{\xi^2}\,\frac{z}{V} + \frac{\xi +1}{\xi}\, \frac{z^2}{V^2}
-\end{align*}
-}
+Using the auxiliary variables~(\ref{eq:AuxVar})
+\begin{equation}
+  \color{red}
+  \label{eq:SimDer2Logf}
+  \begin{aligned}
+    \frac{\partial^2 \log f}{\partial z^2}
+    &= - \frac{\xi + 1}{V^2}\, \left[W - \xi\right] \\
+    \frac{\partial^2 \log f}{\partial z \partial \xi}
+    &=  \frac{W}{V}\, \left[T - \frac{z}{V} \right] - \frac{1}{V}
+      + (\xi + 1) \frac{z}{V^2}\\
+    \frac{\partial^2 \log f}{\partial \xi^2} 
+    &= - W\left\{T^2 - R  \right\} - R +  \frac{z^2}{V^2}
+  \end{aligned}
+\end{equation}
 
 
 
@@ -375,11 +439,11 @@ Here are the limits for $\xi \to 0$
   &= -e^{-z}
   \\
   \lim_{\xi \to 0} \frac{\partial^2 \log f}{\partial z \partial \xi}
-  &= \frac{1}{2} \, \left[ -2  - 2 (1 - e^{-z}) z  + e^{-z} z^2\right]  
+  &= \frac{1}{2} \, \left[ -2  - 2 \,(1 - e^{-z}) \, z  + e^{-z} z^2\right]  
   \\
   \lim_{\xi \to 0} \frac{\partial^2 \log f}{\partial^2 \xi^2}
    &=
-    \frac{z^2}{12} \, \left[12 + 8 (1 - e^{-z}) z -3 e^{-z} z^2 \right]
+    \frac{z^2}{12} \, \left[12 + 8 \, (1 - e^{-z}) \, z -3 \,e^{-z} z^2 \right]
 \end{align*}}
 
 \section{Distribution function $F$}
@@ -390,17 +454,17 @@ Here are the limits for $\xi \to 0$
   W: V^(-1/xi)
 \end{maxima}
 
-Define
-$$
-W := V^{-1/\xi} = [1 + \xi z]^{-1/\xi}, \qquad T := \frac{\log V}{\xi^2}
-- \frac{z}{\xi V}
-$$
-Then
-$$
- F := \exp\{ - W \}.
-$$
-For the distribution function the second-order derivatives has
-not yet been implemented.
+Using the auxiliary variables~(\ref{eq:AuxVar})
+% $$
+% W := V^{-1/\xi} = [1 + \xi z]^{-1/\xi}, \qquad T := \frac{\log V}{\xi^2}
+% - \frac{z}{\xi V}
+% $$
+% Then
+\begin{equation}
+  \color{red}
+  \label{eq:DefF}
+  F := \exp\{ - W \}.
+\end{equation}
 
 \begin{maxima}
   F: exp(-W)
@@ -422,23 +486,27 @@ not yet been implemented.
 \end{equation*}
 }
 \subsubsection*{Simplified expression}
-{\color{red}
-$$
-F = \exp\{-e^{-z}\} \left\{ 1 - e^{-z} \,\frac{z^2}{2} \xi +
-  e^{-z} \frac{z^3}{24} \,\left[ 8 - 3 (1 - e^{-z}) z \right] \xi^2 \right\} +
+\begin{equation}
+  \label{eq:SimpF}
+  \color{red}
+  F = \exp\{-e^{-z}\} \left\{ 1 - e^{-z} \,\frac{z^2}{2} \xi +
+    e^{-z} \frac{z^3}{24} \,\left[ 8 - 3 (1 - e^{-z}) z \right] \xi^2 \right\} +
   o(\xi^2)
-$$}
+\end{equation}
 
 \subsection{First-order derivatives: expressions}
 
 \subsubsection*{Scaling}
-
-\begin{align*}
-  \frac{\partial F}{\partial \mu}
-  &= \frac{-1}{\sigma} \,\frac{\partial F}{\partial z}\\
-  \frac{\partial F}{\partial \sigma}
-  &= \frac{-z}{\sigma} \,\frac{\partial F}{\partial z}\\
-\end{align*}
+\begin{equation}
+  \color{red}
+  \label{eq:ScaleDer1F}
+  \begin{aligned}
+    \frac{\partial F}{\partial \mu}
+    &= \frac{-1}{\sigma} \,\frac{\partial F}{\partial z}\\
+    \frac{\partial F}{\partial \sigma}
+    &= \frac{-z}{\sigma} \,\frac{\partial F}{\partial z}
+  \end{aligned}
+\end{equation}
 
 \subsubsection*{Raw expressions}
 
@@ -464,14 +532,16 @@ $$}
 \end{align*}
 }
 \subsubsection*{Simplified  expressions}
-{\color{red}
-\begin{align*}
-  \frac{\partial F}{\partial z}
-  &= F W \, \frac{1}{V} \\
-  \frac{\partial F}{\partial \xi}
-  &= - F W T \\
-\end{align*}
-}
+\begin{equation}
+  \label{eq:Der1F}
+  \color{red}
+  \begin{aligned}
+    \frac{\partial F}{\partial z}
+    &= F W \, \frac{1}{V} \\
+    \frac{\partial F}{\partial \xi}
+    &= - F W T
+  \end{aligned}
+\end{equation}
 
 \subsection{First-order derivatives: Taylor expansions
   for $\xi \approx 0$}
@@ -499,19 +569,23 @@ $$}
 \end{align*}}
 
 \subsubsection*{Simplified expressions}
-With {\color{red}$F^\star := \exp\{-e^{-z} - z\}$} (Gumbel distribution value at $z$),
+With {\color{red}$F^\star := \exp\{-e^{-z} - z\}$} which is the value
+of the standard Gumbel distribution function at $z$,
 
-{\color{red}
-\begin{align*}
-  \frac{\partial F}{\partial z}
-  &= F^\star \left\{ 1 + \frac{z}{2} \left[ -2 + (1 -e^{-z}) z \right] \xi \right\} + o(\xi) \\
+\begin{equation}
+  \color{red}
+  \label{eq:SimpDer1F}
+  \begin{aligned}
+    \frac{\partial F}{\partial z}
+    &= F^\star \left\{ 1 + \frac{z}{2} \left[ -2 + (1 -e^{-z}) z \right] \xi \right\}
+      + o(\xi) \\
   \frac{\partial F}{\partial \xi}
   &= F^\star
     \left\{-\frac{z^2}{2}
     + \frac{z^3}{12} \left[8 - 3 \, (1 -e^{-z}) z \right] \xi \right\}
     + o(\xi)
-\end{align*}
-}
+  \end{aligned}
+\end{equation}
 
 \subsection{Second-order derivatives}
 
@@ -520,30 +594,31 @@ the formula have not yet been fully checked.
 
 \subsubsection*{Scaling}
 
-{\color{red}
-\begin{align*}
-  \frac{\partial^2 F}{\partial \mu^2}
-  &= \frac{1}{\sigma^2} \,
-    \frac{\partial^2 F}{\partial z^2} \\
-  \frac{\partial^2 F}{\partial \mu \partial \sigma}
-  &= \frac{1}{\sigma^2} \,
-    \left\{
-    \frac{\partial F}{\partial z} +
-    z \frac{\partial^2 F}{\partial z^2}
-    \right\} \\
-  \frac{\partial^2 F}{\partial \mu \partial \xi}
-  &= \frac{-1}{\sigma} \,
-    \frac{\partial^2 F}{\partial z \partial \xi}\\
-  \frac{\partial^2 F}{\partial \sigma^2}
-  &= \frac{z}{\sigma^2} \,
-    \left\{2 \, \frac{\partial F}{\partial z} + z
-    \frac{\partial^2 F}{\partial z^2} \right\} \\
-  \frac{\partial^2 F}{\partial \sigma \partial \xi}
-  &= \frac{-z}{\sigma} \,
-    \frac{\partial^2 F}{\partial z \partial \xi} 
-\end{align*}
-}
-
+\begin{equation}
+  \label{eq:ScalDer2F}
+  \color{red}
+  \begin{aligned}
+    \frac{\partial^2 F}{\partial \mu^2}
+    &= \frac{1}{\sigma^2} \,
+      \frac{\partial^2 F}{\partial z^2} \\
+    \frac{\partial^2 F}{\partial \mu \partial \sigma}
+    &= \frac{1}{\sigma^2} \,
+      \left\{
+      \frac{\partial F}{\partial z} +
+      z \frac{\partial^2 F}{\partial z^2}
+      \right\} \\
+    \frac{\partial^2 F}{\partial \mu \partial \xi}
+    &= \frac{-1}{\sigma} \,
+      \frac{\partial^2 F}{\partial z \partial \xi}\\
+    \frac{\partial^2 F}{\partial \sigma^2}
+    &= \frac{z}{\sigma^2} \,
+      \left\{2 \, \frac{\partial F}{\partial z} + z
+      \frac{\partial^2 F}{\partial z^2} \right\} \\
+    \frac{\partial^2 F}{\partial \sigma \partial \xi}
+    &= \frac{-z}{\sigma} \,
+      \frac{\partial^2 F}{\partial z \partial \xi} 
+  \end{aligned}
+\end{equation}
 
 \begin{maxima}
  Fzz: diff(F, z, 2)
@@ -582,18 +657,20 @@ the formula have not yet been fully checked.
 
 \subsubsection*{Simplified expressions}
 
-{\color{red}
-\begin{align*}
-  \frac{\partial^2 F}{\partial z^2}
-  &= F W^{1+2\xi} \,\left\{-[1 + \xi]  + W \right\} \\
-  \frac{\partial^2 F}{\partial z \partial \xi}
-  &= F W^{1 + \xi}  \left\{ T \left[1 - W \right]
-    - \frac{z}{V} \right\}\\
-  \frac{\partial^2 F}{\partial \xi^2}
-  &= F W \left\{ - T^2 \left[1 - W \right] + \frac{2}{\xi}\, T - \frac{z^2}{\xi V^2} \right\}
-\end{align*}
-}
-Note that $W^{1+ 2\xi}= W/V^2$ and  $W^{1+ \xi}= W/V$, which may be faster to
+Using the auxiliary variables of~(\ref{eq:AuxVar})
+\begin{equation}
+  \color{red}
+  \begin{aligned}
+    \frac{\partial^2 F}{\partial z^2}
+    &= \frac{F W}{V^2} \,\left\{-[1 + \xi]  + W \right\} \\
+    \frac{\partial^2 F}{\partial z \partial \xi}
+    &= \frac{F W}{V}  \, \left\{ T \left[1 - W \right]
+      - \frac{z}{V} \right\}\\
+    \frac{\partial^2 F}{\partial \xi^2}
+    &= F W \left\{ - T^2 \left[1 - W \right] + R \right\}
+  \end{aligned}
+\end{equation}
+Note that $W^{1+ 2\xi}= W/V^2$ and the second form is faster to
 evaluate.
 
 \subsection{Second-order derivatives: limits for $\xi \to 0$}
@@ -629,17 +706,19 @@ interactive session.
 
 With $F^\star := \exp\{-e^{-z} - z\}$ (Gumbel distribution value at $z$), 
 
-{\color{red}
-\begin{align*}
-  \frac{\partial^2 F}{\partial z^2} 
-  &= F^\star \left[ e^{-z} - 1  \right] + o(1) \\
-  \frac{\partial^2 F}{\partial z \partial \xi}
-  &= \frac{1}{2} \, F^\star \left[ z^2 \left(1 - e^{-z} \right) - 2 z  \right] +
-  o(1)\\
-  \frac{\partial^2 F}{\partial \xi^2}
-  &= \frac{1}{12} \, F^\star z^3 \left[ 8 - 3 \left(1 - e^{-z}\right) z \right]+ o(1)
-\end{align*}
-}
+\begin{equation}
+  \color{red}
+  \label{eq:SimpDer2F}
+  \begin{aligned}
+    \frac{\partial^2 F}{\partial z^2} 
+    &= F^\star \left[ e^{-z} - 1  \right] + o(1) \\
+    \frac{\partial^2 F}{\partial z \partial \xi}
+    &= \frac{1}{2} \, F^\star \left[ z^2 \left(1 - e^{-z} \right) - 2 z  \right] +
+      o(1)\\
+    \frac{\partial^2 F}{\partial \xi^2}
+    &= \frac{1}{12} \, F^\star z^3 \left[ 8 - 3 \left(1 - e^{-z}\right) z \right]+ o(1)
+  \end{aligned}
+\end{equation}
 
 
 \section{Quantile or return level}
@@ -655,12 +734,24 @@ With $A:= -\log p$, the quantile $\rho := q_{\text{GEV}}(p)$ is given by
 
 
 %%
-\[
-\rho=
-\begin{maxima}
- tex(rho)
-\end{maxima}
-\]
+\begin{equation}
+  \label{eq:DefRho}
+  \color{red}
+  \rho= 
+  \begin{maxima}
+    tex(rho)
+  \end{maxima}
+\end{equation}
+
+\subsection{Scaling and auxiliary variables}
+
+$$
+   \rho = \mu + \sigma \rho^\star
+$$
+
+\begin{equation}
+  \rho^\star := \frac{ A^{-\xi} - 1}{\xi} 
+\end{equation}
 
 \subsection{Taylor expansion for $\xi \approx 0$}
 
@@ -769,16 +860,20 @@ When $\xi \neq 0$ we have
 %%----------------------
 Since $\rho$ is a linear function of $\mu$ and $\sigma$, we
 consider only the standardized return level
-\begin{maxima}
-  rhoStar: - (1 - A^(-xi)) / xi
-\end{maxima}
+\begin{equation*}%
+  \begin{maxima}%
+    rhoStar: - (1 - A^(-xi)) / xi
+  \end{maxima}%
+\end{equation*}%
 %% 
-\[
-\rho^\star=
-\begin{maxima}
-  tex(rhoStar)
-\end{maxima}
-\]
+\begin{equation}
+  \label{eq:ScaleRho}
+  \color{red}
+  \rho^\star=
+  \begin{maxima}
+    tex(rhoStar)
+  \end{maxima}
+\end{equation}
 so that $\rho = \mu + \sigma \rho^\star$.
 
 \subsubsection*{Raw expressions}
@@ -810,21 +905,23 @@ so that $\rho = \mu + \sigma \rho^\star$.
 \]}
 
 \subsubsection*{Simplified expression}
-{\color{red}
-$$
-\frac{\partial \rho^\star}{\partial \xi} =
-- \frac{1}{\xi}\, \left[ \rho^\star + \log A \right] - \rho^\star \, \log A
-$$
-}
+\begin{equation}
+  \label{eq:SimpDer1RhoStar}
+  \color{red}
+  \frac{\partial \rho^\star}{\partial \xi} =
+  - \frac{1}{\xi}\, \left[ \rho^\star + \log A \right] - \rho^\star \, \log A
+\end{equation}
 
-{\color{red}
-$$
-\frac{\partial^2 \rho^\star}{\partial \xi^2} = \frac{1}{\xi^2} \,
-\left[ \rho^\star + \log A \right]
-  - \frac{\partial \rho^\star}{\partial \xi} \left[ \log A + \frac{1}{\xi} \right]
-$$
-}
 
+\begin{equation}
+  \label{eq:SimpDer2RhoStar}
+  \color{red}
+  \frac{\partial^2 \rho^\star}{\partial \xi^2} = \frac{1}{\xi^2} \,
+  \left[ \rho^\star + \log A \right]
+  - \frac{\partial \rho^\star}{\partial \xi} \left[ \log A +
+    \frac{1}{\xi} \right]
+\end{equation}
+ 
 $$
 \frac{\partial \rho}{\partial \boldsymbol{\theta}\partial \boldsymbol{\theta}^\top} =
 \begin{bmatrix}
@@ -838,17 +935,21 @@ $$
 \subsection{Second-order derivatives: limit for $\xi \to 0$}
 %%========================================================
 Here are the limits for $\xi \to 0$
-{\color{MonVertF}
-\begin{align*}
-  \lim_{\xi \to 0} \frac{\partial \rho^\star}{\partial \xi}
-  &=
-    \begin{maxima}
-      tex(limit(rhoStarxi, xi, 0))
-    \end{maxima}
-  \\
-   \lim_{\xi \to 0} \frac{\partial^2 \rho^\star}{\partial \xi^2}
-  &=
-    \begin{maxima}
-      tex(limit(rhoStarxixi, xi, 0))
-    \end{maxima}
-\end{align*}}
+
+\begin{equation}
+  \color{MonVertF}
+  \label{eq:LimD12RhoStar}
+  \begin{aligned}
+    \lim_{\xi \to 0} \frac{\partial \rho^\star}{\partial \xi}
+    &=
+      \begin{maxima}
+        tex(limit(rhoStarxi, xi, 0))
+      \end{maxima}
+    \\
+    \lim_{\xi \to 0} \frac{\partial^2 \rho^\star}{\partial \xi^2}
+    &=
+      \begin{maxima}
+        tex(limit(rhoStarxixi, xi, 0))
+      \end{maxima}
+  \end{aligned}
+\end{equation}

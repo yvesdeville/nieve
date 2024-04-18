@@ -26,6 +26,11 @@
 
 /* ==========================================================================
  * Density function
+ *
+ * TODO: use the new simplifications provided in 'GEV.pdf' with
+ * auxiliary variables z, V, W, T and R and use the Taylor expansion
+ * of W, T and R in the "small xi" case. This will lead to a clearer
+ * and shorter code.
  * ========================================================================== */
 
 SEXP Call_dGEV(SEXP x,             /*  double                          */
@@ -372,6 +377,11 @@ SEXP Call_dGEV(SEXP x,             /*  double                          */
 
 /* ==========================================================================
  * Distribution function
+ *
+ * TODO: use the new simplifications provided in 'GEV.pdf' with
+ * auxiliary variables z, V, W, T and R and use the Taylor expansion
+ * of W, T and R in the "small xi" case. This will lead to a clearer
+ * and shorter code.
  * ========================================================================== */
 
 SEXP Call_pGEV(SEXP q,               /*  double                          */
@@ -532,7 +542,7 @@ SEXP Call_pGEV(SEXP q,               /*  double                          */
 	      d2Fdzdxi = 0.5 * eemz * z * (z * (1.0 - emz) - 2.0) ;
 	      d2Fdxi2 = eemz * z * z * z * (8.0 - 3.0 * (1.0 - emz) * z) / 12.0 ;
 	      
-	      // same thing as for the small xi case above.
+	      // same thing as for the non-small xi case belows.
 	      // H["mu", "mu"]
 	      rhess[i] = d2Fdz2 / rscale[iscale] / rscale[iscale];
 	      // H["mu", "sigma"] and H["sigma" ,"mu"]

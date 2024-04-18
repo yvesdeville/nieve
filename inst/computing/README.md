@@ -19,6 +19,14 @@ This should provide the pdf file embeding the results computed by
 **Maxima** In case of problems it may be required to clean the auxiliary
 files `.aux`, `.mac` and `.mxp`.
 
+Possible Issues
+---------------
+
+With my configuration and **Maxima 5.45.1** the line
+`load("mactex.lisp")`in the `maxiplot.sty` file generated an error since
+the file seems to no longer exist uin **Maxima** source code. I simply
+commented this line (near line 70).
+
 Provided documents
 ------------------
 
@@ -29,13 +37,16 @@ compiled, and that the `.tex` documents require the **maxiplot**
 -   `nieve.pdf` explains why and how the probability distributions are
     evaluated in **nieve**.
 
--   `GEV.pdf` provides details about the Generalized Extreme Value
-    distribution `GEV`: probability functions and their derivatives.
-
--   `GPD2.pdf` provide details about the two-parameter Genaralized
-    Pareto distribution `GP2`: probability functions and their
+-   [`GEV.pdf`](GEV.pdf) provides details about the Generalized Extreme
+    Value distribution `GEV`: probability functions and their
     derivatives.
 
--   `PP2PoisGP.pdf` The PP to Poisson-GP transform and its derivatives.
+-   [`GPD2.pdf`](GPD.pdf) provide details about the two-parameter
+    Genaralized Pareto distribution `GP2`: probability functions and
+    their derivatives.
 
--   `PoisGP2PP.pdf` The Poisson-GP to PP transform and its derivatives.
+-   [`PP2PoisGP.pdf`](PP2PoisGP) Is about the *PP to Poisson-GP*
+    transform and its derivatives.
+
+-   [`PoisGP2PP.pdf`](PoisGP2PP.pdf) Is about the *Poisson-GP to PP*
+    transform and its derivatives.
